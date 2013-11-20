@@ -1,0 +1,28 @@
+/* CSS */
+blockquote.easy_faq{
+    padding: 10px;
+	margin: 10px auto;
+}
+
+blockquote.easy_faq .attachment-easy_faq_thumb{
+    border-radius: 5px 5px 5px 5px;
+    float: left;
+    margin: 0 10px 10px 0;
+}
+
+blockquote.easy_faq p {
+    width: 100%;
+}
+
+blockquote.easy_faq p a {
+}
+
+blockquote.easy_faq p a:hover{
+}
+
+blockquote.easy_faq cite{
+}
+
+.widgets blockquote.easy_faq{
+	margin: 5px auto;
+}
