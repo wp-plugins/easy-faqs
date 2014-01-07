@@ -8,11 +8,11 @@ Stable tag: 1.0
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
-Easy FAQs is a simple-to-use plugin for adding FAQs to your WordPress Theme, using a shortcode or a widget.
+Easy FAQs is a simple-to-use plugin for adding FAQs (Frequently Asked Questions) to your WordPress Theme, using a shortcode or a widget.
 
 == Description ==
 
-Easy FAQs is an easy-to-use plugin that allows users to add FAQs to the sidebar, as a widget, or to embed them into a Page or Post using the shortcode.  The Easy FAQs plugin also allows you to insert a list of all FAQs or output a Single FAQ. Easy FAQs allows you to include an image with each FAQ - this is a great feature for adding a photo of the FAQ author or other related imagery.
+Easy FAQs is an easy-to-use plugin that allows users to add FAQs (Frequently Asked Questions) to the sidebar, as a widget, or to embed them into a Page or Post using the shortcode.  The Easy FAQs plugin also allows you to insert a list of all FAQs or output a Single FAQ. Easy FAQs allows you to include an image with each FAQ - this is a great feature for adding a photo of the FAQ author or other related imagery.
 
 = Easy FAQs is a great plugin for: =
 * Adding an FAQ to Your Sidebar
