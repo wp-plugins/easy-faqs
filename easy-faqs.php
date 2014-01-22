@@ -1,10 +1,10 @@
 <?php
 /*
 Plugin Name: Easy FAQs
-Plugin URI: http://easy-faqs.com
+Plugin URI: http://goldplugins.com/our-plugins/easy-faqs-details/
 Description: Easy FAQs - Provides custom post type, shortcodes, widgets, and other functionality for Frequently Asked Questions (FAQs).
 Author: Illuminati Karate
-Version: 1.0
+Version: 1.1
 Author URI: http://illuminatikarate.com
 
 This file is part of Easy FAQs.
@@ -53,6 +53,10 @@ class easyFAQs
 		//add example shortcode to list of faqs
 		add_filter('manage_faq_posts_columns', array($this, 'easy_faqs_column_head'), 10);  
 		add_action('manage_faq_posts_custom_column', array($this, 'easy_faqs_columns_content'), 10, 2); 
+		
+		//add example shortcode to faq categories list
+		add_filter('manage_edit-easy-faq-category_columns', array($this, 'easy_faqs_cat_column_head'), 10);  
+		add_action('manage_easy-faq-category_custom_column', array($this, 'easy_faqs_cat_columns_content'), 10, 3); 
 	}
 
 	//setup JS
@@ -203,6 +207,7 @@ class easyFAQs
 		$postType = array('name' => 'FAQ', 'plural' =>'faqs', 'slug' => 'faq' );
 		$fields = array(); 
 		$myCustomType = new ikFAQsCustomPostType($postType, $fields);
+		register_taxonomy( 'easy-faq-category', 'faq', array( 'hierarchical' => true, 'label' => __('FAQ Category'), 'rewrite' => array('slug' => 'faq', 'with_front' => false) ) ); 
 		
 		//load list of current posts that have featured images	
 		$supportedTypes = get_theme_support( 'post-thumbnails' );
@@ -238,6 +243,22 @@ class easyFAQs
 		}  
 	} 
 
+	//this is the heading of the new column we're adding to the faq category list
+	function easy_faqs_cat_column_head($defaults) {  
+		$defaults = array_slice($defaults, 0, 2, true) +
+		array("single_shortcode" => "Shortcode") +
+		array_slice($defaults, 2, count($defaults)-2, true);
+		return $defaults;  
+	}  
+
+	//this content is displayed in the faq category list
+	function easy_faqs_cat_columns_content($value, $column_name, $tax_id) {  
+
+		$category = get_term_by('id', $tax_id, 'easy-faq-category');
+		
+		return "<code>[faqs category='{$category->slug}']</code>"; 
+	} 
+
 	//return an array of random numbers within a given range
 	//credit: http://stackoverflow.com/questions/5612656/generating-unique-random-numbers-within-a-range-php
 	function UniqueRandomNumbersWithinRange($min, $max, $quantity) {
@@ -252,7 +273,8 @@ class easyFAQs
 		//load shortcode attributes into an array
 		extract( shortcode_atts( array(
 			'faqs_link' => get_option('faqs_link'),
-			'faqid' => NULL
+			'faqid' => NULL,
+			'category' => ''
 		), $atts ) );
 		
 		$show_thumbs = get_option('faqs_image');
@@ -262,7 +284,7 @@ class easyFAQs
 		$i = 0;
 		
 		//load faqs into an array
-		$loop = new WP_Query(array( 'post_type' => 'faq','p' => $faqid));
+		$loop = new WP_Query(array( 'post_type' => 'faq','p' => $faqid, 'easy-faq-category' => $category));
 		while($loop->have_posts()) : $loop->the_post();
 			$postid = get_the_ID();
 			$faq['content'] = get_post_meta($postid, '_ikcf_short_content', true); 		
@@ -304,7 +326,8 @@ class easyFAQs
 		//load shortcode attributes into an array
 		extract( shortcode_atts( array(
 			'faqs_link' => get_option('faqs_link'),
-			'count' => -1
+			'count' => -1,
+			'category' => ''
 		), $atts ) );
 		
 		$show_thumbs = get_option('faqs_image');
@@ -318,7 +341,7 @@ class easyFAQs
 		$i = 0;
 		
 		//load faqs into an array
-		$loop = new WP_Query(array( 'post_type' => 'faq','posts_per_page' => '-1'));
+		$loop = new WP_Query(array( 'post_type' => 'faq','posts_per_page' => '-1', 'easy-faq-category' => $category));
 		while($loop->have_posts()) : $loop->the_post();
 			$postid = get_the_ID();
 			$faq['content'] = get_post_meta($postid, '_ikcf_short_content', true); 		

@@ -3,8 +3,8 @@ Contributors: richardgabriel
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=V7HR8DP4EJSYN
 Tags: faqs, faq widget, faq list, faq submission, frequently asked questions, knowledgebase
 Requires at least: 3.0.1
-Tested up to: 3.7.1
-Stable tag: 1.0
+Tested up to: 3.8
+Stable tag: 1.1
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -32,8 +32,7 @@ This section describes how to install the plugin and get it working.
 
 1. Upload the contents of `/easy-faqs/` to the `/wp-content/plugins/` directory
 2. Activate Easy FAQs through the 'Plugins' menu in WordPress
-3. Visit this address for information on how to configure the plugin: http://easy-faqs.com/
-
+3. Visit this address for information on how to configure the plugin: http://goldplugins.com/documentation/easy-faqs-documentation/
 = Adding a New FAQ =
 
 Adding a New FAQ is easy!  There are 3 ways to start adding a new faq
@@ -71,11 +70,11 @@ You have a few things to pay attention to:
 
 = Outputting FAQs =
 * To output a Single FAQ, place the shortcode [single_faq id="1"] in the desired area of the Page or Post Content.  If you view the List of FAQs, you can find the FAQ ID in the Table.
-* To output a list of All FAQs, place the shortcode [faqs] in the desired area of the Page or Post Content.  To display more than one faq, use the shortcode [faqs count='3'], where count is the number of faqs you want displayed.
+* To output a list of All FAQs, place the shortcode [faqs] in the desired area of the Page or Post Content.  To display more than one faq, use the shortcode [faqs count='3'], where count is the number of faqs you want displayed.  To display FAQs from a specific Category, use the shortcode [faqs category='your_category_slug'].  The easiest way to get the slug is to look at the FAQs Category List.
 * To output a FAQ in the Sidebar, use the Widgets section of your WordPress Theme, Accessible on the Appearance Menu in the WordPress Admin.  Use the Drop Down menu to select which FAQ is displayed.
 
 = Front End FAQ Submission =
-* NOTE: This feature requires the Pro version of Easy FAQs: http://easy-faqs.com/easy-faqs-pro/
+* NOTE: This feature requires the Pro version of Easy FAQs: http://goldplugins.com/our-plugins/easy-faqs-details/
 * Add the shortcode [submit_faq] to the area of the page you want your form on.
 * Any submissions will be added to your FAQs list, on the back end.  Only FAQs that you choose to publish will be displayed publicly.
 
@@ -88,11 +87,11 @@ You have a few things to pay attention to:
 
 = Help!  I need more information! =
 
-OK!  We have a great page with some helpful information here: http://easy-faqs.com/
+OK!  We have a great page with some helpful information here: http://goldplugins.com/documentation/easy-faqs-documentation/
 
 = Hey!  How do I allow my visitors to submit faqs? =
 
-Great question!  With the Pro version of the plugin, you can do this with our front end form that is output with a shortcode!  FAQs will show up as pending on the Dashboard, for admin moderation.  Visit here to purchase the Pro version: http://easy-faqs.com/easy-faqs-pro/
+Great question!  With the Pro version of the plugin, you can do this with our front end form that is output with a shortcode!  FAQs will show up as pending on the Dashboard, for admin moderation.  Visit here to purchase the Pro version: http://goldplugins.com/our-plugins/easy-faqs-details/
 
 = Ack!  This FAQs Plugin is too easy to use! Will you make it more complicated? =
 
@@ -104,12 +103,16 @@ Never!  Easy is in our name!  If by complicated you mean new and easy to use fea
 2. This is the List of FAQs - from here you can Edit or Delete a FAQ.
 3. This is the Easy FAQs Settings Page.
 4. This is the Easy Single FAQ Widget.
+5. This is the Easy FAQs Categories Page.
 
 == Changelog ==
+
+= 1.1 =
+* Feature: Adds FAQ Categories and ability to list FAQs on a per category basis.
 
 = 1.0 =
 * Released!
 
 == Upgrade Notice ==
 
-* 1.0: Released!
+* 1.1: New features available!

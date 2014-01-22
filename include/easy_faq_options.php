@@ -92,7 +92,7 @@ class easyFAQOptions
 			<form action="http://illuminatikarate.us2.list-manage2.com/subscribe/post?u=403e206455845b3b4bd0c08dc&amp;id=4ec6d49e6b" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
 				<label for="mce-EMAIL">Subscribe to our mailing list</label>
 				<input type="email" value="" name="EMAIL" class="email" id="mce-EMAIL" placeholder="email address" required>
-				<p>New subscribers will receive a discount code good for any version of <a href="http://easy-faqs.com/easy-faqs-pro/?utm_src=signupform">Easy FAQs Pro</a>!</p>
+				<p>New subscribers will receive a discount code good for any version of <a href="http://goldplugins.com/our-plugins/easy-faqs-details/">Easy FAQs Pro</a>!</p>
 				<div class="clear"><input type="submit" value="Subscribe" name="subscribe" id="mc-embedded-subscribe" class="button"></div>
 			</form>
 			</div>
