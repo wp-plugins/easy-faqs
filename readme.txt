@@ -70,7 +70,7 @@ You have a few things to pay attention to:
 
 = Outputting FAQs =
 * To output a Single FAQ, place the shortcode [single_faq id="1"] in the desired area of the Page or Post Content.  If you view the List of FAQs, you can find the FAQ ID in the Table.
-* To output a list of All FAQs, place the shortcode [faqs] in the desired area of the Page or Post Content.  To display more than one faq, use the shortcode [faqs count='3'], where count is the number of faqs you want displayed.  To display FAQs from a specific Category, use the shortcode [faqs category='your_category_slug'].  The easiest way to get the slug is to look at the FAQs Category List.
+* To output a list of All FAQs, place the shortcode [faqs] in the desired area of the Page or Post Content.  To display more than one faq, use the shortcode [faqs count='3'], where count is the number of faqs you want displayed.  To display FAQs from a Category, use the shortcode [faqs category='your_slug'].
 * To output a FAQ in the Sidebar, use the Widgets section of your WordPress Theme, Accessible on the Appearance Menu in the WordPress Admin.  Use the Drop Down menu to select which FAQ is displayed.
 
 = Front End FAQ Submission =
