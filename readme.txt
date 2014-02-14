@@ -80,10 +80,6 @@ You have a few things to pay attention to:
 * Add the shortcode [submit_faq] to the area of the page you want your form on.
 * Any submissions will be added to your FAQs list, on the back end.  Only FAQs that you choose to publish will be displayed publicly.
 
-= Front End FAQ Submission =
-* Add the shortcode [submit_faq] to the area of the page you want your form on.
-* Any submissions will be added to your FAQs list, on the back end.  Only FAQs that you choose to publish will be displayed publicly.
-
 = Options =
 * To control the destination of the "Read More" link, set the path in the FAQs Read More Link field.
 * To display any Featured Images that you have attached to your FAQs, check the box next to Show FAQ Image.
