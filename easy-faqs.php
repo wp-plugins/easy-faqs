@@ -4,7 +4,7 @@ Plugin Name: Easy FAQs
 Plugin URI: http://goldplugins.com/our-plugins/easy-faqs-details/
 Description: Easy FAQs - Provides custom post type, shortcodes, widgets, and other functionality for Frequently Asked Questions (FAQs).
 Author: Illuminati Karate
-Version: 1.2
+Version: 1.2.1
 Author URI: http://illuminatikarate.com
 
 This file is part of Easy FAQs.
@@ -333,7 +333,9 @@ class easyFAQs
 			'faqs_link' => get_option('faqs_link'),
 			'count' => -1,
 			'category' => '',
-			'style' => ''
+			'style' => '',
+			'orderby' => 'date',//'none','ID','author','title','name','date','modified','parent','rand','menu_order'
+			'order' => 'ASC'//'DESC'
 		), $atts ) );
 		
 		$show_thumbs = get_option('faqs_image');
@@ -353,7 +355,7 @@ class easyFAQs
 		$i = 0;
 		
 		//load faqs into an array
-		$loop = new WP_Query(array( 'post_type' => 'faq','posts_per_page' => '-1', 'easy-faq-category' => $category));
+		$loop = new WP_Query(array( 'post_type' => 'faq','posts_per_page' => $count, 'orderby' => $orderby, 'order' => $order, 'easy-faq-category' => $category));
 		while($loop->have_posts()) : $loop->the_post();
 			$postid = get_the_ID();
 			$faq['content'] = get_post_meta($postid, '_ikcf_short_content', true); 		

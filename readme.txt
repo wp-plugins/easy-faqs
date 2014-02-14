@@ -70,7 +70,7 @@ You have a few things to pay attention to:
 
 = Outputting FAQs =
 * To output a Single FAQ, place the shortcode [single_faq id="1"] in the desired area of the Page or Post Content.  If you view the List of FAQs, you can find the FAQ ID in the Table.
-* To output a list of All FAQs, place the shortcode [faqs] in the desired area of the Page or Post Content.  To display more than one faq, use the shortcode [faqs count='3'], where count is the number of faqs you want displayed.  To display FAQs from a Category, use the shortcode [faqs category='your_slug'].
+* To output a list of All FAQs, place the shortcode [faqs] in the desired area of the Page or Post Content.  To display more than one faq, use the shortcode [faqs count='3'], where count is the number of faqs you want displayed.  To display FAQs from a Category, use the shortcode [faqs category='your_slug'].  To control the Order of the FAQs, use the attribute [faqs order='ASC'].  To control the Order By parameter of the FAQs, use the attribute [faqs orderby='title'].  You can find more details here: http://goldplugins.com/documentation/easy-faqs-documentation/
 * To output a FAQ in the Sidebar, use the Widgets section of your WordPress Theme, Accessible on the Appearance Menu in the WordPress Admin.  Use the Drop Down menu to select which FAQ is displayed.
 * NOTE: This feature requires the Pro version of Easy FAQs: http://goldplugins.com/our-plugins/easy-faqs-details/
 * To output a Accordion Style FAQ List, use the shortcode [faqs style=accordion].  The same attributes, such as count and category, apply from above.
@@ -109,6 +109,9 @@ Never!  Easy is in our name!  If by complicated you mean new and easy to use fea
 
 == Changelog ==
 
+= 1.2.1 =
+* Feature: adds ability to control Order and OrderBy parameters via the shortcode.
+
 = 1.2 =
 * Fix: update deprecated functions in widgets.
 * Feature: Adds accordion style FAQ lists to Pro version.
@@ -122,4 +125,4 @@ Never!  Easy is in our name!  If by complicated you mean new and easy to use fea
 
 == Upgrade Notice ==
 
-* 1.1: New features available!
+* 1.2.1: New features available!
