@@ -1,28 +1,40 @@
 /* CSS */
-blockquote.easy_faq{
+.easy_faq{
     padding: 10px;
 	margin: 10px auto;
 }
 
-blockquote.easy_faq .attachment-easy_faq_thumb{
+.easy-faq-title {
+    border-bottom: 1px solid #D3D3D3;
+    font-weight: bold;
+    margin-bottom: 12px;
+    padding-bottom: 3px;
+    text-decoration: none;
+	cursor: pointer;
+	cursor: hand;
+}
+
+.easy_faq .attachment-easy_faq_thumb{
     border-radius: 5px 5px 5px 5px;
     float: left;
     margin: 0 10px 10px 0;
 }
 
-blockquote.easy_faq p {
+
+.easy-faq .easy-faq-body {
+	margin-bottom: 35px;
+}
+
+.easy_faq .easy-faq-body p {
     width: 100%;
 }
 
-blockquote.easy_faq p a {
+.easy_faq .easy-faq-body p a {
 }
 
-blockquote.easy_faq p a:hover{
+.easy_faq p a:hover{
 }
 
-blockquote.easy_faq cite{
-}
-
-.widgets blockquote.easy_faq{
+.widgets .easy_faq{
 	margin: 5px auto;
 }

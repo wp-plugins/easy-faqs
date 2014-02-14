@@ -4,7 +4,7 @@ Plugin Name: Easy FAQs
 Plugin URI: http://goldplugins.com/our-plugins/easy-faqs-details/
 Description: Easy FAQs - Provides custom post type, shortcodes, widgets, and other functionality for Frequently Asked Questions (FAQs).
 Author: Illuminati Karate
-Version: 1.1
+Version: 1.2
 Author URI: http://illuminatikarate.com
 
 This file is part of Easy FAQs.
@@ -42,7 +42,7 @@ class easyFAQs
 		add_action( 'wp_head', array($this, 'easy_faqs_setup_css' ));
 
 		//add Custom CSS
-		add_action( 'wp_footer', array($this, 'easy_faqs_setup_custom_css'));
+		add_action( 'wp_head', array($this, 'easy_faqs_setup_custom_css'));
 
 		//register sidebar widgets
 		add_action( 'widgets_init', array($this, 'easy_faqs_register_widgets' ));
@@ -61,13 +61,14 @@ class easyFAQs
 
 	//setup JS
 	function easy_faqs_setup_js() {
-		/*
-		wp_enqueue_script(
-			'cycle2',
-			plugins_url('include/js/jquery.cycle2.min.js', __FILE__),
-			array( 'jquery' )
-		);
-		*/
+		if(isValidFAQKey()){
+			wp_enqueue_script('jquery-ui-accordion');
+			wp_enqueue_script(
+				'easy-faqs',
+				plugins_url('include/js/easy-faqs-init.js', __FILE__),
+				array( 'jquery' )
+			);
+		}
 	}
 
 	//add FAQ CSS to header
@@ -283,6 +284,8 @@ class easyFAQs
 		
 		$i = 0;
 		
+		echo '<div class="easy-faqs-wrapper">';
+		
 		//load faqs into an array
 		$loop = new WP_Query(array( 'post_type' => 'faq','p' => $faqid, 'easy-faq-category' => $category));
 		while($loop->have_posts()) : $loop->the_post();
@@ -303,16 +306,18 @@ class easyFAQs
 					echo $faq['image'];
 				} ?>
 				
-				<?php echo '<p class="easy-faqs_title">' . get_the_title($postid) . '</p>'; ?>
+				<?php echo '<h3 class="easy-faq-title">' . get_the_title($postid) . '</h3>'; ?>
 					
 				<p class="faq_body">
-					<?php echo $faq['content'];?>
+					<?php echo apply_filters('the_content', $faq['content']);?>
 				</p>	
 
 			</div><?php 	
 				
 		endwhile;	
 		wp_reset_query();
+		
+		echo '</div>';
 		
 		$content = ob_get_contents();
 		ob_end_clean();	
@@ -327,7 +332,8 @@ class easyFAQs
 		extract( shortcode_atts( array(
 			'faqs_link' => get_option('faqs_link'),
 			'count' => -1,
-			'category' => ''
+			'category' => '',
+			'style' => ''
 		), $atts ) );
 		
 		$show_thumbs = get_option('faqs_image');
@@ -338,6 +344,12 @@ class easyFAQs
 		
 		ob_start();
 		
+		if($style == "accordion" && isValidFAQKey()){
+			echo '<div class="easy-faqs-wrapper easy-faqs-accordion">';
+		} else {
+			echo '<div class="easy-faqs-wrapper">';
+		}
+
 		$i = 0;
 		
 		//load faqs into an array
@@ -362,11 +374,11 @@ class easyFAQs
 						echo $faq['image'];
 					} ?>	
 					
-					<?php echo '<p class="easy-faq-title">' . get_the_title($postid) . '</p>'; ?>	
+					<?php echo '<h3 class="easy-faq-title">' . get_the_title($postid) . '</h3>'; ?>	
 				
-					<p class="easy-faq-body">
-						<?php echo $faq['content'];?>
-					</p>	
+					<div class="easy-faq-body">
+						<?php echo apply_filters('the_content', $faq['content']);?>
+					</div>	
 					
 				</div><?php 	
 				
@@ -374,6 +386,8 @@ class easyFAQs
 			}
 		endwhile;	
 		wp_reset_query();
+
+		echo '</div>'; //<!--.easy-faqs-wrapper-->
 		
 		$content = ob_get_contents();
 		ob_end_clean();	

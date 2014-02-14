@@ -3,8 +3,8 @@ Contributors: richardgabriel
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=V7HR8DP4EJSYN
 Tags: faqs, faq widget, faq list, faq submission, frequently asked questions, knowledgebase
 Requires at least: 3.0.1
-Tested up to: 3.8
-Stable tag: 1.1
+Tested up to: 3.8.1
+Stable tag: 1.2
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -72,9 +72,15 @@ You have a few things to pay attention to:
 * To output a Single FAQ, place the shortcode [single_faq id="1"] in the desired area of the Page or Post Content.  If you view the List of FAQs, you can find the FAQ ID in the Table.
 * To output a list of All FAQs, place the shortcode [faqs] in the desired area of the Page or Post Content.  To display more than one faq, use the shortcode [faqs count='3'], where count is the number of faqs you want displayed.  To display FAQs from a Category, use the shortcode [faqs category='your_slug'].
 * To output a FAQ in the Sidebar, use the Widgets section of your WordPress Theme, Accessible on the Appearance Menu in the WordPress Admin.  Use the Drop Down menu to select which FAQ is displayed.
+* NOTE: This feature requires the Pro version of Easy FAQs: http://goldplugins.com/our-plugins/easy-faqs-details/
+* To output a Accordion Style FAQ List, use the shortcode [faqs style=accordion].  The same attributes, such as count and category, apply from above.
 
 = Front End FAQ Submission =
 * NOTE: This feature requires the Pro version of Easy FAQs: http://goldplugins.com/our-plugins/easy-faqs-details/
+* Add the shortcode [submit_faq] to the area of the page you want your form on.
+* Any submissions will be added to your FAQs list, on the back end.  Only FAQs that you choose to publish will be displayed publicly.
+
+= Front End FAQ Submission =
 * Add the shortcode [submit_faq] to the area of the page you want your form on.
 * Any submissions will be added to your FAQs list, on the back end.  Only FAQs that you choose to publish will be displayed publicly.
 
@@ -106,6 +112,11 @@ Never!  Easy is in our name!  If by complicated you mean new and easy to use fea
 5. This is the Easy FAQs Categories Page.
 
 == Changelog ==
+
+= 1.2 =
+* Fix: update deprecated functions in widgets.
+* Feature: Adds accordion style FAQ lists to Pro version.
+* Update: fixes poorly structured HTML and some validation issues.
 
 = 1.1 =
 * Feature: Adds FAQ Categories and ability to list FAQs on a per category basis.
