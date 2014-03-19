@@ -1,5 +1,5 @@
 /* CSS */
-.easy_faq{
+.easy-faq{
     padding: 10px;
 	margin: 10px auto;
 }
@@ -14,27 +14,27 @@
 	cursor: hand;
 }
 
-.easy_faq .attachment-easy_faq_thumb{
-    border-radius: 5px 5px 5px 5px;
+.easy-faq .attachment-easy_faqs_thumb {
+    border-radius: 5px;
     float: left;
-    margin: 0 10px 10px 0;
+    margin: 5px 10px 5px 5px;
 }
-
 
 .easy-faq .easy-faq-body {
-	margin-bottom: 35px;
+    margin-bottom: 35px;
+    padding-left: 20px;
 }
 
-.easy_faq .easy-faq-body p {
+.easy-faq .easy-faq-body p {
     width: 100%;
 }
 
-.easy_faq .easy-faq-body p a {
+.easy-faq .easy-faq-body p a {
 }
 
-.easy_faq p a:hover{
+.easy-faq p a:hover{
 }
 
-.widgets .easy_faq{
+.widgets .easy-faq{
 	margin: 5px auto;
 }

@@ -1,10 +1,10 @@
 === Easy FAQs ===
-Contributors: richardgabriel
+Contributors: richardgabriel, ghuger
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=V7HR8DP4EJSYN
 Tags: faqs, faq widget, faq list, faq submission, frequently asked questions, knowledgebase
 Requires at least: 3.0.1
 Tested up to: 3.8.1
-Stable tag: 1.2
+Stable tag: 1.2.2
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -49,7 +49,8 @@ You have a few things to pay attention to:
 
 * **FAQ Title:** this content will be displayed above your FAQ - typically this is the Question that is being Answered.
 * **FAQ Body:** this is the content of your FAQ.  This will be output and displayed below the FAQ Title.
-* **Featured Image:** This image is shown to the left of the faq, as a 50px by 50px thumbnail.
+* **Featured Image:** This image is shown to the left of the FAQ's title, as a 50px by 50px thumbnail.
+* **FAQ Category:** This is the Category that the FAQ belongs to, if desired.  You can use this to output FAQs from specific categories only, with the shortcode.
 
 = Editing a FAQ =
 
@@ -71,17 +72,20 @@ You have a few things to pay attention to:
 = Outputting FAQs =
 * To output a Single FAQ, place the shortcode [single_faq id="1"] in the desired area of the Page or Post Content.  If you view the List of FAQs, you can find the FAQ ID in the Table.
 * To output a list of All FAQs, place the shortcode [faqs] in the desired area of the Page or Post Content.  To display more than one faq, use the shortcode [faqs count='3'], where count is the number of faqs you want displayed.  To display FAQs from a Category, use the shortcode [faqs category='your_slug'].  To control the Order of the FAQs, use the attribute [faqs order='ASC'].  To control the Order By parameter of the FAQs, use the attribute [faqs orderby='title'].  You can find more details here: http://goldplugins.com/documentation/easy-faqs-documentation/
+* To display the Featured Image along with FAQs, use the attribute show_thumbs='1'.  This applies to both the single and list shortcodes.
+* To control the wording of the Read More Link, use the attribute read_more_link_text='Your Text Here'.  This applies to both the single and list shortcodes.
+* To control the destination of the Read More Link, use the attribute read_more_link='http://www.yahoo.com'.  This applies to both the single and list shortcodes.  **NOTE:** be sure you include http:// in your link.
 * To output a FAQ in the Sidebar, use the Widgets section of your WordPress Theme, Accessible on the Appearance Menu in the WordPress Admin.  Use the Drop Down menu to select which FAQ is displayed.
-* NOTE: This feature requires the Pro version of Easy FAQs: http://goldplugins.com/our-plugins/easy-faqs-details/
-* To output a Accordion Style FAQ List, use the shortcode [faqs style=accordion].  The same attributes, such as count and category, apply from above.
+* To output a Accordion Style FAQ List, use the shortcode [faqs style=accordion].  The same attributes, such as count and category, apply from above.  **NOTE:** This feature requires the Pro version of Easy FAQs: http://goldplugins.com/our-plugins/easy-faqs-details/
 
 = Front End FAQ Submission =
-* NOTE: This feature requires the Pro version of Easy FAQs: http://goldplugins.com/our-plugins/easy-faqs-details/
+* **NOTE:** This feature requires the Pro version of Easy FAQs: http://goldplugins.com/our-plugins/easy-faqs-details/
 * Add the shortcode [submit_faq] to the area of the page you want your form on.
 * Any submissions will be added to your FAQs list, on the back end.  Only FAQs that you choose to publish will be displayed publicly.
 
 = Options =
 * To control the destination of the "Read More" link, set the path in the FAQs Read More Link field.
+* To control the wording of the "Read More" link, set the wording in the Read More Link Text field.
 * To display any Featured Images that you have attached to your FAQs, check the box next to Show FAQ Image.
 * To add any Custom CSS, to further modify the output of the plugin, input the CSS in the textarea labeled Custom CSS.  You do not need to include the opening or closing <style> tags, treat it like you're inside a CSS file.
 
@@ -109,6 +113,13 @@ Never!  Easy is in our name!  If by complicated you mean new and easy to use fea
 
 == Changelog ==
 
+= 1.2.2 =
+* Feature: extends shortcode to allow full control over output, including overriding global options such as image display, read more text, and read more display.
+* Feature: extends widget to allow full control over output, including overriding global options such as image display, read more text, and read more display.
+* Fix: address issue with single FAQ shortcode not outputting the correct FAQ.
+* Fix: address issue with FAQ Read More link not displaying when global option is set.
+* Fix: addresses CSS issues preventing certain styles from being applied correctly.
+
 = 1.2.1 =
 * Feature: adds ability to control Order and OrderBy parameters via the shortcode.
 
@@ -125,4 +136,4 @@ Never!  Easy is in our name!  If by complicated you mean new and easy to use fea
 
 == Upgrade Notice ==
 
-* 1.2.1: New features available!
+* 1.2.2: New features and bug fixes available!

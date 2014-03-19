@@ -41,6 +41,7 @@ class easyFAQOptions
 	function register_settings(){
 		//register our settings
 		register_setting( 'easy-faqs-settings-group', 'faqs_link' );
+		register_setting( 'easy-faqs-settings-group', 'faqs_read_more_text' );
 		register_setting( 'easy-faqs-settings-group', 'faqs_image' );
 		register_setting( 'easy-faqs-settings-group', 'faqs_style' );
 		register_setting( 'easy-faqs-settings-group', 'easy_faqs_custom_css' );
@@ -181,6 +182,15 @@ class easyFAQOptions
 					<th scope="row"><label for="faqs_link">FAQs Read More Link</label></th>
 					<td><input type="text" name="faqs_link" id="faqs_link" value="<?php echo get_option('faqs_link'); ?>"  style="width: 250px" />
 					<p class="description">This is the URL of the 'Read More' Link.  If not set, no Read More Link is output.  If set, Read More Link will be output next to faq that will go to this page.</p>
+					</td>
+				</tr>
+			</table>
+			
+			<table class="form-table">
+				<tr valign="top">
+					<th scope="row"><label for="faqs_read_more_text">FAQs Read More Text</label></th>
+					<td><input type="text" name="faqs_read_more_text" id="faqs_read_more_text" value="<?php echo get_option('faqs_read_more_text', 'Read More'); ?>"  style="width: 250px" />
+					<p class="description">This is the Text of the 'Read More' Link.  Default text is "Read More."  This is only displayed if a URL is set in the above field, FAQs Read More Link.</p>
 					</td>
 				</tr>
 			</table>

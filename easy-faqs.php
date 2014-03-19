@@ -4,7 +4,7 @@ Plugin Name: Easy FAQs
 Plugin URI: http://goldplugins.com/our-plugins/easy-faqs-details/
 Description: Easy FAQs - Provides custom post type, shortcodes, widgets, and other functionality for Frequently Asked Questions (FAQs).
 Author: Illuminati Karate
-Version: 1.2.1
+Version: 1.2.2
 Author URI: http://illuminatikarate.com
 
 This file is part of Easy FAQs.
@@ -93,37 +93,37 @@ class easyFAQs
 			if( 'POST' == $_SERVER['REQUEST_METHOD'] && !empty( $_POST['action'] )) {
 				//only process submissions from logged in users
 				if(isValidFAQKey()){  
-						if (isset ($_POST['the-title'])) {
-								$title =  $_POST['the-title'];
-						} else {
-								echo 'Please enter a title';
-						}
-					   
-						if (isset ($_POST['the-body'])) {
-								$body = $_POST['the-body'];
-						} else {
-								echo 'Please enter the content';
-						}
-					   
-						$tags = $_POST['the-post_tags'];
-					   
-						$post = array(
-								'post_title'    => $title,
-								'post_content'  => $body,
-								'post_category' => array(1),  // custom taxonomies too, needs to be an array
-								'tags_input'    => $tags,
-								'post_status'   => 'pending',
-								'post_type'     => 'faq'
-						);
-					   
-						wp_insert_post($post);
-					   
-						$inserted = true;
-	   
-						// do the wp_insert_post action to insert it
-						do_action('wp_insert_post', 'wp_insert_post');                 
+					if (isset ($_POST['the-title'])) {
+							$title =  $_POST['the-title'];
+					} else {
+							echo 'Please enter a title';
+					}
+				   
+					if (isset ($_POST['the-body'])) {
+							$body = $_POST['the-body'];
+					} else {
+							echo 'Please enter the content';
+					}
+				   
+					$tags = $_POST['the-post_tags'];
+				   
+					$post = array(
+							'post_title'    => $title,
+							'post_content'  => $body,
+							'post_category' => array(1),  // custom taxonomies too, needs to be an array
+							'tags_input'    => $tags,
+							'post_status'   => 'pending',
+							'post_type'     => 'faq'
+					);
+				   
+					wp_insert_post($post);
+				   
+					$inserted = true;
+   
+					// do the wp_insert_post action to insert it
+					do_action('wp_insert_post', 'wp_insert_post');                 
 				} else {
-						echo "You must have a valid key to perform this action.";
+					echo "You must have a valid key to perform this action.";
 				}
 			}       
 		   
@@ -137,21 +137,21 @@ class easyFAQs
 				} else { ?>
 				<!-- New Post Form -->
 				<div id="postbox">
-						<form id="new_post" name="new_post" method="post" action="/blog/easy-faqs-test/">
-								<div class="easy_faqs_field_wrap">
-									<label for="the-title">Question</label><br />
-									<textarea id="the-title" tabindex="3" name="the-body" cols="50" rows="6"></textarea>
-									<p class="easy_faqs_description">This is the question that you are asking.</p>
-								</div>
-								<div class="easy_faqs_field_wrap">
-									<label for="the-body">Additional Info</label><br />
-									<textarea id="the-body" tabindex="3" name="the-body" cols="50" rows="6"></textarea>
-									<p class="easy_faqs_description">Any additional info you want relayed along with your question.</p>
-								</div>
-								<div class="easy_faqs_field_wrap"><input type="submit" value="Submit FAQ" tabindex="6" id="submit" name="submit" /></div>
-								<input type="hidden" name="action" value="post" />
-								<?php wp_nonce_field( 'new-post' ); ?>
-						</form>
+					<form id="new_post" name="new_post" method="post" action="/blog/easy-faqs-test/">
+						<div class="easy_faqs_field_wrap">
+							<label for="the-title">Question</label><br />
+							<textarea id="the-title" tabindex="3" name="the-body" cols="50" rows="6"></textarea>
+							<p class="easy_faqs_description">This is the question that you are asking.</p>
+						</div>
+						<div class="easy_faqs_field_wrap">
+							<label for="the-body">Additional Info</label><br />
+							<textarea id="the-body" tabindex="3" name="the-body" cols="50" rows="6"></textarea>
+							<p class="easy_faqs_description">Any additional info you want relayed along with your question.</p>
+						</div>
+						<div class="easy_faqs_field_wrap"><input type="submit" value="Submit FAQ" tabindex="6" id="submit" name="submit" /></div>
+						<input type="hidden" name="action" value="post" />
+						<?php wp_nonce_field( 'new-post' ); ?>
+					</form>
 				</div>
 				<!--// New Post Form -->
 				<?php }
@@ -273,13 +273,13 @@ class easyFAQs
 		
 		//load shortcode attributes into an array
 		extract( shortcode_atts( array(
-			'faqs_link' => get_option('faqs_link'),
-			'faqid' => NULL,
-			'category' => ''
+			'read_more_link' => get_option('faqs_link'),
+			'id' => NULL,
+			'category' => '',
+			'show_thumbs' => get_option('faqs_image'),
+			'read_more_link_text' =>  get_option('faqs_read_more_text', 'Read More')
 		), $atts ) );
-		
-		$show_thumbs = get_option('faqs_image');
-		
+				
 		ob_start();
 		
 		$i = 0;
@@ -287,7 +287,7 @@ class easyFAQs
 		echo '<div class="easy-faqs-wrapper">';
 		
 		//load faqs into an array
-		$loop = new WP_Query(array( 'post_type' => 'faq','p' => $faqid, 'easy-faq-category' => $category));
+		$loop = new WP_Query(array( 'post_type' => 'faq','p' => $id, 'easy-faq-category' => $category));
 		while($loop->have_posts()) : $loop->the_post();
 			$postid = get_the_ID();
 			$faq['content'] = get_post_meta($postid, '_ikcf_short_content', true); 		
@@ -301,16 +301,19 @@ class easyFAQs
 				$faq['image'] = get_the_post_thumbnail($postid, 'easy_faqs_thumb');
 			}
 		
-			?><div class="easy-faq" id="easy-faq-<?php echo $postid; ?>">		
+			?><div class="easy-faq" id="easy-faq-<?php echo $postid; ?>">	
+			
 				<?php if ($show_thumbs) {
 					echo $faq['image'];
-				} ?>
+				} ?>		
 				
 				<?php echo '<h3 class="easy-faq-title">' . get_the_title($postid) . '</h3>'; ?>
 					
-				<p class="faq_body">
+				<div class="easy-faq-body">
 					<?php echo apply_filters('the_content', $faq['content']);?>
-				</p>	
+				
+					<?php if(strlen($read_more_link)>2):?><a class="easy-faq-read-more-link" href="<?php echo $read_more_link; ?>"><?php echo $read_more_link_text; ?></a><?php endif; ?>
+				</div>	
 
 			</div><?php 	
 				
@@ -330,15 +333,15 @@ class easyFAQs
 		
 		//load shortcode attributes into an array
 		extract( shortcode_atts( array(
-			'faqs_link' => get_option('faqs_link'),
+			'read_more_link' => get_option('faqs_link'),
 			'count' => -1,
 			'category' => '',
+			'show_thumbs' => get_option('faqs_image'),
+			'read_more_link_text' =>  get_option('faqs_read_more_text', 'Read More'),
 			'style' => '',
 			'orderby' => 'date',//'none','ID','author','title','name','date','modified','parent','rand','menu_order'
 			'order' => 'ASC'//'DESC'
 		), $atts ) );
-		
-		$show_thumbs = get_option('faqs_image');
 				
 		if(!is_numeric($count)){
 			$count = -1;
@@ -369,20 +372,22 @@ class easyFAQs
 				$faq['image'] = get_the_post_thumbnail($postid, 'easy_faqs_thumb');
 			}
 		
-			if($i < $count || $count == -1){
-		
-				?><div class="easy-faq" id="easy-faq-<?php echo $postid; ?>">		
+			if($i < $count || $count == -1){		
+				?><div class="easy-faq" id="easy-faq-<?php echo $postid; ?>">	
+				
 					<?php if ($show_thumbs) {
 						echo $faq['image'];
-					} ?>	
+					} ?>		
 					
-					<?php echo '<h3 class="easy-faq-title">' . get_the_title($postid) . '</h3>'; ?>	
-				
+					<?php echo '<h3 class="easy-faq-title">' . get_the_title($postid) . '</h3>'; ?>
+						
 					<div class="easy-faq-body">
 						<?php echo apply_filters('the_content', $faq['content']);?>
-					</div>	
 					
-				</div><?php 	
+						<?php if(strlen($read_more_link)>2):?><a class="easy-faq-read-more-link" href="<?php echo $read_more_link; ?>"><?php echo $read_more_link_text; ?></a><?php endif; ?>
+					</div>	
+
+				</div><?php 		
 				
 				$i ++;
 			}

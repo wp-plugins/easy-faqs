@@ -1,8 +1,8 @@
 <h3>Pro Registration</h3>			
-<p>Fill out the fields below, if you have purchased the pro version of the plugin, to activate additional features such as Front-End FAQ Submission.</p>
 <?php if(isValidFAQKey()): ?>	
 <p class="easy_faq_registered">Your plugin is succesfully registered and activated!</p>
 <?php else: ?>
+<p>Fill out the fields below, if you have purchased the pro version of the plugin, to activate additional features such as Front-End FAQ Submission.</p>
 <p class="easy_faq_not_registered">Your plugin is not succesfully registered and activated. <a href="http://goldplugins.com/our-plugins/easy-faqs-details/" target="_blank">Click here</a> to upgrade today!</p>
 <?php endif; ?>	
 <style type="text/css">
@@ -19,6 +19,7 @@
     width: 860px;
 }
 </style>	
+<?php if(!isValidMSFAQKey()): ?>
 <table class="form-table">
 	<tr valign="top">
 		<th scope="row"><label for="easy_faqs_registered_name">Email Address</label></th>
@@ -45,3 +46,4 @@
 		</td>
 	</tr>
 </table>
+<?php endif; ?>
