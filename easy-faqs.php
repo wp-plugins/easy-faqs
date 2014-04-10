@@ -4,7 +4,7 @@ Plugin Name: Easy FAQs
 Plugin URI: http://goldplugins.com/our-plugins/easy-faqs-details/
 Description: Easy FAQs - Provides custom post type, shortcodes, widgets, and other functionality for Frequently Asked Questions (FAQs).
 Author: Illuminati Karate
-Version: 1.2.2.1
+Version: 1.2.2.2
 Author URI: http://illuminatikarate.com
 
 This file is part of Easy FAQs.
@@ -318,7 +318,6 @@ class easyFAQs
 			</div><?php 	
 				
 		endwhile;	
-		wp_reset_query();
 		
 		echo '</div>';
 		
@@ -392,7 +391,6 @@ class easyFAQs
 				$i ++;
 			}
 		endwhile;	
-		wp_reset_query();
 
 		echo '</div>'; //<!--.easy-faqs-wrapper-->
 		
