@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Tags: faqs, faq widget, faq list, faq submission, frequently asked questions, knowledgebase
 Requires at least: 3.0.1
 Tested up to: 3.8.1
-Stable tag: 1.2.2
+Stable tag: 1.2.2.1
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -113,6 +113,9 @@ Never!  Easy is in our name!  If by complicated you mean new and easy to use fea
 
 == Changelog ==
 
+= 1.2.2.1 =
+* Fix: Address issue with taxonomy and CPT slug conflicting when trying to view single faqs (ref #2189, thanks mralexweber!)
+
 = 1.2.2 =
 * Feature: extends shortcode to allow full control over output, including overriding global options such as image display, read more text, and read more display.
 * Feature: extends widget to allow full control over output, including overriding global options such as image display, read more text, and read more display.
@@ -136,4 +139,4 @@ Never!  Easy is in our name!  If by complicated you mean new and easy to use fea
 
 == Upgrade Notice ==
 
-* 1.2.2: New features and bug fixes available!
+* 1.2.2.1: Bug fixes available!
