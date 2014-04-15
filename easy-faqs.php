@@ -4,7 +4,7 @@ Plugin Name: Easy FAQs
 Plugin URI: http://goldplugins.com/our-plugins/easy-faqs-details/
 Description: Easy FAQs - Provides custom post type, shortcodes, widgets, and other functionality for Frequently Asked Questions (FAQs).
 Author: Illuminati Karate
-Version: 1.2.2.2
+Version: 1.2.3
 Author URI: http://illuminatikarate.com
 
 This file is part of Easy FAQs.
@@ -33,6 +33,7 @@ class easyFAQs
 		//create shortcodes
 		add_shortcode('single_faq', array($this, 'outputSingleFAQ'));
 		add_shortcode('faqs', array($this, 'outputFAQs'));
+		add_shortcode('faqs-by-category', array($this, 'outputFAQsByCategory'));
 		add_shortcode('submit_faq', array($this, 'submitFAQForm'));
 
 		//add JS
@@ -350,6 +351,8 @@ class easyFAQs
 		
 		if($style == "accordion" && isValidFAQKey()){
 			echo '<div class="easy-faqs-wrapper easy-faqs-accordion">';
+		} else if($style == "accordion-collapsed" && isValidFAQKey()){
+			//output the accordion, with everything collapsed
 		} else {
 			echo '<div class="easy-faqs-wrapper">';
 		}
@@ -399,6 +402,95 @@ class easyFAQs
 		
 		return $content;
 	}
+	
+	//output all faqs grouped by category
+	function outputFAQsByCategory($atts){ 
+		
+		//load shortcode attributes into an array
+		extract( shortcode_atts( array(
+			'read_more_link' => get_option('faqs_link'),
+			'count' => -1,
+			//'category' => '',
+			'show_thumbs' => get_option('faqs_image'),
+			'read_more_link_text' =>  get_option('faqs_read_more_text', 'Read More'),
+			'style' => '',
+			'orderby' => 'date',//'none','ID','author','title','name','date','modified','parent','rand','menu_order'
+			'order' => 'ASC'//'DESC'
+		), $atts ) );
+				
+		if(!is_numeric($count)){
+			$count = -1;
+		}
+		
+		ob_start();
+		
+		//load list of FAQ categories
+		$categories = array();
+		
+		$categories = get_terms('easy-faq-category'); 
+		
+		//loop through categories, outputting a heading for the category and the list of faqs in that category
+		foreach($categories as $category){				
+			//output title of category
+			?><h2 class="easy-testimonial-category-heading"><?php echo $category->name; ?></h2><?php
+		
+			if($style == "accordion" && isValidFAQKey()){
+				echo '<div class="easy-faqs-wrapper easy-faqs-accordion">';
+			} else if($style == "accordion-collapsed" && isValidFAQKey()){
+				//output the accordion, with everything collapsed
+				echo '<div class="easy-faqs-wrapper easy-faqs-accordion-collapsed">';
+			} else {
+				echo '<div class="easy-faqs-wrapper">';
+			}
+
+			$i = 0;		
+			
+			//load faqs into an array
+			$loop = new WP_Query(array( 'post_type' => 'faq','posts_per_page' => $count, 'orderby' => $orderby, 'order' => $order, 'easy-faq-category' => $category->slug));
+			while($loop->have_posts()) : $loop->the_post();
+				$postid = get_the_ID();
+				$faq['content'] = get_post_meta($postid, '_ikcf_short_content', true); 		
+
+				//if nothing is set for the short content, use the long content
+				if(strlen($faq['content']) < 2){
+					$faq['content'] = get_the_content($postid); 
+				}
+				
+				if ($show_thumbs) {
+					$faq['image'] = get_the_post_thumbnail($postid, 'easy_faqs_thumb');
+				}
+			
+				if($i < $count || $count == -1){		
+					?><div class="easy-faq" id="easy-faq-<?php echo $postid; ?>">	
+					
+						<?php if ($show_thumbs) {
+							echo $faq['image'];
+						} ?>		
+						
+						<?php echo '<h3 class="easy-faq-title">' . get_the_title($postid) . '</h3>'; ?>
+							
+						<div class="easy-faq-body">
+							<?php echo apply_filters('the_content', $faq['content']);?>
+						
+							<?php if(strlen($read_more_link)>2):?><a class="easy-faq-read-more-link" href="<?php echo $read_more_link; ?>"><?php echo $read_more_link_text; ?></a><?php endif; ?>
+						</div>	
+
+					</div><?php 		
+					
+					$i ++;
+				}
+			endwhile;	
+
+			echo '</div>'; //<!--.easy-faqs-wrapper-->
+			
+		}//endforeach categories
+		
+		$content = ob_get_contents();
+		ob_end_clean();	
+		
+		return $content;
+	}
+
 
 	//register any widgets here
 	function easy_faqs_register_widgets() {

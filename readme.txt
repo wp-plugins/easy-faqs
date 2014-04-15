@@ -3,8 +3,8 @@ Contributors: richardgabriel, ghuger
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=V7HR8DP4EJSYN
 Tags: faqs, faq widget, faq list, faq submission, frequently asked questions, knowledgebase
 Requires at least: 3.0.1
-Tested up to: 3.8.2
-Stable tag: 1.2.2.2
+Tested up to: 3.8.3
+Stable tag: 1.2.3
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -75,8 +75,9 @@ You have a few things to pay attention to:
 * To display the Featured Image along with FAQs, use the attribute show_thumbs='1'.  This applies to both the single and list shortcodes.
 * To control the wording of the Read More Link, use the attribute read_more_link_text='Your Text Here'.  This applies to both the single and list shortcodes.
 * To control the destination of the Read More Link, use the attribute read_more_link='http://www.yahoo.com'.  This applies to both the single and list shortcodes.  **NOTE:** be sure you include http:// in your link.
+* To output a list of FAQs, grouped by category, use the shortcode [faqs-by-category].
 * To output a FAQ in the Sidebar, use the Widgets section of your WordPress Theme, Accessible on the Appearance Menu in the WordPress Admin.  Use the Drop Down menu to select which FAQ is displayed.
-* To output a Accordion Style FAQ List, use the shortcode [faqs style=accordion].  The same attributes, such as count and category, apply from above.  **NOTE:** This feature requires the Pro version of Easy FAQs: http://goldplugins.com/our-plugins/easy-faqs-details/
+* To output a Accordion Style FAQ List, use the shortcode [faqs style=accordion].  If you want the Accordion List to start with everything collapsed, use the shortcode [faqs style=accordion-collapsed].  The same attributes, such as count and category, apply from above.  **NOTE:** This feature requires the Pro version of Easy FAQs: http://goldplugins.com/our-plugins/easy-faqs-details/
 
 = Front End FAQ Submission =
 * **NOTE:** This feature requires the Pro version of Easy FAQs: http://goldplugins.com/our-plugins/easy-faqs-details/
@@ -112,6 +113,10 @@ Never!  Easy is in our name!  If by complicated you mean new and easy to use fea
 5. This is the Easy FAQs Categories Page.
 
 == Changelog ==
+
+= 1.2.3 -
+* Update: adds ability to default FAQ accordion to being collapsed.
+* Feature: adds category list shortcode.
 
 = 1.2.2.2 =
 * Fix: Address issue with content translation plugins and double content output.
