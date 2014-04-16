@@ -4,7 +4,7 @@ Plugin Name: Easy FAQs
 Plugin URI: http://goldplugins.com/our-plugins/easy-faqs-details/
 Description: Easy FAQs - Provides custom post type, shortcodes, widgets, and other functionality for Frequently Asked Questions (FAQs).
 Author: Illuminati Karate
-Version: 1.2.3
+Version: 1.2.3.1
 Author URI: http://illuminatikarate.com
 
 This file is part of Easy FAQs.
@@ -95,24 +95,21 @@ class easyFAQs
 				//only process submissions from logged in users
 				if(isValidFAQKey()){  
 					if (isset ($_POST['the-title'])) {
-							$title =  $_POST['the-title'];
+							$title =  "Question from: " . $_POST['the-title'];
 					} else {
-							echo 'Please enter a title';
+							echo 'Please enter your name';
 					}
 				   
 					if (isset ($_POST['the-body'])) {
 							$body = $_POST['the-body'];
 					} else {
-							echo 'Please enter the content';
+							echo 'Please enter a question.';
 					}
-				   
-					$tags = $_POST['the-post_tags'];
 				   
 					$post = array(
 							'post_title'    => $title,
 							'post_content'  => $body,
 							'post_category' => array(1),  // custom taxonomies too, needs to be an array
-							'tags_input'    => $tags,
 							'post_status'   => 'pending',
 							'post_type'     => 'faq'
 					);
@@ -138,18 +135,18 @@ class easyFAQs
 				} else { ?>
 				<!-- New Post Form -->
 				<div id="postbox">
-					<form id="new_post" name="new_post" method="post" action="/blog/easy-faqs-test/">
+					<form id="new_post" name="new_post" method="post">
 						<div class="easy_faqs_field_wrap">
-							<label for="the-title">Question</label><br />
-							<textarea id="the-title" tabindex="3" name="the-body" cols="50" rows="6"></textarea>
+							<label for="the-title">Your Name</label><br />
+							<input type="text" id="the-title" tabindex="1" name="the-title" />
+							<p class="easy_faqs_description">Please let us know your name.</p>
+						</div>
+						<div class="easy_faqs_field_wrap">
+							<label for="the-body">Question</label><br />
+							<textarea id="the-body" tabindex="2" name="the-body" cols="50" rows="6"></textarea>
 							<p class="easy_faqs_description">This is the question that you are asking.</p>
 						</div>
-						<div class="easy_faqs_field_wrap">
-							<label for="the-body">Additional Info</label><br />
-							<textarea id="the-body" tabindex="3" name="the-body" cols="50" rows="6"></textarea>
-							<p class="easy_faqs_description">Any additional info you want relayed along with your question.</p>
-						</div>
-						<div class="easy_faqs_field_wrap"><input type="submit" value="Submit FAQ" tabindex="6" id="submit" name="submit" /></div>
+						<div class="easy_faqs_field_wrap"><input type="submit" value="Submit Your Question" tabindex="3" id="submit" name="submit" /></div>
 						<input type="hidden" name="action" value="post" />
 						<?php wp_nonce_field( 'new-post' ); ?>
 					</form>
@@ -325,6 +322,8 @@ class easyFAQs
 		$content = ob_get_contents();
 		ob_end_clean();	
 		
+		wp_reset_query();
+		
 		return $content;
 	}
 
@@ -399,6 +398,8 @@ class easyFAQs
 		
 		$content = ob_get_contents();
 		ob_end_clean();	
+		
+		wp_reset_query();
 		
 		return $content;
 	}
@@ -487,6 +488,8 @@ class easyFAQs
 		
 		$content = ob_get_contents();
 		ob_end_clean();	
+		
+		wp_reset_query();
 		
 		return $content;
 	}
