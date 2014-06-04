@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Tags: faqs, faq widget, faq list, faq submission, frequently asked questions, knowledgebase
 Requires at least: 3.0.1
 Tested up to: 3.9.1
-Stable tag: 1.2.3.1
+Stable tag: 1.3
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -83,6 +83,8 @@ You have a few things to pay attention to:
 * **NOTE:** This feature requires the Pro version of Easy FAQs: http://goldplugins.com/our-plugins/easy-faqs-details/
 * Add the shortcode [submit_faq] to the area of the page you want your form on.
 * Any submissions will be added to your FAQs list, on the back end.  Only FAQs that you choose to publish will be displayed publicly.
+* E-mail notifications are sent to the site admin on new Frequently Asked Question (FAQ) submission.
+* Front End Submission supports Really Simple Captcha for SPAM prevention.  Enable from the Options screen.
 
 = Options =
 * To control the destination of the "Read More" link, set the path in the FAQs Read More Link field.
@@ -113,6 +115,10 @@ Never!  Easy is in our name!  If by complicated you mean new and easy to use fea
 5. This is the Easy FAQs Categories Page.
 
 == Changelog ==
+
+= 1.3 =
+* Feature: adds support for captcha on submission form.
+* Feature: adds support for notification e-mails on submission form.
 
 = 1.2.3.1 =
 * Fix: address issues with FAQ submission form.
@@ -151,4 +157,4 @@ Never!  Easy is in our name!  If by complicated you mean new and easy to use fea
 
 == Upgrade Notice ==
 
-* 1.2.2.2: Bug fixes available!
+* 1.3: New features available!
