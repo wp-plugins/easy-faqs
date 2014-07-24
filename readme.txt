@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Tags: faqs, faq widget, faq list, faq submission, frequently asked questions, knowledgebase
 Requires at least: 3.0.1
 Tested up to: 3.9.1
-Stable tag: 1.3
+Stable tag: 1.3.1
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -116,6 +116,9 @@ Never!  Easy is in our name!  If by complicated you mean new and easy to use fea
 
 == Changelog ==
 
+= 1.3.1 =
+* Minor Feature: output notice if Captcha isn't functional.
+
 = 1.3 =
 * Feature: adds support for captcha on submission form.
 * Feature: adds support for notification e-mails on submission form.
@@ -157,4 +160,4 @@ Never!  Easy is in our name!  If by complicated you mean new and easy to use fea
 
 == Upgrade Notice ==
 
-* 1.3: New features available!
+* 1.3.1: Minor update available

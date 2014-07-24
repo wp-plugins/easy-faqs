@@ -236,6 +236,7 @@ class easyFAQOptions
 					<th scope="row"><label for="easy_faqs_use_captcha">Enable Captcha on Submission Form</label></th>
 					<td><input type="checkbox" name="easy_faqs_use_captcha" id="easy_faqs_use_captcha" <?php if(!isValidFAQKey()): ?>disabled="disabled"<?php endif; ?> value="1" <?php if(get_option('easy_faqs_use_captcha')){ ?> checked="CHECKED" <?php } ?>/>
 					<p class="description">If checked, and a compatible plugin is installed (such as <a href="https://wordpress.org/plugins/really-simple-captcha/" target="_blank">Really Simple Captcha</a>) then we will output a Captcha on the Submission Form.  This is useful if you are having SPAM problems.</p>
+					<?php if(!class_exists('ReallySimpleCaptcha')): ?><p class="alert"><strong>ALERT: Really Simple Captcha is NOT active.  Captcha feature will not function.</strong></p><?php endif; ?>
 					</td>
 				</tr>
 			</table>
