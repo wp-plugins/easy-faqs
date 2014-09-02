@@ -29,7 +29,7 @@
 	</tr>
 </table>
 	
-<table class="form-table">
+<table class="form-table" style="display: none;">
 	<tr valign="top">
 		<th scope="row"><label for="easy_faqs_registered_url">Website Address</label></th>
 		<td><input type="text" name="easy_faqs_registered_url" id="easy_faqs_registered_url" value="<?php echo get_option('easy_faqs_registered_url'); ?>"  style="width: 250px" />
