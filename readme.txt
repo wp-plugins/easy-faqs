@@ -3,8 +3,8 @@ Contributors: richardgabriel, ghuger
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=V7HR8DP4EJSYN
 Tags: faqs, faq widget, faq list, faq submission, frequently asked questions, knowledgebase
 Requires at least: 3.0.1
-Tested up to: 3.9.2
-Stable tag: 1.3.2
+Tested up to: 4.0
+Stable tag: 1.3.3
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -24,6 +24,16 @@ Easy FAQs is an easy-to-use plugin that allows users to add FAQs (Frequently Ask
 
 Easy FAQs includes options to set the URL of the Read More Link, whether or not to display the FAQ Image, and more!  You can set the URL of the FAQs read more links for many purposes - such as directing visitors to the product info page that the faq is about.  Showing an Image next to a FAQ is a great tool!
 
+= Why Should I Add Frequently Asked Questions (FAQs) to my Website? =
+
+Adding a Frequently Asked Questions (FAQs) section to your website, either as a full page or even just as a sidebar widget, can be a crucial tool to help your customers get the answers they need, fast.  A well written Frequently Asked Questions page can give users the answers they need without reading tedious documentation.  Organized into a Knowledgebase, Frequently Asked Questions can be a one-stop-shop for staff, users, and anyone else who may need answers.
+
+= Top Notch Support =
+
+We take our plugins seriously.  You can contact our staff at hello@goldplugins.com for technical support, bug reports, and more. If you need professional help getting your setup configured just right, or are interested in advanced features such as Collapsing / Accordion-style FAQs, or want your users to be able to submit questions from the front-end, check out the Pro version of Easy FAQs: http://goldplugins.com/our-plugins/easy-faqs-details/
+
+= Get Started Using Easy FAQs Today! =
+
 The Easy FAQs plugin is the easiest way to start adding your customer's FAQs, right now!  Click the Download button now to get started.  The Easy FAQs plugin will inherit the styling from your Theme - just install and get to work adding your faqs!
 
 == Installation ==
@@ -33,9 +43,10 @@ This section describes how to install the plugin and get it working.
 1. Upload the contents of `/easy-faqs/` to the `/wp-content/plugins/` directory
 2. Activate Easy FAQs through the 'Plugins' menu in WordPress
 3. Visit this address for information on how to configure the plugin: http://goldplugins.com/documentation/easy-faqs-documentation/
+
 = Adding a New FAQ =
 
-Adding a New FAQ is easy!  There are 3 ways to start adding a new faq
+Adding a New FAQ is easy!  There are 3 ways to start adding a new FAQ
 
 **How to Add a New FAQ**
 
@@ -116,6 +127,9 @@ Never!  Easy is in our name!  If by complicated you mean new and easy to use fea
 
 == Changelog ==
 
+= 1.3.3 =
+* Updates compatibility to WP 4.0.
+
 = 1.3.2  =
 * Minor registration update.
 * Updates compatibility to WP 3.9.2.
@@ -164,4 +178,4 @@ Never!  Easy is in our name!  If by complicated you mean new and easy to use fea
 
 == Upgrade Notice ==
 
-* 1.3.2: Minor update available
+* 1.3.3: Minor update available

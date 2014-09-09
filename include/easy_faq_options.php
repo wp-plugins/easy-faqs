@@ -18,6 +18,8 @@ along with The Easy FAQs.  If not, see <http://www.gnu.org/licenses/>.
 
 class easyFAQOptions
 {
+	var $textdomain = '';
+
 	function __construct(){
 		//may be running in non WP mode (for example from a notification)
 		if(function_exists('add_action')){
@@ -35,6 +37,19 @@ class easyFAQOptions
 
 		//call register settings function
 		add_action( 'admin_init', array($this, 'register_settings'));	
+	}
+	
+	//function to produce tabs on admin screen
+	function admin_tabs( $current = 'homepage' ) {
+	
+		$tabs = array( 'basic_options' => __('Basic Options', $this->textdomain), 'help' => __('Help & Instructions', $this->textdomain));
+		echo '<div id="icon-themes" class="icon32"><br></div>';
+		echo '<h2 class="nav-tab-wrapper">';
+			foreach( $tabs as $tab => $name ){
+				$class = ( $tab == $current ) ? ' nav-tab-active' : '';
+				echo "<a class='nav-tab$class' href='?page=easy-faqs/include/easy_faq_options.php&tab=$tab'>$name</a>";
+			}
+		echo '</h2>';
 	}
 
 
@@ -55,6 +70,8 @@ class easyFAQOptions
 	function settings_page(){
 		$title = "Easy FAQs Settings";
 		$message = "Easy FAQs Settings Updated.";
+		
+		global $pagenow;
 	?>
 	<div class="wrap">
 		<h2><?php echo $title; ?></h2>
@@ -174,9 +191,23 @@ class easyFAQOptions
 		
 		<?php if (isset($_GET['settings-updated']) && $_GET['settings-updated'] == 'true') : ?>
 		<div id="message" class="updated fade"><p><?php echo $message; ?></p></div>
-		<?php endif; ?>	
+		<?php endif; ?>			
+		
+		<?php if ( isset ( $_GET['tab'] ) ) $this->admin_tabs($_GET['tab']); else $this->admin_tabs('basic_options'); ?>
+		<?php 
+			if ( $pagenow == 'admin.php' && $_GET['page'] == 'easy-faqs/include/easy_faq_options.php' ){
+				if ( isset ( $_GET['tab'] ) ) $tab = $_GET['tab'];
+				else $tab = 'basic_options';
+			} 			
+		?>		
 		
 		<form method="post" action="options.php">
+				
+		<?php 
+			switch ( $tab ){
+				case 'basic_options' :	
+		?>
+		
 			<?php settings_fields( 'easy-faqs-settings-group' ); ?>			
 			
 			<h3>Basic Options</h3>
@@ -255,6 +286,14 @@ class easyFAQOptions
 			<p class="submit">
 				<input type="submit" class="button-primary" value="<?php _e('Save Changes') ?>" />
 			</p>
+						
+			<?php
+					break;
+					case 'help' :
+					include('pages/help.html');					
+					break; 			
+			?>
+			<?php } ?>
 		</form>
 	</div>
 	<?php } // end settings_page function
