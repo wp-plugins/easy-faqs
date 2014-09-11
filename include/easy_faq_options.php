@@ -31,9 +31,12 @@ class easyFAQOptions
 	function add_admin_menu_item(){
 		$title = "Easy FAQ Settings";
 		$page_title = "Easy FAQs Settings";
+		$top_level_slug = "easy-faqs-settings";
 		
 		//create new top-level menu
-		add_menu_page($page_title, $title, 'administrator', __FILE__, array($this, 'settings_page'));
+		add_menu_page($page_title, $title, 'administrator', $top_level_slug , array($this, 'basic_settings_page'));
+		add_submenu_page($top_level_slug , 'Basic Options', 'Basic Options', 'administrator', $top_level_slug, array($this, 'basic_settings_page'));
+		add_submenu_page($top_level_slug , 'Help & Instructions', 'Help & Instructions', 'administrator', 'easy-faqs-help', array($this, 'help_settings_page'));
 
 		//call register settings function
 		add_action( 'admin_init', array($this, 'register_settings'));	
@@ -42,16 +45,15 @@ class easyFAQOptions
 	//function to produce tabs on admin screen
 	function admin_tabs( $current = 'homepage' ) {
 	
-		$tabs = array( 'basic_options' => __('Basic Options', $this->textdomain), 'help' => __('Help & Instructions', $this->textdomain));
+		$tabs = array( 'easy-faqs-settings' => __('Basic Options', $this->textdomain), 'easy-faqs-help' => __('Help & Instructions', $this->textdomain));
 		echo '<div id="icon-themes" class="icon32"><br></div>';
 		echo '<h2 class="nav-tab-wrapper">';
 			foreach( $tabs as $tab => $name ){
 				$class = ( $tab == $current ) ? ' nav-tab-active' : '';
-				echo "<a class='nav-tab$class' href='?page=easy-faqs/include/easy_faq_options.php&tab=$tab'>$name</a>";
+				echo "<a class='nav-tab$class' href='?page=$tab'>$name</a>";
 			}
 		echo '</h2>';
 	}
-
 
 	function register_settings(){
 		//register our settings
@@ -67,7 +69,7 @@ class easyFAQOptions
 		register_setting( 'easy-faqs-settings-group', 'easy_faqs_registered_key' );
 	}
 
-	function settings_page(){
+	function settings_page_top(){
 		$title = "Easy FAQs Settings";
 		$message = "Easy FAQs Settings Updated.";
 		
@@ -191,26 +193,26 @@ class easyFAQOptions
 		
 		<?php if (isset($_GET['settings-updated']) && $_GET['settings-updated'] == 'true') : ?>
 		<div id="message" class="updated fade"><p><?php echo $message; ?></p></div>
-		<?php endif; ?>			
+		<?php endif;
 		
-		<?php if ( isset ( $_GET['tab'] ) ) $this->admin_tabs($_GET['tab']); else $this->admin_tabs('basic_options'); ?>
-		<?php 
-			if ( $pagenow == 'admin.php' && $_GET['page'] == 'easy-faqs/include/easy_faq_options.php' ){
-				if ( isset ( $_GET['tab'] ) ) $tab = $_GET['tab'];
-				else $tab = 'basic_options';
-			} 			
-		?>		
+		$this->get_and_output_current_tab($pagenow);	
+	}
+	
+	function get_and_output_current_tab($pagenow){
+		$tab = $_GET['page'];
 		
-		<form method="post" action="options.php">
+		$this->admin_tabs($tab); 
 				
-		<?php 
-			switch ( $tab ){
-				case 'basic_options' :	
-		?>
+		return $tab;
+	}
+	
+	function basic_settings_page(){	
+		$this->settings_page_top(); ?>	
 		
+		<form method="post" action="options.php">		
 			<?php settings_fields( 'easy-faqs-settings-group' ); ?>			
 			
-			<h3>Basic Options</h3>
+			<h2>Basic Options</h2>
 			
 			<p>Use the below options to control various bits of output.</p>
 			
@@ -285,18 +287,16 @@ class easyFAQOptions
 			
 			<p class="submit">
 				<input type="submit" class="button-primary" value="<?php _e('Save Changes') ?>" />
-			</p>
-						
-			<?php
-					break;
-					case 'help' :
-					include('pages/help.html');					
-					break; 			
-			?>
-			<?php } ?>
+			</p>			
 		</form>
-	</div>
-	<?php } // end settings_page function
+		</div>						
+		<?php
+	}
 	
+	function help_settings_page(){
+		$this->settings_page_top();
+		include('pages/help.html');					
+		?></div><?php			
+	}	
 } // end class
 ?>

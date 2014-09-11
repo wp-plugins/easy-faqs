@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Tags: faqs, faq widget, faq list, faq submission, frequently asked questions, knowledgebase
 Requires at least: 3.0.1
 Tested up to: 4.0
-Stable tag: 1.3.3
+Stable tag: 1.3.4
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -44,7 +44,7 @@ This section describes how to install the plugin and get it working.
 2. Activate Easy FAQs through the 'Plugins' menu in WordPress
 3. Visit this address for information on how to configure the plugin: http://goldplugins.com/documentation/easy-faqs-documentation/
 
-= Adding a New FAQ =
+# Adding a New FAQ #
 
 Adding a New FAQ is easy!  There are 3 ways to start adding a new FAQ
 
@@ -63,7 +63,7 @@ You have a few things to pay attention to:
 * **Featured Image:** This image is shown to the left of the FAQ's title, as a 50px by 50px thumbnail.
 * **FAQ Category:** This is the Category that the FAQ belongs to, if desired.  You can use this to output FAQs from specific categories only, with the shortcode.
 
-= Editing a FAQ =
+# Editing a FAQ #
 
  **This is as easy as adding a New FAQ!**
 
@@ -71,7 +71,7 @@ You have a few things to pay attention to:
 2. Hover over the FAQ you want to Edit and click "Edit".
 3. Change the fields to the desired content and click "Update".
 
-= Deleting a FAQ =
+# Deleting a FAQ #
 
  **This is as easy as adding a New FAQ!**
 
@@ -80,24 +80,26 @@ You have a few things to pay attention to:
   
   **You can also change the Status of a FAQ, if you want to keep it on file.**
 
-= Outputting FAQs =
-* To output a Single FAQ, place the shortcode [single_faq id="1"] in the desired area of the Page or Post Content.  If you view the List of FAQs, you can find the FAQ ID in the Table.
-* To output a list of All FAQs, place the shortcode [faqs] in the desired area of the Page or Post Content.  To display more than one faq, use the shortcode [faqs count='3'], where count is the number of faqs you want displayed.  To display FAQs from a Category, use the shortcode [faqs category='your_slug'].  To control the Order of the FAQs, use the attribute [faqs order='ASC'].  To control the Order By parameter of the FAQs, use the attribute [faqs orderby='title'].  You can find more details here: http://goldplugins.com/documentation/easy-faqs-documentation/
-* To display the Featured Image along with FAQs, use the attribute show_thumbs='1'.  This applies to both the single and list shortcodes.
-* To control the wording of the Read More Link, use the attribute read_more_link_text='Your Text Here'.  This applies to both the single and list shortcodes.
-* To control the destination of the Read More Link, use the attribute read_more_link='http://www.yahoo.com'.  This applies to both the single and list shortcodes.  **NOTE:** be sure you include http:// in your link.
-* To output a list of FAQs, grouped by category, use the shortcode [faqs-by-category].
-* To output a FAQ in the Sidebar, use the Widgets section of your WordPress Theme, Accessible on the Appearance Menu in the WordPress Admin.  Use the Drop Down menu to select which FAQ is displayed.
-* To output a Accordion Style FAQ List, use the shortcode [faqs style=accordion].  If you want the Accordion List to start with everything collapsed, use the shortcode [faqs style=accordion-collapsed].  The same attributes, such as count and category, apply from above.  **NOTE:** This feature requires the Pro version of Easy FAQs: http://goldplugins.com/our-plugins/easy-faqs-details/
+# Outputting FAQs #
 
-= Front End FAQ Submission =
-* **NOTE:** This feature requires the Pro version of Easy FAQs: http://goldplugins.com/our-plugins/easy-faqs-details/
-* Add the shortcode [submit_faq] to the area of the page you want your form on.
+* To output a Single FAQ, place the shortcode ```[single_faq id="1"]``` in the desired area of the Page or Post Content.  If you view the List of FAQs, you can find the FAQ ID in the Table.
+* To output a list of All FAQs, place the shortcode ```[faqs]``` in the desired area of the Page or Post Content.  To display more than one faq, use the shortcode ```[faqs count='3']```, where count is the number of faqs you want displayed.  To display FAQs from a Category, use the shortcode ```[faqs category='your_slug']```.  To control the Order of the FAQs, use the attribute ```[faqs order='ASC']```.  To control the Order By parameter of the FAQs, use the attribute ```[faqs orderby='title']```.  You can find more details [here](http://goldplugins.com/documentation/easy-faqs-documentation/ "Easy FAQs Documentation")
+* To display the Featured Image along with FAQs, use the attribute ```show_thumbs='1'```.  This applies to both the single and list shortcodes.
+* To control the wording of the Read More Link, use the attribute ```read_more_link_text='Your Text Here'```.  This applies to both the single and list shortcodes.
+* To control the destination of the Read More Link, use the attribute ```read_more_link='http://www.yahoo.com'```.  This applies to both the single and list shortcodes.  **NOTE:** be sure you include http:// in your link.
+* To output a list of FAQs, grouped by category, use the shortcode ```[faqs-by-category]```.
+* To output a FAQ in the Sidebar, use the Widgets section of your WordPress Theme, Accessible on the Appearance Menu in the WordPress Admin.  Use the Drop Down menu to select which FAQ is displayed.
+* To output a Accordion Style FAQ List, use the shortcode ```[faqs style=accordion]```.  If you want the Accordion List to start with everything collapsed, use the shortcode ```[faqs style=accordion-collapsed]```.  The same attributes, such as count and category, apply from above.  **NOTE:** This feature requires the [Pro version of Easy FAQs](http://goldplugins.com/our-plugins/easy-faqs-details/ "Easy FAQs Pro")
+
+# Front End FAQ Submission #
+
+* **NOTE:** This feature requires the [Pro version of Easy FAQs](http://goldplugins.com/our-plugins/easy-faqs-details/ "Easy FAQs Pro")
+* Add the shortcode ```[submit_faq]``` to the area of the page you want your form on.
 * Any submissions will be added to your FAQs list, on the back end.  Only FAQs that you choose to publish will be displayed publicly.
 * E-mail notifications are sent to the site admin on new Frequently Asked Question (FAQ) submission.
 * Front End Submission supports Really Simple Captcha for SPAM prevention.  Enable from the Options screen.
 
-= Options =
+# Options #
 * To control the destination of the "Read More" link, set the path in the FAQs Read More Link field.
 * To control the wording of the "Read More" link, set the wording in the Read More Link Text field.
 * To display any Featured Images that you have attached to your FAQs, check the box next to Show FAQ Image.
@@ -122,10 +124,14 @@ Never!  Easy is in our name!  If by complicated you mean new and easy to use fea
 1. This is the Add New FAQ Page.
 2. This is the List of FAQs - from here you can Edit or Delete a FAQ.
 3. This is the Easy FAQs Settings Page.
-4. This is the Easy Single FAQ Widget.
-5. This is the Easy FAQs Categories Page.
+4. This is the Easy FAQs Help & Instructions Page.
+5. This is the Easy Single FAQ Widget.
+6. This is the Easy FAQs Categories Page.
 
 == Changelog ==
+
+= 1.3.4 =
+* Updates readme.txt
 
 = 1.3.3 =
 * Updates compatibility to WP 4.0.
@@ -178,4 +184,4 @@ Never!  Easy is in our name!  If by complicated you mean new and easy to use fea
 
 == Upgrade Notice ==
 
-* 1.3.3: Minor update available
+* 1.3.4: Minor update available
