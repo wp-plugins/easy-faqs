@@ -4,7 +4,7 @@ Plugin Name: Easy FAQs
 Plugin URI: http://goldplugins.com/our-plugins/easy-faqs-details/
 Description: Easy FAQs - Provides custom post type, shortcodes, widgets, and other functionality for Frequently Asked Questions (FAQs).
 Author: Gold Plugins
-Version: 1.4.1
+Version: 1.4.2
 Author URI: http://goldplugins.com
 
 This file is part of Easy FAQs.
@@ -469,6 +469,12 @@ class easyFAQs
 		$i = 0;
 		$r = $loop->post_count;
 		$divCount = intval($r/5);
+		
+		//if there are trailing testimonials, make sure we take into account the final div
+		if($r%5!=0){
+			$divCount ++;
+		}
+		
 		$divWidth = floor(100/$divCount);
 		echo '<div class="easy-faq-questions" style="width: '.$divWidth.'%;">';
 		while($loop->have_posts()) : $loop->the_post();
@@ -484,6 +490,12 @@ class easyFAQs
 			$i ++;
 			
 		endwhile;
+		
+		//close any trailing div, happens if we are in the middle of a column of 5
+		if($i%5 != 0){
+			echo "</div>";
+		}
+		
 		echo "</ol>";
 		echo "</div>";
 	}
