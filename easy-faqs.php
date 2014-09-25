@@ -3,9 +3,9 @@
 Plugin Name: Easy FAQs
 Plugin URI: http://goldplugins.com/our-plugins/easy-faqs-details/
 Description: Easy FAQs - Provides custom post type, shortcodes, widgets, and other functionality for Frequently Asked Questions (FAQs).
-Author: Illuminati Karate
-Version: 1.3.4
-Author URI: http://illuminatikarate.com
+Author: Gold Plugins
+Version: 1.4
+Author URI: http://goldplugins.com
 
 This file is part of Easy FAQs.
 
@@ -447,6 +447,46 @@ class easyFAQs
 		
 		return $content;
 	}
+	
+	//passed the atts for the shortcode of faqs this is displayed above
+	//loads faq data into a loop object
+	//loops through that object and outputs quicklinks for those FAQs
+	function outputQuickLinks($atts){		
+		//load shortcode attributes into an array
+		extract( shortcode_atts( array(
+			'count' => -1,
+			'category' => '',
+			'orderby' => 'date',//'none','ID','author','title','name','date','modified','parent','rand','menu_order'
+			'order' => 'ASC'//'DESC'
+		), $atts ) );
+		
+		//load faqs into an array
+		$loop = new WP_Query(array( 'post_type' => 'faq','posts_per_page' => $count, 'orderby' => $orderby, 'order' => $order, 'easy-faq-category' => $category));
+	
+		echo "<div class='quick-links'>Quick Links</div>";
+		echo "<div class='faq-questions'>";
+		echo "<ol>";
+		$i = 0;
+		$r = $loop->post_count;
+		$divCount = intval($r/5) + 1;
+		$divWidth = floor(100/$divCount);
+		echo '<div class="easy-faq-questions" style="width: '.$divWidth.'%;">';
+		while($loop->have_posts()) : $loop->the_post();
+
+			$postid = get_the_ID();
+			
+			if($i%5 == 0)	{
+				echo "</div>";
+				echo '<div class="easy-faq-questions" style="width: '.$divWidth.'%;">';
+			}			
+			echo '<li class="faq_scroll" id="'.$postid.'"><a href="#easy-faq-' . $postid . '">' . get_the_title($postid) . '</a></li>';
+
+			$i ++;
+			
+		endwhile;
+		echo "</ol>";
+		echo "</div>";
+	}
 
 	//output all faqs
 	function outputFAQs($atts){ 
@@ -459,6 +499,7 @@ class easyFAQs
 			'show_thumbs' => get_option('faqs_image'),
 			'read_more_link_text' =>  get_option('faqs_read_more_text', 'Read More'),
 			'style' => '',
+			'quicklinks' => false,
 			'orderby' => 'date',//'none','ID','author','title','name','date','modified','parent','rand','menu_order'
 			'order' => 'ASC'//'DESC'
 		), $atts ) );
@@ -476,11 +517,15 @@ class easyFAQs
 		} else {
 			echo '<div class="easy-faqs-wrapper">';
 		}
-
-		$i = 0;
 		
 		//load faqs into an array
 		$loop = new WP_Query(array( 'post_type' => 'faq','posts_per_page' => $count, 'orderby' => $orderby, 'order' => $order, 'easy-faq-category' => $category));
+		
+		//output QuickLinks, if available and pro
+		if($quicklinks && isValidFAQKey()){
+			$this->outputQuickLinks($atts);
+		} 
+		
 		while($loop->have_posts()) : $loop->the_post();
 			$postid = get_the_ID();
 			$faq['content'] = get_post_meta($postid, '_ikcf_short_content', true); 		
@@ -493,26 +538,23 @@ class easyFAQs
 			if ($show_thumbs) {
 				$faq['image'] = get_the_post_thumbnail($postid, 'easy_faqs_thumb');
 			}
-		
-			if($i < $count || $count == -1){		
-				?><div class="easy-faq" id="easy-faq-<?php echo $postid; ?>">	
+			
+			?><div class="easy-faq" id="easy-faq-<?php echo $postid; ?>">	
+			
+				<?php if ($show_thumbs) {
+					echo $faq['image'];
+				} ?>		
 				
-					<?php if ($show_thumbs) {
-						echo $faq['image'];
-					} ?>		
+				<?php echo '<h3 class="easy-faq-title">' . get_the_title($postid) . '</h3>'; ?>
 					
-					<?php echo '<h3 class="easy-faq-title">' . get_the_title($postid) . '</h3>'; ?>
-						
-					<div class="easy-faq-body">
-						<?php echo apply_filters('the_content', $faq['content']);?>
-					
-						<?php if(strlen($read_more_link)>2):?><a class="easy-faq-read-more-link" href="<?php echo $read_more_link; ?>"><?php echo $read_more_link_text; ?></a><?php endif; ?>
-					</div>	
+				<div class="easy-faq-body">
+					<?php echo apply_filters('the_content', $faq['content']);?>
+				
+					<?php if(strlen($read_more_link)>2):?><a class="easy-faq-read-more-link" href="<?php echo $read_more_link; ?>"><?php echo $read_more_link_text; ?></a><?php endif; ?>
+				</div>	
 
-				</div><?php 		
-				
-				$i ++;
-			}
+			</div><?php 		
+			
 		endwhile;	
 
 		echo '</div>'; //<!--.easy-faqs-wrapper-->
@@ -536,6 +578,7 @@ class easyFAQs
 			'show_thumbs' => get_option('faqs_image'),
 			'read_more_link_text' =>  get_option('faqs_read_more_text', 'Read More'),
 			'style' => '',
+			'quicklinks' => false,
 			'orderby' => 'date',//'none','ID','author','title','name','date','modified','parent','rand','menu_order'
 			'order' => 'ASC'//'DESC'
 		), $atts ) );
@@ -551,6 +594,11 @@ class easyFAQs
 		
 		$categories = get_terms('easy-faq-category'); 
 		
+		//output QuickLinks, if available and pro
+		if($quicklinks && isValidFAQKey()){
+			$this->outputQuickLinks($atts);
+		} 
+		
 		//loop through categories, outputting a heading for the category and the list of faqs in that category
 		foreach($categories as $category){				
 			//output title of category
@@ -563,9 +611,7 @@ class easyFAQs
 				echo '<div class="easy-faqs-wrapper easy-faqs-accordion-collapsed">';
 			} else {
 				echo '<div class="easy-faqs-wrapper">';
-			}
-
-			$i = 0;		
+			}	
 			
 			//load faqs into an array
 			$loop = new WP_Query(array( 'post_type' => 'faq','posts_per_page' => $count, 'orderby' => $orderby, 'order' => $order, 'easy-faq-category' => $category->slug));
@@ -581,26 +627,22 @@ class easyFAQs
 				if ($show_thumbs) {
 					$faq['image'] = get_the_post_thumbnail($postid, 'easy_faqs_thumb');
 				}
-			
-				if($i < $count || $count == -1){		
-					?><div class="easy-faq" id="easy-faq-<?php echo $postid; ?>">	
+				
+				?><div class="easy-faq" id="easy-faq-<?php echo $postid; ?>">	
+				
+					<?php if ($show_thumbs) {
+						echo $faq['image'];
+					} ?>		
 					
-						<?php if ($show_thumbs) {
-							echo $faq['image'];
-						} ?>		
+					<?php echo '<h3 class="easy-faq-title">' . get_the_title($postid) . '</h3>'; ?>
 						
-						<?php echo '<h3 class="easy-faq-title">' . get_the_title($postid) . '</h3>'; ?>
-							
-						<div class="easy-faq-body">
-							<?php echo apply_filters('the_content', $faq['content']);?>
-						
-							<?php if(strlen($read_more_link)>2):?><a class="easy-faq-read-more-link" href="<?php echo $read_more_link; ?>"><?php echo $read_more_link_text; ?></a><?php endif; ?>
-						</div>	
+					<div class="easy-faq-body">
+						<?php echo apply_filters('the_content', $faq['content']);?>
+					
+						<?php if(strlen($read_more_link)>2):?><a class="easy-faq-read-more-link" href="<?php echo $read_more_link; ?>"><?php echo $read_more_link_text; ?></a><?php endif; ?>
+					</div>	
 
-					</div><?php 		
-					
-					$i ++;
-				}
+				</div><?php 						
 			endwhile;	
 
 			echo '</div>'; //<!--.easy-faqs-wrapper-->

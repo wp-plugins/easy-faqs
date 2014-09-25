@@ -38,3 +38,25 @@
 .widgets .easy-faq{
 	margin: 5px auto;
 }
+.easy-faq-questions	{
+	padding: 10px 0;
+	display: inline-block;
+	float: left;
+	color: #00af41;
+	padding: 10px 0;
+	font-size: 16px;
+}
+.easy-faq-questions li	{
+	padding: 5px 0;
+}
+.quick-links	{
+	border-bottom: 1px solid #000;
+	font-size: 32px;
+	padding: 60px 0 20px 0;
+}
+.faq-questions	{
+	display: inline-block;
+}
+.faq_scroll:hover	{
+	cursor: pointer;
+}
