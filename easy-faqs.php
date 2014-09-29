@@ -4,7 +4,7 @@ Plugin Name: Easy FAQs
 Plugin URI: http://goldplugins.com/our-plugins/easy-faqs-details/
 Description: Easy FAQs - Provides custom post type, shortcodes, widgets, and other functionality for Frequently Asked Questions (FAQs).
 Author: Gold Plugins
-Version: 1.4.2
+Version: 1.4.3
 Author URI: http://goldplugins.com
 
 This file is part of Easy FAQs.
@@ -451,53 +451,100 @@ class easyFAQs
 	//passed the atts for the shortcode of faqs this is displayed above
 	//loads faq data into a loop object
 	//loops through that object and outputs quicklinks for those FAQs
-	function outputQuickLinks($atts){		
+	function outputQuickLinks($atts, $by_category = false){		
 		//load shortcode attributes into an array
 		extract( shortcode_atts( array(
 			'count' => -1,
 			'category' => '',
 			'orderby' => 'date',//'none','ID','author','title','name','date','modified','parent','rand','menu_order'
-			'order' => 'ASC'//'DESC'
+			'order' => 'ASC',//'DESC'
+			'colcount' => false
 		), $atts ) );
 		
-		//load faqs into an array
-		$loop = new WP_Query(array( 'post_type' => 'faq','posts_per_page' => $count, 'orderby' => $orderby, 'order' => $order, 'easy-faq-category' => $category));
-	
-		echo "<div class='quick-links'>Quick Links</div>";
-		echo "<div class='faq-questions'>";
-		echo "<ol>";
-		$i = 0;
-		$r = $loop->post_count;
-		$divCount = intval($r/5);
 		
-		//if there are trailing testimonials, make sure we take into account the final div
-		if($r%5!=0){
-			$divCount ++;
-		}
-		
-		$divWidth = floor(100/$divCount);
-		echo '<div class="easy-faq-questions" style="width: '.$divWidth.'%;">';
-		while($loop->have_posts()) : $loop->the_post();
-
-			$postid = get_the_ID();
+		if($by_category){
+			//load list of FAQ categories
+			$categories = array();
 			
-			if($i%5 == 0 && $i != 0)	{
+			$categories = get_terms('easy-faq-category'); 
+			
+			echo "<h3 class='quick-links'>Quick Links</h3>";
+			
+			//loop through categories, outputting a heading for the category and the list of faqs in that category
+			foreach($categories as $category){	
+				//output title of category
+				?><h4 class="easy-testimonial-category-heading"><?php echo $category->name; ?></h4><?php
+			
+				//load faqs into an array
+				$loop = new WP_Query(array( 'post_type' => 'faq','posts_per_page' => $count, 'orderby' => $orderby, 'order' => $order, 'easy-faq-category' => $category->slug));
+			
+				$i = 0;
+				$r = $loop->post_count;
+				
+				if(!$colcount){
+					$divCount = intval($r/5);
+					//if there are trailing testimonials, make sure we take into account the final div
+					if($r%5!=0){
+						$divCount ++;
+					}		
+				} else {
+					$divCount = intval($colcount);
+				}
+				
+				//trying CSS3 instead...
+				echo "<div class='faq-questions'>";
+				echo "<ol style=\"-webkit-column-count: {$divCount}; -moz-column-count: {$divCount}; column-count: {$divCount};\">";
+				
+				while($loop->have_posts()) : $loop->the_post();
+
+					$postid = get_the_ID();
+					
+					echo '<li class="faq_scroll" id="'.$postid.'"><a href="#easy-faq-' . $postid . '">' . get_the_title($postid) . '</a></li>';
+
+					$i ++;
+					
+				endwhile;
+				
+				
+				echo "</ol>";
 				echo "</div>";
-				echo '<div class="easy-faq-questions" style="width: '.$divWidth.'%;">';
-			}			
-			echo '<li class="faq_scroll" id="'.$postid.'"><a href="#easy-faq-' . $postid . '">' . get_the_title($postid) . '</a></li>';
-
-			$i ++;
-			
-		endwhile;
+			} 
+		} else {
+			//load faqs into an array
+			$loop = new WP_Query(array( 'post_type' => 'faq','posts_per_page' => $count, 'orderby' => $orderby, 'order' => $order, 'easy-faq-category' => $category));
 		
-		//close any trailing div, happens if we are in the middle of a column of 5
-		if($i%5 != 0){
+			$i = 0;
+			$r = $loop->post_count;
+			
+			if(!$colcount){
+				$divCount = intval($r/5);
+				//if there are trailing testimonials, make sure we take into account the final div
+				if($r%5!=0){
+					$divCount ++;
+				}		
+			} else {
+				$divCount = intval($colcount);
+			}
+			
+			//trying CSS3 instead...
+			echo "<h3 class='quick-links'>Quick Links</h3>";
+			echo "<div class='faq-questions'>";
+			echo "<ol style=\"-webkit-column-count: {$divCount}; -moz-column-count: {$divCount}; column-count: {$divCount};\">";
+			
+			while($loop->have_posts()) : $loop->the_post();
+
+				$postid = get_the_ID();
+				
+				echo '<li class="faq_scroll" id="'.$postid.'"><a href="#easy-faq-' . $postid . '">' . get_the_title($postid) . '</a></li>';
+
+				$i ++;
+				
+			endwhile;
+			
+			
+			echo "</ol>";
 			echo "</div>";
 		}
-		
-		echo "</ol>";
-		echo "</div>";
 	}
 
 	//output all faqs
@@ -608,7 +655,7 @@ class easyFAQs
 		
 		//output QuickLinks, if available and pro
 		if($quicklinks && isValidFAQKey()){
-			$this->outputQuickLinks($atts);
+			$this->outputQuickLinks($atts, true);
 		} 
 		
 		//loop through categories, outputting a heading for the category and the list of faqs in that category

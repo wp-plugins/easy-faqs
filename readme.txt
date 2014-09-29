@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Tags: faqs, faq widget, faq list, faq submission, frequently asked questions, knowledgebase
 Requires at least: 3.0.1
 Tested up to: 4.0
-Stable tag: 1.4.2
+Stable tag: 1.4.3
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -90,7 +90,7 @@ You have a few things to pay attention to:
 * To output a list of FAQs, grouped by category, use the shortcode ```[faqs-by-category]```.
 * To output a FAQ in the Sidebar, use the Widgets section of your WordPress Theme, Accessible on the Appearance Menu in the WordPress Admin.  Use the Drop Down menu to select which FAQ is displayed.
 * To output a Accordion Style FAQ List, use the shortcode ```[faqs style=accordion]```.  If you want the Accordion List to start with everything collapsed, use the shortcode ```[faqs style=accordion-collapsed]```.  The same attributes, such as count and category, apply from above.  **NOTE:** This feature requires the [Pro version of Easy FAQs](http://goldplugins.com/our-plugins/easy-faqs-details/ "Easy FAQs Pro")
-* To output a QuickLinks menu above your FAQ List, use the shortcode attribute```quicklinks=1```.  This attribute works with both the regular and the accordion style FAQs list.  **NOTE:** This feature requires the [Pro version of Easy FAQs](http://goldplugins.com/our-plugins/easy-faqs-details/ "Easy FAQs Pro")
+* To output a QuickLinks menu above your FAQ List, use the shortcode attribute```quicklinks=1```.  To control the number of columns quicklinks are dividied into, use the shortcode attribute ```colcount=2```.  This attribute works with both the regular and the accordion style FAQs list.  **NOTE:** This feature requires the [Pro version of Easy FAQs](http://goldplugins.com/our-plugins/easy-faqs-details/ "Easy FAQs Pro")
 
 # Front End FAQ Submission #
 
@@ -130,6 +130,9 @@ Never!  Easy is in our name!  If by complicated you mean new and easy to use fea
 6. This is the Easy FAQs Categories Page.
 
 == Changelog ==
+
+= 1.4.3 =
+* Fix: address some HTML validation issues.
 
 = 1.4.2 =
 * Fix: address issue with final quicklinks column not being closed if the last column didn't have 5 questions.
@@ -195,4 +198,4 @@ Never!  Easy is in our name!  If by complicated you mean new and easy to use fea
 
 == Upgrade Notice ==
 
-* 1.4.2: Update available!
+* 1.4.3: Update available!
