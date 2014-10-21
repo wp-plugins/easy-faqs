@@ -4,7 +4,7 @@ Plugin Name: Easy FAQs
 Plugin URI: http://goldplugins.com/our-plugins/easy-faqs-details/
 Description: Easy FAQs - Provides custom post type, shortcodes, widgets, and other functionality for Frequently Asked Questions (FAQs).
 Author: Gold Plugins
-Version: 1.4.3
+Version: 1.4.4
 Author URI: http://goldplugins.com
 
 This file is part of Easy FAQs.
@@ -29,6 +29,8 @@ include('include/lib/lib.php');
 
 class easyFAQs
 {
+	var $category_sort_order = array();
+	
 	function __construct(){		
 		//create shortcodes
 		add_shortcode('single_faq', array($this, 'outputSingleFAQ'));
@@ -396,6 +398,7 @@ class easyFAQs
 			'id' => NULL,
 			'category' => '',
 			'show_thumbs' => get_option('faqs_image'),
+			'style' => '',			
 			'read_more_link_text' =>  get_option('faqs_read_more_text', 'Read More')
 		), $atts ) );
 				
@@ -403,8 +406,15 @@ class easyFAQs
 		
 		$i = 0;
 		
-		echo '<div class="easy-faqs-wrapper">';
-		
+		if($style == "accordion" && isValidFAQKey()){
+			echo '<div class="easy-faqs-wrapper easy-faqs-accordion">';
+		} else if($style == "accordion-collapsed" && isValidFAQKey()){
+			//output the accordion, with everything collapsed
+			echo '<div class="easy-faqs-wrapper easy-faqs-accordion-collapsed">';
+		} else {
+			echo '<div class="easy-faqs-wrapper">';
+		}
+				
 		//load faqs into an array
 		$loop = new WP_Query(array( 'post_type' => 'faq','p' => $id, 'easy-faq-category' => $category));
 		while($loop->have_posts()) : $loop->the_post();
@@ -573,6 +583,7 @@ class easyFAQs
 			echo '<div class="easy-faqs-wrapper easy-faqs-accordion">';
 		} else if($style == "accordion-collapsed" && isValidFAQKey()){
 			//output the accordion, with everything collapsed
+			echo '<div class="easy-faqs-wrapper easy-faqs-accordion-collapsed">';
 		} else {
 			echo '<div class="easy-faqs-wrapper">';
 		}
@@ -631,6 +642,8 @@ class easyFAQs
 		
 		//load shortcode attributes into an array
 		extract( shortcode_atts( array(
+			'category_id' => '',
+			'category_ids' => '',
 			'read_more_link' => get_option('faqs_link'),
 			'count' => -1,
 			//'category' => '',
@@ -646,13 +659,36 @@ class easyFAQs
 			$count = -1;
 		}
 		
+		// handle possible pluralization of category_id(s)
+		if ( empty($category_id) && !empty($category_ids) ) {
+			$category_id = $category_ids;
+		}
+
 		ob_start();
 		
 		//load list of FAQ categories
 		$categories = array();
+		$args = array();
 		
-		$categories = get_terms('easy-faq-category'); 
-		
+		/* If a custom category order was specified, apply it now */
+		if ( !empty($category_id) ) {
+			// we may have many categorys, delimited by commas, so explode 
+			// the ID string into an array and then trim any whitespace
+			$cats = explode(',', $category_id);
+			$trimmed_cats = array_map('trim', $cats);
+			$args['include'] = $trimmed_cats;
+			
+			// get only the categories which were specified
+			$categories = get_terms('easy-faq-category', $args);		
+			
+			// resort the category's by the custom order
+			$this->category_sort_order = $trimmed_cats;
+			usort( $categories, array($this, "order_faqs_by_category_id") );
+		} else {
+			// no custom ordering specified, so proceed normally
+			$categories = get_terms('easy-faq-category', $args);		
+		}
+
 		//output QuickLinks, if available and pro
 		if($quicklinks && isValidFAQKey()){
 			$this->outputQuickLinks($atts, true);
@@ -714,6 +750,40 @@ class easyFAQs
 		wp_reset_query();
 		
 		return $content;
+	}
+	
+	function order_faqs_by_category_id($cat_1, $cat_2)
+	{
+		// first find their term's positions in our order array		
+		// this is the key on which we will actually sort
+		$c1_pos = array_search( $cat_1->term_id, $this->category_sort_order );
+		$c2_pos = array_search( $cat_2->term_id, $this->category_sort_order );
+		
+		// now, handle cases where one of the keys wasn't found
+		// in this case, whichever one was found "wins"		
+		if ($c1_pos === FALSE && $c2_pos === FALSE) {
+			return 0;
+		}
+		else if ($c1_pos >= 0 && $c2_pos == FALSE) {
+			return 1;
+		}
+		else if ($c1_pos === FALSE && $c2_pos >= 0) {
+			return -1;
+		}		
+				
+		// both keys found; return the one which is first in our custom order
+		if ($c1_pos === $c2_pos) {
+			// this should only happen if a category id was duplicated
+			return 0;
+		}
+		else if ($c1_pos > $c2_pos) {
+			// first term appears first
+			return 1;
+		} else if ($c1_pos < $c2_pos) {
+			// second term appears first
+			return -1;
+		}
+		
 	}
 
 
