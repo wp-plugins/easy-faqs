@@ -19,6 +19,5 @@ var initEasyFAQs = function ()
 	jQuery(".faq-questions li a").click(function(){
 		jQuery("#easy-faq-" + jQuery(this).parent("li").attr("id") + " h3").trigger("click");
 	});
-};
 
 jQuery(initEasyFAQs);

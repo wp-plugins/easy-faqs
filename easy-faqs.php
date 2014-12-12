@@ -4,7 +4,7 @@ Plugin Name: Easy FAQs
 Plugin URI: http://goldplugins.com/our-plugins/easy-faqs-details/
 Description: Easy FAQs - Provides custom post type, shortcodes, widgets, and other functionality for Frequently Asked Questions (FAQs).
 Author: Gold Plugins
-Version: 1.4.4
+Version: 1.5
 Author URI: http://goldplugins.com
 
 This file is part of Easy FAQs.
@@ -478,7 +478,7 @@ class easyFAQs
 			
 			$categories = get_terms('easy-faq-category'); 
 			
-			echo "<h3 class='quick-links'>Quick Links</h3>";
+			echo "<h3 class='quick-links' id='quick-links-top'>Quick Links</h3>";
 			
 			//loop through categories, outputting a heading for the category and the list of faqs in that category
 			foreach($categories as $category){	
@@ -537,7 +537,7 @@ class easyFAQs
 			}
 			
 			//trying CSS3 instead...
-			echo "<h3 class='quick-links'>Quick Links</h3>";
+			echo "<h3 class='quick-links' id='quick-links-top'>Quick Links</h3>";
 			echo "<div class='faq-questions'>";
 			echo "<ol style=\"-webkit-column-count: {$divCount}; -moz-column-count: {$divCount}; column-count: {$divCount};\">";
 			
@@ -622,7 +622,14 @@ class easyFAQs
 				
 					<?php if(strlen($read_more_link)>2):?><a class="easy-faq-read-more-link" href="<?php echo $read_more_link; ?>"><?php echo $read_more_link_text; ?></a><?php endif; ?>
 				</div>	
-
+				<?php 
+					//output return to top links
+					if($quicklinks && isValidFAQKey()){
+						?>
+							<a href="#quick-links-top" class="easy_faqs_return_to_top" title="<?php echo get_option('return_text', 'Return to Top');?>"><?php echo get_option('return_text', 'Return to Top');?></a>
+						<?php
+					}
+				?>
 			</div><?php 		
 			
 		endwhile;	
@@ -736,6 +743,15 @@ class easyFAQs
 					
 						<?php if(strlen($read_more_link)>2):?><a class="easy-faq-read-more-link" href="<?php echo $read_more_link; ?>"><?php echo $read_more_link_text; ?></a><?php endif; ?>
 					</div>	
+					
+					<?php 
+						//output return to top links
+						if($quicklinks && isValidFAQKey()){
+							?>
+								<a href="#quick-links-top" class="easy_faqs_return_to_top" title="<?php echo get_option('return_text', 'Return to Top');?>"><?php echo get_option('return_text', 'Return to Top');?></a>
+							<?php
+						}
+					?>
 
 				</div><?php 						
 			endwhile;	
