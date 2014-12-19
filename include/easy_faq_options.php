@@ -19,6 +19,7 @@ along with The Easy FAQs.  If not, see <http://www.gnu.org/licenses/>.
 class easyFAQOptions
 {
 	var $textdomain = '';
+	var $shed = false;
 
 	function __construct(){
 		//may be running in non WP mode (for example from a notification)
@@ -26,6 +27,9 @@ class easyFAQOptions
 			//add a menu item
 			add_action('admin_menu', array($this, 'add_admin_menu_item'));		
 		}
+		
+		// create the BikeShed object now, so that BikeShed can add its hooks
+		$this->shed = new Easy_FAQs_GoldPlugins_BikeShed();
 	}
 	
 	function add_admin_menu_item(){
@@ -64,6 +68,22 @@ class easyFAQOptions
 		register_setting( 'easy-faqs-settings-group', 'easy_faqs_custom_css' );	
 		register_setting( 'easy-faqs-settings-group', 'easy_faqs_use_captcha' );	
 		
+		register_setting( 'easy-faqs-settings-group', 'easy_faqs_question_font_size' );	
+		register_setting( 'easy-faqs-settings-group', 'easy_faqs_question_font_color' );	
+		register_setting( 'easy-faqs-settings-group', 'easy_faqs_question_font_style' );	
+		register_setting( 'easy-faqs-settings-group', 'easy_faqs_question_font_family' );	
+		
+		register_setting( 'easy-faqs-settings-group', 'easy_faqs_answer_font_size' );	
+		register_setting( 'easy-faqs-settings-group', 'easy_faqs_answer_font_color' );	
+		register_setting( 'easy-faqs-settings-group', 'easy_faqs_answer_font_style' );	
+		register_setting( 'easy-faqs-settings-group', 'easy_faqs_answer_font_family' );	
+		
+		register_setting( 'easy-faqs-settings-group', 'easy_faqs_read_more_link_font_size' );	
+		register_setting( 'easy-faqs-settings-group', 'easy_faqs_read_more_link_font_color' );	
+		register_setting( 'easy-faqs-settings-group', 'easy_faqs_read_more_link_font_style' );	
+		register_setting( 'easy-faqs-settings-group', 'easy_faqs_read_more_link_font_family' );	
+		
+		
 		register_setting( 'easy-faqs-settings-group', 'easy_faqs_registered_name' );
 		register_setting( 'easy-faqs-settings-group', 'easy_faqs_registered_url' );
 		register_setting( 'easy-faqs-settings-group', 'easy_faqs_registered_key' );
@@ -75,103 +95,11 @@ class easyFAQOptions
 		
 		global $pagenow;
 	?>
-	<div class="wrap">
+	<div class="wrap easy_faqs_wrapper gold_plugins_settings">
 		<h2><?php echo $title; ?></h2>
-		
 		<?php if(!isValidFAQKey()): ?>			
 			<!-- Begin MailChimp Signup Form -->
 			<style type="text/css">
-				/* MailChimp Form Embed Code - Slim - 08/17/2011 */
-				#mc_embed_signup form {display:block; position:relative; text-align:left; padding:10px 0 10px 3%}
-				#mc_embed_signup h2 {font-weight:bold; padding:0; margin:15px 0; font-size:1.4em;}
-				#mc_embed_signup input {border:1px solid #999; -webkit-appearance:none;}
-				#mc_embed_signup input[type=checkbox]{-webkit-appearance:checkbox;}
-				#mc_embed_signup input[type=radio]{-webkit-appearance:radio;}
-				#mc_embed_signup input:focus {border-color:#333;}
-				#mc_embed_signup .button {clear:both; background-color: #aaa; border: 0 none; border-radius:4px; color: #FFFFFF; cursor: pointer; display: inline-block; font-size:15px; font-weight: bold; height: 32px; line-height: 32px; margin: 0 5px 10px 0; padding:0; text-align: center; text-decoration: none; vertical-align: top; white-space: nowrap; width: auto;}
-				#mc_embed_signup .button:hover {background-color:#777;}
-				#mc_embed_signup .small-meta {font-size: 11px;}
-				#mc_embed_signup .nowrap {white-space:nowrap;}     
-				#mc_embed_signup .clear {clear:none; display:inline;}
-
-				#mc_embed_signup h3 { color: #008000; display:block; font-size:19px; padding-bottom:10px; font-weight:bold; margin: 0 0 10px;}
-				#mc_embed_signup .explain {
-					color: #808080;
-					width: 600px;
-				}
-				#mc_embed_signup label {
-					color: #000000;
-					display: block;
-					font-size: 15px;
-					font-weight: bold;
-					padding-bottom: 10px;
-				}
-				#mc_embed_signup input.email {display:block; padding:8px 0; margin:0 4% 10px 0; text-indent:5px; width:58%; min-width:130px;}
-
-				#mc_embed_signup div#mce-responses {float:left; top:-1.4em; padding:0em .5em 0em .5em; overflow:hidden; width:90%;margin: 0 5%; clear: both;}
-				#mc_embed_signup div.response {margin:1em 0; padding:1em .5em .5em 0; font-weight:bold; float:left; top:-1.5em; z-index:1; width:80%;}
-				#mc_embed_signup #mce-error-response {display:none;}
-				#mc_embed_signup #mce-success-response {color:#529214; display:none;}
-				#mc_embed_signup label.error {display:block; float:none; width:auto; margin-left:1.05em; text-align:left; padding:.5em 0;}		
-				#mc_embed_signup{background:#fff; clear:left; font:14px Helvetica,Arial,sans-serif; }
-					#mc_embed_signup{    
-							background-color: white;
-							border: 1px solid #DCDCDC;
-							clear: left;
-							color: #008000;
-							font: 14px Helvetica,Arial,sans-serif;
-							margin-top: 10px;
-							margin-bottom: 0px;
-							max-width: 800px;
-							padding: 5px 12px 0px;
-				}
-				#mc_embed_signup form{padding: 10px}
-
-				#mc_embed_signup .special-offer {
-					color: #808080;
-					margin: 0;
-					padding: 0 0 3px;
-					text-transform: uppercase;
-				}
-				#mc_embed_signup .button {
-				  background: #5dd934;
-				  background-image: -webkit-linear-gradient(top, #5dd934, #549e18);
-				  background-image: -moz-linear-gradient(top, #5dd934, #549e18);
-				  background-image: -ms-linear-gradient(top, #5dd934, #549e18);
-				  background-image: -o-linear-gradient(top, #5dd934, #549e18);
-				  background-image: linear-gradient(to bottom, #5dd934, #549e18);
-				  -webkit-border-radius: 5;
-				  -moz-border-radius: 5;
-				  border-radius: 5px;
-				  font-family: Arial;
-				  color: #ffffff;
-				  font-size: 20px;
-				  padding: 10px 20px 10px 20px;
-				  line-height: 1.5;
-				  height: auto;
-				  margin-top: 7px;
-				  text-decoration: none;
-				}
-
-				#mc_embed_signup .button:hover {
-				  background: #65e831;
-				  background-image: -webkit-linear-gradient(top, #65e831, #5dd934);
-				  background-image: -moz-linear-gradient(top, #65e831, #5dd934);
-				  background-image: -ms-linear-gradient(top, #65e831, #5dd934);
-				  background-image: -o-linear-gradient(top, #65e831, #5dd934);
-				  background-image: linear-gradient(to bottom, #65e831, #5dd934);
-				  text-decoration: none;
-				}
-				#signup_wrapper {
-					max-width: 800px;
-					margin-bottom: 20px;
-				}
-				#signup_wrapper .u_to_p
-				{
-					font-size: 10px;
-					margin: 0;
-					padding: 2px 0 0 3px;				
-				]
 			</style>
 			<div id="signup_wrapper">
 				<div id="mc_embed_signup">
@@ -212,82 +140,89 @@ class easyFAQOptions
 		<form method="post" action="options.php">		
 			<?php settings_fields( 'easy-faqs-settings-group' ); ?>			
 			
-			<h2>Basic Options</h2>
+			<h3>Basic Options</h3>
 			
 			<p>Use the below options to control various bits of output.</p>
 			
 			<table class="form-table">
-				<tr valign="top">
-					<th scope="row"><label for="faqs_style">FAQs Style</a></th>
-					<td>
-						<select name="faqs_style" id="faqs_style">	
-							<option value="default_style" <?php if(get_option('faqs_style') == "default_style"): echo 'selected="SELECTED"'; endif; ?>>Default Style</option>
-							<option value="no_style" <?php if(get_option('faqs_style') == "no_style"): echo 'selected="SELECTED"'; endif; ?>>No Style</option>
-						</select>
-						<p class="description">Select which style you want to use.  If 'No Style' is selected, only your Theme's CSS, and any Custom CSS you've added, will be used.</p>
-					</td>
-				</tr>
+				<?php
+					// FAQs Theme (select)
+					$themes = array(
+						'default_style' => 'Default Theme',
+						'no_style' => 'No Theme',
+					);
+					$desc = 'Select which style you want to use.  If \'No Style\' is selected, only your Theme\'s CSS, and any Custom CSS you\'ve added, will be used.';
+					$this->shed->select( array('name' => 'faqs_style', 'options' => $themes, 'label' =>'FAQs Style', 'value' => get_option('faqs_style'), 'description' => $desc) );
+
+					// Question Font (typography)
+					$values = array(
+						'font_size' => get_option('easy_faqs_question_font_size'),
+						'font_family' => get_option('easy_faqs_question_font_family'),
+						'font_style' => get_option('easy_faqs_question_font_style'),
+						'font_color' => get_option('easy_faqs_question_font_color'),
+					);
+					$this->shed->typography( array('name' => 'easy_faqs_question_*', 'label' =>'Question Font', 'description' => 'Choose a font size, family, style, and color.', 'google_fonts' => true, 'default_color' => '#878787', 'values' => $values) );
+
+					// Answer Font (typography)
+					$values = array(
+						'font_size' => get_option('easy_faqs_answer_font_size'),
+						'font_family' => get_option('easy_faqs_answer_font_family'),
+						'font_style' => get_option('easy_faqs_answer_font_style'),
+						'font_color' => get_option('easy_faqs_answer_font_color'),
+					);
+					$this->shed->typography( array('name' => 'easy_faqs_answer_*', 'label' =>'Answer Font', 'description' => 'Choose a font size, family, style, and color.', 'google_fonts' => true, 'default_color' => '#878787', 'values' => $values) );
+
+					// Read More Link Font (typography)
+					$values = array(
+						'font_size' => get_option('easy_faqs_read_more_link_font_size'),
+						'font_family' => get_option('easy_faqs_read_more_link_font_family'),
+						'font_style' => get_option('easy_faqs_read_more_link_font_style'),
+						'font_color' => get_option('easy_faqs_read_more_link_font_color'),
+					);
+					$this->shed->typography( array('name' => 'easy_faqs_read_more_link_*', 'label' =>'Read More Link Font', 'description' => 'Choose a font size, family, style, and color.', 'google_fonts' => true, 'default_color' => '#878787', 'values' => $values) );
+					
+				
+					// Custom CSS (textarea)
+					$this->shed->textarea( array('name' => 'easy_faqs_custom_css', 'label' =>'Custom CSS', 'value' => get_option('easy_faqs_custom_css'), 'description' => 'Input any Custom CSS you want to use here.  The plugin will work without you placing anything here - this is useful in case you need to edit any styles for it to work with your theme, though.') );
+					
+					// FAQS - Read More Link (text)
+					$this->shed->text( array('name' => 'faqs_link', 'label' =>'FAQs Read More Link', 'value' => get_option('faqs_link'), 'description' => 'This is the URL of the \'Read More\' Link.  If not set, no Read More Link is output.  If set, Read More Link will be output next to faq that will go to this page.') );
+
+					// FAQS - Read More Text (text)
+					$this->shed->text( array('name' => 'faqs_read_more_text', 'label' =>'FAQs Read More Text', 'value' => get_option('faqs_read_more_text'), 'description' => 'This is the Text of the \'Read More\' Link.  Default text is "Read More."  This is only displayed if a URL is set in the above field, FAQs Read More Link.') );
+					
+					// Hide Images in Feed (checkbox)
+					$checked = (get_option('faqs_image') == '1');
+					$this->shed->checkbox( array('name' => 'faqs_image', 'label' =>'Show FAQ Images', 'value' => 1, 'checked' => $checked, 'description' => 'If checked, the Featured Image for each FAQ will be displayed.', 'inline_label' => 'Show FAQ Images') );
+				?>
 			</table>
+
+			<h3>Submission Form Settings</h3>
+			<?php if(!isValidFAQKey()):?>
+			<p class="easy_faq_not_registered"><strong>These settings require Easy FAQs Pro.</strong>&nbsp;&nbsp;&nbsp;<a class="button" target="blank" href="http://goldplugins.com/our-plugins/easy-faqs-details/">Upgrade Now</a></p>
+			<?php endif;?>
 			
 			<table class="form-table">
-				<tr valign="top">
-					<th scope="row"><label for="easy_faqs_custom_css">Custom CSS</a></th>
-					<td><textarea name="easy_faqs_custom_css" id="easy_faqs_custom_css" style="width: 250px; height: 250px;"><?php echo get_option('easy_faqs_custom_css'); ?></textarea>
-					<p class="description">Input any Custom CSS you want to use here.  The plugin will work without you placing anything here - this is useful in case you need to edit any styles for it to work with your theme, though.</p></td>
-				</tr>
-			</table>
+			<?php
+					// Submission Form CAPTCHA (checkbox)
+					$desc = 'If checked, and a compatible plugin is installed (such as <a href="https://wordpress.org/plugins/really-simple-captcha/" target="_blank">Really Simple Captcha</a>) then we will output a Captcha on the Submission Form.  This is useful if you are having SPAM problems.';
+					$disabled =  !isValidFAQKey();
+					if(!class_exists('ReallySimpleCaptcha')) {
+						$desc .= '</p><p class="alert"><strong>ALERT: Really Simple Captcha is NOT active.  Captcha feature will not function.</strong>';
+					}
+					$checked = (get_option('easy_faqs_use_captcha') == '1');
+					$this->shed->checkbox( array('name' => 'easy_faqs_use_captcha', 'label' =>'Enable Captcha on Submission Form', 'value' => 1, 'checked' => $checked, 'description' => $desc, 'inline_label' => 'Show a CAPTCHA on form submissions to prevent spam', 'disabled' => $disabled) );
 			
-			<table class="form-table">
-				<tr valign="top">
-					<th scope="row"><label for="faqs_link">FAQs Read More Link</label></th>
-					<td><input type="text" name="faqs_link" id="faqs_link" value="<?php echo get_option('faqs_link'); ?>"  style="width: 250px" />
-					<p class="description">This is the URL of the 'Read More' Link.  If not set, no Read More Link is output.  If set, Read More Link will be output next to faq that will go to this page.</p>
-					</td>
-				</tr>
-			</table>
-			
-			<table class="form-table">
-				<tr valign="top">
-					<th scope="row"><label for="faqs_read_more_text">FAQs Read More Text</label></th>
-					<td><input type="text" name="faqs_read_more_text" id="faqs_read_more_text" value="<?php echo get_option('faqs_read_more_text', 'Read More'); ?>"  style="width: 250px" />
-					<p class="description">This is the Text of the 'Read More' Link.  Default text is "Read More."  This is only displayed if a URL is set in the above field, FAQs Read More Link.</p>
-					</td>
-				</tr>
-			</table>
-			
-			<table class="form-table">
-				<tr valign="top">
-					<th scope="row"><label for="faqs_image">Show FAQ Image</label></th>
-					<td><input type="checkbox" name="faqs_image" id="faqs_image" value="1" <?php if(get_option('faqs_image')){ ?> checked="CHECKED" <?php } ?>/>
-					<p class="description">If checked, the Image will be shown next to the FAQ.</p>
-					</td>
-				</tr>
-			</table>
-						
-			<table class="form-table">
-				<tr valign="top">
-					<th scope="row"><label for="easy_faqs_use_captcha">Enable Captcha on Submission Form</label></th>
-					<td><input type="checkbox" name="easy_faqs_use_captcha" id="easy_faqs_use_captcha" <?php if(!isValidFAQKey()): ?>disabled="disabled"<?php endif; ?> value="1" <?php if(get_option('easy_faqs_use_captcha')){ ?> checked="CHECKED" <?php } ?>/>
-					<p class="description">If checked, and a compatible plugin is installed (such as <a href="https://wordpress.org/plugins/really-simple-captcha/" target="_blank">Really Simple Captcha</a>) then we will output a Captcha on the Submission Form.  This is useful if you are having SPAM problems.</p>
-					<?php if(!class_exists('ReallySimpleCaptcha')): ?><p class="alert"><strong>ALERT: Really Simple Captcha is NOT active.  Captcha feature will not function.</strong></p><?php endif; ?>
-					</td>
-				</tr>
-			</table>
-						
-			<table class="form-table">
-				<tr valign="top">
-					<th scope="row"><label for="easy_faq_submit_notification_address">Submission Success Notification E-Mail Address</label></th>
-					<td><input type="text" name="easy_faq_submit_notification_address" id="easy_faq_submit_notification_address" <?php if(!isValidFAQKey()): ?>disabled="disabled"<?php endif; ?> value="<?php echo get_option('easy_faq_submit_notification_address'); ?>"  style="width: 250px" />
-					<p class="description">If set, we will attempt to send an e-mail notification to this address upon a succesfull submission.  If not set, submission notifications will be sent to the site's Admin E-mail address.</p>
-					</td>
-				</tr>
-			</table>
-			
-			<?php include('registration_options.php'); ?>
+					// Email Address for Submissions (text)
+					$this->shed->text( array('name' => 'easy_faq_submit_notification_address', 'label' =>'Submission Success Notification E-Mail Address', 'value' => get_option('easy_faq_submit_notification_address'), 'description' => 'If set, we will attempt to send an e-mail notification to this address upon a succesfull submission.  If not set, submission notifications will be sent to the website administrator\'s e-mail address.', 'disabled' => $disabled) );
+			?>
+
+			</table>	
+			<?php include('registration_options.php'); ?>				
 			
 			<p class="submit">
 				<input type="submit" class="button-primary" value="<?php _e('Save Changes') ?>" />
-			</p>			
+			</p>
 		</form>
 		</div>						
 		<?php

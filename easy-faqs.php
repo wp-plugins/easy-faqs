@@ -4,7 +4,7 @@ Plugin Name: Easy FAQs
 Plugin URI: http://goldplugins.com/our-plugins/easy-faqs-details/
 Description: Easy FAQs - Provides custom post type, shortcodes, widgets, and other functionality for Frequently Asked Questions (FAQs).
 Author: Gold Plugins
-Version: 1.5.1
+Version: 1.6
 Author URI: http://goldplugins.com
 
 This file is part of Easy FAQs.
@@ -26,6 +26,7 @@ along with Easy FAQs .  If not, see <http://www.gnu.org/licenses/>.
 global $easy_faqs_footer_css_output;
 
 include('include/lib/lib.php');
+include('include/lib/BikeShed/bikeshed.php');
 
 class easyFAQs
 {
@@ -60,6 +61,18 @@ class easyFAQs
 		//add example shortcode to faq categories list
 		add_filter('manage_edit-easy-faq-category_columns', array($this, 'easy_faqs_cat_column_head'), 10);  
 		add_action('manage_easy-faq-category_custom_column', array($this, 'easy_faqs_cat_columns_content'), 10, 3); 
+		
+		// admin init
+		add_action('admin_init', array($this, 'admin_init'));
+		
+		// add Google web fonts if needed
+		add_action( 'wp_enqueue_scripts', array($this, 'enqueue_webfonts'));
+	}
+	
+	function admin_init()
+	{
+		wp_register_style( 'easy_faqs_admin_stylesheet', plugins_url('include/css/admin_style.css', __FILE__) );
+		wp_enqueue_style( 'easy_faqs_admin_stylesheet' );
 	}
 
 	//setup JS
@@ -434,15 +447,10 @@ class easyFAQs
 			
 				<?php if ($show_thumbs) {
 					echo $faq['image'];
-				} ?>		
+				} ?>
 				
-				<?php echo '<h3 class="easy-faq-title">' . get_the_title($postid) . '</h3>'; ?>
-					
-				<div class="easy-faq-body">
-					<?php echo apply_filters('the_content', $faq['content']);?>
-				
-					<?php if(strlen($read_more_link)>2):?><a class="easy-faq-read-more-link" href="<?php echo $read_more_link; ?>"><?php echo $read_more_link_text; ?></a><?php endif; ?>
-				</div>	
+				<?php echo $this->build_the_question($postid); ?>
+				<?php echo $this->build_the_answer($faq, $read_more_link, $read_more_link_text); ?>
 
 			</div><?php 	
 				
@@ -456,6 +464,37 @@ class easyFAQs
 		wp_reset_query();
 		
 		return $content;
+	}
+	
+	function build_the_question($postid)
+	{
+		$h3 = '<h3 class="easy-faq-title" style="%s">%s</h3>';
+		$style_str = $this->build_typography_css('easy_faqs_question_');
+		$output = sprintf($h3, $style_str, get_the_title($postid));
+		return apply_filters( 'easy_faqs_question', $output);
+	}
+	
+	function build_the_answer($faq, $read_more_link = '', $read_more_link_text = '')
+	{
+		$template = '<div class="easy-faq-body" style="%s">%s %s</div>';
+		$content_str = apply_filters('the_content', $faq['content']);
+		$style_str = $this->build_typography_css('easy_faqs_answer_');
+		
+		// add the read more link (if the user's options say to do so)
+		if(!empty($read_more_link)) {
+			// build the read more link to be inserted
+			$link_template = '<a class="easy-faq-read-more-link" style="%s" href="%s">%s</a>';
+			$link_style_str = $this->build_typography_css('easy_faqs_read_more_link_');
+			$link_str = sprintf($link_template, $link_style_str, $read_more_link, $read_more_link_text);
+		} else {
+			// do not output a read more link
+			$link_str = '';
+		}
+		$link_str = apply_filters( 'easy_faqs_read_more_link', $link_str);		
+		
+		// return the formatted answer text
+		$output =  sprintf($template, $style_str, $content_str, $link_str);
+		return apply_filters( 'easy_faqs_answer', $output);		
 	}
 	
 	//passed the atts for the shortcode of faqs this is displayed above
@@ -478,13 +517,17 @@ class easyFAQs
 			
 			$categories = get_terms('easy-faq-category'); 
 			
-			echo "<h3 class='quick-links' id='quick-links-top'>Quick Links</h3>";
+			$quick_links_title = "<h3 class='quick-links' id='quick-links-top'>Quick Links</h3>";
+			echo apply_filters( 'easy_faqs_quick_links_title', $quick_links_title);
 			
 			//loop through categories, outputting a heading for the category and the list of faqs in that category
-			foreach($categories as $category){	
-				//output title of category
-				?><h4 class="easy-testimonial-category-heading"><?php echo $category->name; ?></h4><?php
-			
+			foreach($categories as $category)
+			{
+				//output title of category as a heading
+				$category_name = apply_filters( 'easy_faqs_category_name', $category->name);
+				$category_heading = sprintf('<h4 class="easy-testimonial-category-heading">%s</h4>', $category_name);
+				echo apply_filters( 'easy_faqs_quick_links_category_heading', $category_heading);
+
 				//load faqs into an array
 				$loop = new WP_Query(array( 'post_type' => 'faq','posts_per_page' => $count, 'orderby' => $orderby, 'order' => $order, 'easy-faq-category' => $category->slug));
 			
@@ -509,7 +552,8 @@ class easyFAQs
 
 					$postid = get_the_ID();
 					
-					echo '<li class="faq_scroll" id="'.$postid.'"><a href="#easy-faq-' . $postid . '">' . get_the_title($postid) . '</a></li>';
+					$list_item = '<li class="faq_scroll" id="'.$postid.'"><a href="#easy-faq-' . $postid . '">' . get_the_title($postid) . '</a></li>';
+					echo apply_filters( 'easy_faqs_quick_links_list_item', $list_item);
 
 					$i ++;
 					
@@ -537,7 +581,8 @@ class easyFAQs
 			}
 			
 			//trying CSS3 instead...
-			echo "<h3 class='quick-links' id='quick-links-top'>Quick Links</h3>";
+			$quick_links_title = "<h3 class='quick-links' id='quick-links-top'>Quick Links</h3>";
+			echo apply_filters( 'easy_faqs_quick_links_title', $quick_links_title);			
 			echo "<div class='faq-questions'>";
 			echo "<ol style=\"-webkit-column-count: {$divCount}; -moz-column-count: {$divCount}; column-count: {$divCount};\">";
 			
@@ -615,13 +660,9 @@ class easyFAQs
 					echo $faq['image'];
 				} ?>		
 				
-				<?php echo '<h3 class="easy-faq-title">' . get_the_title($postid) . '</h3>'; ?>
-					
-				<div class="easy-faq-body">
-					<?php echo apply_filters('the_content', $faq['content']);?>
-				
-					<?php if(strlen($read_more_link)>2):?><a class="easy-faq-read-more-link" href="<?php echo $read_more_link; ?>"><?php echo $read_more_link_text; ?></a><?php endif; ?>
-				</div>	
+				<?php echo $this->build_the_question($postid); ?>				
+				<?php echo $this->build_the_answer($faq, $read_more_link, $read_more_link_text); ?>
+
 				<?php 
 					//output return to top links
 					if($quicklinks && isValidFAQKey()){
@@ -702,9 +743,12 @@ class easyFAQs
 		} 
 		
 		//loop through categories, outputting a heading for the category and the list of faqs in that category
-		foreach($categories as $category){				
-			//output title of category
-			?><h2 class="easy-testimonial-category-heading"><?php echo $category->name; ?></h2><?php
+		foreach($categories as $category)
+		{	
+			//output title of category as a heading
+			$category_name = apply_filters( 'easy_faqs_category_name', $category->name);
+			$category_heading = sprintf('<h2 class="easy-faqs-category-heading">%s</h2>', $category_name);
+			echo apply_filters( 'easy_faqs_category_heading', $category_heading);
 		
 			if($style == "accordion" && isValidFAQKey()){
 				echo '<div class="easy-faqs-wrapper easy-faqs-accordion">';
@@ -736,13 +780,9 @@ class easyFAQs
 						echo $faq['image'];
 					} ?>		
 					
-					<?php echo '<h3 class="easy-faq-title">' . get_the_title($postid) . '</h3>'; ?>
+					<?php echo $this->build_the_question($postid); ?>					
+					<?php echo $this->build_the_answer($faq, $read_more_link, $read_more_link_text); ?>
 						
-					<div class="easy-faq-body">
-						<?php echo apply_filters('the_content', $faq['content']);?>
-					
-						<?php if(strlen($read_more_link)>2):?><a class="easy-faq-read-more-link" href="<?php echo $read_more_link; ?>"><?php echo $read_more_link_text; ?></a><?php endif; ?>
-					</div>	
 					
 					<?php 
 						//output return to top links
@@ -801,6 +841,126 @@ class easyFAQs
 		}
 		
 	}
+	
+/*
+	 * Builds a CSS string corresponding to the values of a typography setting
+	 *
+	 * @param	$prefix		The prefix for the settings. We'll append font_name,
+	 *						font_size, etc to this prefix to get the actual keys
+	 *
+	 * @returns	string		The completed CSS string, with the values inlined
+	 */
+	function build_typography_css($prefix)
+	{
+		$css_rule_template = ' %s: %s;';
+		$output = '';
+		
+		/* 
+		 * Font Family
+		 */
+		 
+		$option_val = get_option($prefix . 'font_family', '');
+		if (!empty($option_val)) {
+			// strip off 'google:' prefix if needed
+			$option_val = str_replace('google:', '', $option_val);
+
+		
+			// wrap font family name in quotes
+			$option_val = '\'' . $option_val . '\'';
+			$output .= sprintf($css_rule_template, 'font-family', $option_val);
+		}
+		
+		/* 
+		 * Font Size
+		 */
+		$option_val = get_option($prefix . 'font_size', '');
+		if (!empty($option_val)) {
+			// append 'px' if needed
+			if ( is_numeric($option_val) ) {
+				$option_val .= 'px';
+			}
+			$output .= sprintf($css_rule_template, 'font-size', $option_val);
+		}		
+		
+		/* 
+		 * Font Color
+		 */
+		$option_val = get_option($prefix . 'font_color', '');
+		if (!empty($option_val)) {
+			$output .= sprintf($css_rule_template, 'color', $option_val);
+		}
+
+		/* 
+		 * Font Style - add font-style and font-weight rules
+		 * NOTE: in this special case, we are adding 2 rules!
+		 */
+		$option_val = get_option($prefix . 'font_style', '');
+
+		// Convert the value to 2 CSS rules, font-style and font-weight
+		// NOTE: we lowercase the value before comparison, for simplification
+		switch(strtolower($option_val))
+		{
+			case 'regular':
+				// not bold not italic
+				$output .= sprintf($css_rule_template, 'font-style', 'normal');
+				$output .= sprintf($css_rule_template, 'font-weight', 'normal');
+			break;
+		
+			case 'bold':
+				// bold, but not italic
+				$output .= sprintf($css_rule_template, 'font-style', 'normal');
+				$output .= sprintf($css_rule_template, 'font-weight', 'bold');
+			break;
+
+			case 'italic':
+				// italic, but not bold
+				$output .= sprintf($css_rule_template, 'font-style', 'italic');
+				$output .= sprintf($css_rule_template, 'font-weight', 'normal');
+			break;
+		
+			case 'bold italic':
+				// bold and italic
+				$output .= sprintf($css_rule_template, 'font-style', 'italic');
+				$output .= sprintf($css_rule_template, 'font-weight', 'bold');
+			break;
+			
+			default:
+				// empty string or other invalid value, ignore and move on
+			break;			
+		}			
+
+		// return the completed CSS string
+		return trim($output);		
+	}
+	
+	// Enqueue any needed Google Web Fonts
+	function enqueue_webfonts()
+	{
+		$font_list = $this->list_required_google_fonts();
+		$font_list_encoded = array_map('urlencode', $this->list_required_google_fonts());
+		$font_str = implode('|', $font_list_encoded);
+		wp_register_style( 'ik_facebook_webfonts', 'http://fonts.googleapis.com/css?family=' . $font_str);
+		wp_enqueue_style( 'ik_facebook_webfonts' );
+	}
+
+	function list_required_google_fonts()
+	{
+		// check each typography setting for google fonts, and build a list
+		$option_keys = array(
+			'easy_faqs_question_font_family',
+			'easy_faqs_answer_font_family',
+			'easy_faqs_read_more_link_font_family',
+		);
+		$fonts = array();
+		foreach ($option_keys as $option_key) {
+			$option_value = get_option($option_key);
+			if (strpos($option_value, 'google:') !== FALSE) {
+				$option_value = str_replace('google:', '', $option_value);
+			}
+			$fonts[$option_value] = $option_value;
+		}
+		return $fonts;
+	}	
 
 
 	//register any widgets here
