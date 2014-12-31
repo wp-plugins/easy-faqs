@@ -40,6 +40,7 @@ class easyFAQOptions
 		//create new top-level menu
 		add_menu_page($page_title, $title, 'administrator', $top_level_slug , array($this, 'basic_settings_page'));
 		add_submenu_page($top_level_slug , 'Basic Options', 'Basic Options', 'administrator', $top_level_slug, array($this, 'basic_settings_page'));
+		add_submenu_page($top_level_slug , 'Shortcode Generator', 'Shortcode Generator', 'administrator', 'easy-faqs-shortcode-generator', array($this, 'shortcode_generator_page'));
 		add_submenu_page($top_level_slug , 'Help & Instructions', 'Help & Instructions', 'administrator', 'easy-faqs-help', array($this, 'help_settings_page'));
 
 		//call register settings function
@@ -49,7 +50,10 @@ class easyFAQOptions
 	//function to produce tabs on admin screen
 	function admin_tabs( $current = 'homepage' ) {
 	
-		$tabs = array( 'easy-faqs-settings' => __('Basic Options', $this->textdomain), 'easy-faqs-help' => __('Help & Instructions', $this->textdomain));
+		$tabs = array( 'easy-faqs-settings' => __('Basic Options', $this->textdomain),
+					   'easy-faqs-shortcode-generator' => __('Shortcode Generator', $this->textdomain),
+					   'easy-faqs-help' => __('Help & Instructions', $this->textdomain)
+					 );
 		echo '<div id="icon-themes" class="icon32"><br></div>';
 		echo '<h2 class="nav-tab-wrapper">';
 			foreach( $tabs as $tab => $name ){
@@ -172,24 +176,24 @@ class easyFAQOptions
 					);
 					$this->shed->typography( array('name' => 'easy_faqs_answer_*', 'label' =>'Answer Font', 'description' => 'Choose a font size, family, style, and color.', 'google_fonts' => true, 'default_color' => '#878787', 'values' => $values) );
 
-					// Read More Link Font (typography)
+					// View All Link Font (typography)
 					$values = array(
 						'font_size' => get_option('easy_faqs_read_more_link_font_size'),
 						'font_family' => get_option('easy_faqs_read_more_link_font_family'),
 						'font_style' => get_option('easy_faqs_read_more_link_font_style'),
 						'font_color' => get_option('easy_faqs_read_more_link_font_color'),
 					);
-					$this->shed->typography( array('name' => 'easy_faqs_read_more_link_*', 'label' =>'Read More Link Font', 'description' => 'Choose a font size, family, style, and color.', 'google_fonts' => true, 'default_color' => '#878787', 'values' => $values) );
+					$this->shed->typography( array('name' => 'easy_faqs_read_more_link_*', 'label' =>'View All Link Font', 'description' => 'Choose a font size, family, style, and color.', 'google_fonts' => true, 'default_color' => '#878787', 'values' => $values) );
 					
 				
 					// Custom CSS (textarea)
 					$this->shed->textarea( array('name' => 'easy_faqs_custom_css', 'label' =>'Custom CSS', 'value' => get_option('easy_faqs_custom_css'), 'description' => 'Input any Custom CSS you want to use here.  The plugin will work without you placing anything here - this is useful in case you need to edit any styles for it to work with your theme, though.') );
 					
-					// FAQS - Read More Link (text)
-					$this->shed->text( array('name' => 'faqs_link', 'label' =>'FAQs Read More Link', 'value' => get_option('faqs_link'), 'description' => 'This is the URL of the \'Read More\' Link.  If not set, no Read More Link is output.  If set, Read More Link will be output next to faq that will go to this page.') );
+					// FAQS - View All Link (text)
+					$this->shed->text( array('name' => 'faqs_link', 'label' =>'FAQs View All Link', 'value' => get_option('faqs_link'), 'description' => 'This is the URL of the \'View All\' Link.  If not set, no View All Link is output.  If set, View All Link will be output next to FAQ that will go to this page.') );
 
-					// FAQS - Read More Text (text)
-					$this->shed->text( array('name' => 'faqs_read_more_text', 'label' =>'FAQs Read More Text', 'value' => get_option('faqs_read_more_text'), 'description' => 'This is the Text of the \'Read More\' Link.  Default text is "Read More."  This is only displayed if a URL is set in the above field, FAQs Read More Link.') );
+					// FAQS - View All Text (text)
+					$this->shed->text( array('name' => 'faqs_read_more_text', 'label' =>'FAQs View All Text', 'value' => get_option('faqs_read_more_text'), 'description' => 'This is the Text of the \'View All\' Link.  Default text is "View All."  This is only displayed if a URL is set in the above field, FAQs View All Link.') );
 					
 					// Hide Images in Feed (checkbox)
 					$checked = (get_option('faqs_image') == '1');
@@ -233,5 +237,210 @@ class easyFAQOptions
 		include('pages/help.html');					
 		?></div><?php			
 	}	
+		
+	function shortcode_generator_page() {
+		$this->settings_page_top();
+		$categories = get_terms( 'easy-faq-category', 'orderby=title&hide_empty=0' );
+		?>
+		<div id="gold_plugins_shortcode_generator">
+			<h3>Shortcode Generator</h3>			
+			<p>Select the options you'd like, and then click the "Build My Shortcode!" button. You'll get a shortcode that you can copy and paste into any post or page.</p>
+			
+			<form id="easy_faqs_shortcode_generator">
+				<table class="form-table">
+					<tbody>										
+						<tr>
+							<th scope="row">
+								<div class="sc_gen_control_group">
+									<label for="sc_gen_count">Count</label>
+								</div>
+							</th>
+							<td>
+								<input type="text" class="valid_int" id="sc_gen_count" value="10" />
+								<p class="description">How many FAQs would you like to show? If you have more than this number, we'll show a Read More link.</p>
+								<p class="description tip"><strong>Tip:</strong> Leave this blank to show all FAQs (unlimited)</p>
+							</td>
+						</tr>
+												
+						<tr>
+							<th scope="row">
+								<div class="sc_gen_control_group">
+									<label for="sc_gen_read_more_url">View All URL</label>
+								</div>
+							</th>
+							<td>
+								<input type="text" id="sc_gen_read_more_url" value="" />
+								<p class="description">The URL of your FAQs page. If you have more FAQs than are currently displayed, we'll show this link.</p>
+								<p class="description"><strong>Tip:</strong> leave this blank to hide the View All link entirely.</p>
+							</td>
+						</tr>
+						
+						<tr>
+							<th scope="row">
+								<div class="sc_gen_control_group">
+									<label for="sc_gen_read_more_text">View All Link Text</label>
+								</div>
+							</th>
+							<td>
+								<input type="text" id="sc_gen_read_more_text" value="View All FAQs" />
+								<p class="description">The anchor text for the 'View All' link. If you have more FAQs than are currently displayed, we'll show this link.</p>
+							</td>
+						</tr>
+
+						<tr>
+							<th scope="row">
+								<div class="sc_gen_control_group">
+									<label for="sc_gen_order_by">Order By</label>
+								</div>
+							</th>
+							<td>
+								<div class="inline-select-wrapper">
+									<select id="sc_gen_order_by">
+										<option value="rand">Random</option>
+										<option value="id">ID</option>
+										<option value="author">Author</option>
+										<option value="title" selected="selected">Title</option>
+										<option value="name">Name</option>
+										<option value="date">Date</option>
+										<option value="modified">Last Modified</option>
+										<option value="parent">Parent ID</option>								
+									</select>
+								</div>
+								<div class="inline-select-wrapper">
+									<select id="sc_gen_order_dir">
+										<option value="asc">Ascending (ASC)</option>
+										<option value="desc">Descending (DESC)</option>
+									</select>
+								</div>
+								<p class="description">How should we order your FAQs?</p>
+							</td>
+						</tr>
+						
+						<tr>
+							<th scope="row">
+								<div class="sc_gen_control_group">
+									<label for="sc_gen_category">Filter By Category</label>
+								</div>
+							</th>
+							<td>
+								<select id="sc_gen_category">
+									<option value="all">All Categories</option>
+									<?php foreach($categories as $cat):?>
+									<option value="<?=$cat->slug?>"><?=htmlentities($cat->name)?></option>
+									<?php endforeach; ?>
+								</select>
+								<p class="description"><a href="<?php echo admin_url('edit-tags.php?taxonomy=easy-faq-category&post_type=faq'); ?>">Manage Categories</a></p>
+							</td>
+						</tr>
+						
+						<tr>
+							<th scope="row">
+								Featured Images
+							</th>
+							<td>							
+								<div class="sc_gen_control_group">
+									<label for="sc_gen_show_thumbs">
+										<input type="checkbox" class="checkbox" id="sc_gen_show_thumbs" value="yes" />
+										Show Featured Images with each FAQ?
+									</label>
+								</div>
+							</td>
+						</tr>
+						
+						<?php if (!isValidFAQKey()):?>
+						<tr>
+							<td colspan="2">
+								<div class="upgrade_notice">
+									<p class="easy_faq_not_registered"><strong>These settings require Easy FAQs Pro.</strong>&nbsp;&nbsp;&nbsp;<a class="button" target="blank" href="http://goldplugins.com/our-plugins/easy-faqs-details/?utm_source=shortcode_generator&utm_campaign=pro_upgrade">Upgrade Now</a></p>
+								</div>
+							</td>
+						</tr>
+						<?php endif; ?>
+						
+						<?php if (!isValidFAQKey()):?>
+						<tr class="disabled">
+						<?php else: ?>
+						<tr>
+						<?php endif; ?>
+							<th scope="row">
+								Quick Links
+							</th>
+							<td>
+								<div class="sc_gen_control_group">
+									<label for="sc_gen_quick_links">
+										<input type="checkbox" class="checkbox" id="sc_gen_quick_links" value="yes" />
+										Include a Quick Links section?
+									</label>
+								</div>
+							</td>
+						</tr>
+						
+						<?php if (!isValidFAQKey()):?>
+						<tr class="disabled">
+						<?php else: ?>
+						<tr>
+						<?php endif; ?>
+							<th scope="row">
+								<label for="sc_gen_quick_links_cols">Quick Links Columns</label>
+							</th>
+							<td>
+								<input type="text" class="valid_int" id="sc_gen_quick_links_cols" value="2" />
+								<p class="description">How many columns should your Quick Links section have?</p>
+							</td>
+						</tr>
+						
+						
+						<?php if (!isValidFAQKey()):?>
+						<tr class="disabled">
+						<?php else: ?>
+						<tr>
+						<?php endif; ?>
+							<th scope="row">
+								Accordion Style
+							</th>
+							<td>
+								<div class="sc_gen_control_group sc_gen_control_group_radio">
+									<label title="Hide Ratings">
+										<input type="radio" value="normal" id="sc_gen_style_normal" name="sc_gen_style" checked="checked">
+										<span>Normal Style</span>
+									</label>
+									<label title="Show Rating Before Testimonial">
+										<input type="radio" value="accordion" id="sc_gen_style_accordion_first_open" name="sc_gen_style">
+										<span>Accordion Style - First FAQ Visible</span>
+									</label>
+									<label title="Show Rating After Testimonial">
+										<input type="radio" value="accordion-collapsed" id="sc_gen_style_accordion_closed" name="sc_gen_style">
+										<span>Accordion Style - All FAQs Start Collapsed</span>
+									</label>
+								</div>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+				
+				<?php if (!isValidFAQKey()):?>
+				<input type="hidden" name="is_pro" id="is_pro" value="0" />
+				<?php else: ?>
+				<input type="hidden" name="is_pro" id="is_pro" value="1" />
+				<?php endif; ?>
+				
+				
+				<p class="submit">
+					<button id="sc_generate" class="button button-primary" type="button">Build My Shortcode!</button>
+				</p>
+				
+				<div id="sc_gen_output_wrapper">
+					<label for="sc_gen_output">Here is your Shortcode!</label>
+					<p class="description">Copy and paste this shortcode into any page or post to display your FAQs!</p>
+					<textarea id="sc_gen_output" rows="4" cols="80"></textarea>
+				</div>
+				
+			</form>
+		</div><!-- end #gold_plugins_shortcode_generator -->
+		</div><!--end settings_page-->
+		<?php 
+	}	
+	
+	
 } // end class
 ?>
