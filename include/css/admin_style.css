@@ -1,9 +1,8 @@
 /* Gold Plugins Settings Page Styles */
 .gold_plugins_settings form > h3 {
-    border-bottom: 1px solid #ccc;
     font-size: 24px;
     margin-top: 30px;
-    padding-bottom: 10px;
+    padding-bottom: 0px;
 }
 
 .gold_plugins_settings td h4 {
@@ -166,9 +165,23 @@
 	position: relative;
 	padding-right: 440px;
 }
+.gold_plugins_settings .topper {
+	background-color: dodgerblue;
+    color: white;
+    padding: 10px 20px;
+	border-top-left-radius: 5px;	
+	border-top-right-radius: 5px;
+	margin-top: 15px;
+}
+.gold_plugins_settings .topper h3 {
+    color: navajowhite;
+    font-size: 21px;
+    margin-bottom: 14px;
+}
+
 .gold_plugins_settings #mc_embed_signup form {display:block; position:relative; text-align:left; padding:10px 0 10px 3%}
 .gold_plugins_settings #mc_embed_signup h2 {font-weight:bold; padding:0; margin:15px 0; font-size:1.4em;}
-.gold_plugins_settings #mc_embed_signup input {border:1px solid #999; -webkit-appearance:none;}
+.gold_plugins_settings #mc_embed_signup input {-webkit-appearance:none;}
 .gold_plugins_settings #mc_embed_signup input[type=checkbox]{-webkit-appearance:checkbox;}
 .gold_plugins_settings #mc_embed_signup input[type=radio]{-webkit-appearance:radio;}
 .gold_plugins_settings #mc_embed_signup input:focus {border-color:#333;}
@@ -178,7 +191,43 @@
 .gold_plugins_settings #mc_embed_signup .nowrap {white-space:nowrap;}     
 .gold_plugins_settings #mc_embed_signup .clear {clear:none; display:inline;}
 
-.gold_plugins_settings #mc_embed_signup h3 { color: #008000; display:block; font-size:19px; padding-bottom:10px; font-weight:bold; margin: 0 0 10px;}
+.gold_plugins_settings #signup_wrapper #mc_embed_signup {
+	padding-bottom: 5px;
+	border-bottom-left-radius: 5px;	
+	border-bottom-right-radius: 5px;	
+}
+.gold_plugins_settings #mc_embed_signup h3 { 
+	color: #008888;
+    display: block;
+    font-size: 19px;
+    font-weight: bold;
+    margin: 0;
+    padding-bottom: 0;
+}
+.gold_plugins_settings #mc_embed_signup p.pitch {  
+	color: #454545;
+    margin-bottom: 20px;
+}
+.gold_plugins_settings #mc_embed_signup .secure {
+	text-align: center;
+	font-size: 8px;
+	line-height: 16px;
+	font-weight: bold;
+	font-family: Verdana, sans-serif;
+	text-transform: uppercase;
+	color: darkgray;
+	border-top: 1px solid #eee;
+	padding-top: 20px;
+}
+
+.gold_plugins_settings #mc_embed_signup .secure img {
+	display: inline-block;
+	margin-right: 5px;
+    position: relative;
+    top: 2px;
+}
+
+
 .gold_plugins_settings #mc_embed_signup .explain {
 	color: #808080;
 	width: auto;
@@ -190,7 +239,20 @@
 	font-weight: bold;
 	padding-bottom: 10px;
 }
-.gold_plugins_settings #mc_embed_signup input.email {display:block; padding:8px 0; margin:0 4% 10px 0; text-indent:5px; width:58%; min-width:130px;}
+.gold_plugins_settings #mc_embed_signup input.name,
+.gold_plugins_settings #mc_embed_signup input.email {
+	display:block;
+	padding:8px 0;
+	margin:0 4% 10px 0;
+	text-indent:5px;
+	width:100%;
+	min-width:130px;
+}
+.gold_plugins_settings #mc_embed_signup .smallBlueButton {
+	margin: 10px 0;
+    width: 100%;
+}
+
 
 .gold_plugins_settings #mc_embed_signup div#mce-responses {float:left; top:-1.4em; padding:0em .5em 0em .5em; overflow:hidden; width:90%;margin: 0 5%; clear: both;}
 .gold_plugins_settings #mc_embed_signup div.response {margin:1em 0; padding:1em .5em .5em 0; font-weight:bold; float:left; top:-1.5em; z-index:1; width:80%;}
@@ -204,10 +266,10 @@
 			clear: left;
 			color: #008000;
 			font: 14px Helvetica,Arial,sans-serif;
-			margin-top: 10px;
+			margin-top: 0px;
 			margin-bottom: 0px;
 			max-width: 800px;
-			padding: 5px 12px 0px;
+			padding: 15px 12px 5px;
 }
 .gold_plugins_settings #mc_embed_signup form{padding: 10px}
 
@@ -235,6 +297,8 @@
   height: auto;
   margin-top: 7px;
   text-decoration: none;
+  width: 100%;
+  text-align: center;
 }
 
 .gold_plugins_settings #mc_embed_signup .button:hover {
@@ -248,7 +312,6 @@
 }
 .gold_plugins_settings #signup_wrapper {
 	max-width: 800px;
-	margin-bottom: 20px;
 }
 .gold_plugins_settings #signup_wrapper .u_to_p
 {
@@ -333,4 +396,91 @@
 }
 #gold_plugins_shortcode_generator .upgrade_notice {
 	margin-left: -10px;
+}
+
+.gold_plugins_settings .smallBlueButton {
+    background: linear-gradient(to bottom, #79bbff 5%, #378de5 100%) repeat scroll 0 0 #79bbff;
+    border: 1px solid #337bc4;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px -2px #111, 0 2px 5px 0 rgba(255, 255, 255, 0.3) inset;
+    color: #ffffff;
+    cursor: pointer;
+    display: inline-block;
+    font-family: arial;
+    font-size: 22px;
+    font-weight: bold;
+    padding: 12px 24px;
+    text-decoration: none;
+    text-shadow: 0 1px 0 #528ecc;
+}
+.gold_plugins_settings .smallBlueButton:hover {
+    background: linear-gradient(to bottom, #378de5 5%, #79bbff 100%) repeat scroll 0 0 #378de5;
+}
+.gold_plugins_settings .smallBlueButton:active {
+    position: relative;
+    top: 1px;
+}
+
+#mc-show-coupon-codes .upgrade_link {
+    background: none repeat scroll 0 0 #f7f7f7;
+    border-color: #ccc;
+    border-radius: 3px;
+    border-style: solid;
+    border-width: 1px;
+    box-shadow: 0 1px 0 #fff inset, 0 1px 0 rgba(0, 0, 0, 0.08);
+    box-sizing: border-box;
+    color: #555;
+    cursor: pointer;
+    display: inline-block;
+    font-size: 15px;
+    margin: 0 0 15px;
+    padding: 12px 10px 17px;
+    text-align: center;
+    text-decoration: none;
+    vertical-align: top;
+    white-space: nowrap;
+    width: 100%;
+}
+
+#mc-show-coupon-codes .thx {
+	padding-bottom: 10px;
+}
+
+#mc-show-coupon-codes .package a {
+    display: inline-block;
+    font-weight: bold;
+	font-size: 18px;
+    margin-bottom: 6px;
+    text-decoration: none;
+}
+
+#mc-show-coupon-codes .desc a {
+	color: gray;
+    text-decoration: none;
+}
+
+.gold_plugins_settings #mc_embed_signup .features {
+	background-color: lightyellow;
+    margin-top: 30px;
+    margin-bottom: 15px;
+    padding: 20px 20px 10px;
+}
+.gold_plugins_settings #mc_embed_signup .features strong {
+	display: block;
+    font-size: 18px;
+    line-height: 26px;
+    margin-bottom: 14px;
+}
+
+.gold_plugins_settings #mc_embed_signup .features ul {
+	padding-left: 15px;
+}
+
+.gold_plugins_settings #mc_embed_signup .features ul li {
+	color: gray;
+	list-style-type: disc;
+	padding-bottom: 2px;
+	padding-left: 3px;
+	margin-left: 15px;
+	max-width: 85%;
 }

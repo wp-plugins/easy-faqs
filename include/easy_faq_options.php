@@ -98,24 +98,54 @@ class easyFAQOptions
 		$message = "Easy FAQs Settings Updated.";
 		
 		global $pagenow;
+		global $current_user;
+		get_currentuserinfo();
 	?>
+	<script type="text/javascript">
+	jQuery(function () {
+		if (typeof(gold_plugins_init_mailchimp_form) == 'function') {
+			gold_plugins_init_mailchimp_form();
+		}
+	});
+	</script>
 	<div class="wrap easy_faqs_wrapper gold_plugins_settings">
 		<h2><?php echo $title; ?></h2>
-		<?php if(!isValidFAQKey()): ?>			
+		<?php if(!isValidFAQKey()): ?>
 			<!-- Begin MailChimp Signup Form -->
 			<style type="text/css">
 			</style>
 			<div id="signup_wrapper">
+				<div class="topper">
+					<h3>Save 20% on Easy FAQs Pro!</h3>
+					<p class="pitch">Submit your name and email and we’ll send you a coupon for 20% off your upgrade to the Pro version.</p>
+				</div>
 				<div id="mc_embed_signup">
 					<form action="http://illuminatikarate.us2.list-manage2.com/subscribe/post?u=403e206455845b3b4bd0c08dc&amp;id=4ec6d49e6b" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
-						<p class="special-offer">Special Offer:</p>
-						<h3>Sign-up for our mailing list now, and we'll give you a discount on Easy FAQs Pro!</h3>
+						<label for="mce-NAME">Your Name:</label>
+						<input type="text" value="<?php echo (!empty($current_user->display_name) ?  $current_user->display_name : ''); ?>" name="NAME" class="name" id="mce-NAME" placeholder="Your Name">
 						<label for="mce-EMAIL">Your Email:</label>
-						<input type="email" value="" name="EMAIL" class="email" id="mce-EMAIL" placeholder="email address" required>
+						<input type="email" value="<?php echo (!empty($current_user->user_email) ?  $current_user->user_email : ''); ?>" name="EMAIL" class="email" id="mce-EMAIL" placeholder="email address" required>
 						<!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups-->
 						<div style="position: absolute; left: -5000px;"><input type="text" name="b_403e206455845b3b4bd0c08dc_6ad78db648" tabindex="-1" value=""></div>
-						<div class="clear"><input type="submit" value="Subscribe Now" name="subscribe" id="mc-embedded-subscribe" class="button"></div>
-						<p class="explain"><strong>What To Expect:</strong> <br/> As soon as you've confirmed your subscription, you'll receive a coupon code for a big discount on Easy FAQs Pro. After that, you'll receive about one email from us each month, jam-packed with special offers and tips for getting the most out of WordPress. Of course, you can unsubscribe at any time.</p>
+						<div class="clear"><input type="submit" value="Send Me The Coupon Now" name="subscribe" id="mc-embedded-subscribe" class="smallBlueButton"></div>
+						<p class="secure"><img src="<?php echo plugins_url( 'img/lock.png', __FILE__ ); ?>" alt="Lock" width="16px" height="16px" />We respect your privacy.</p>
+						
+						<input type="hidden" id="mc-upgrade-plugin-name" value="Easy FAQs Pro" />
+						<input type="hidden" id="mc-upgrade-link-per" value="http://goldplugins.com/purchase/easy-faqs/single?promo=newsub20" />
+						<input type="hidden" id="mc-upgrade-link-biz" value="http://goldplugins.com/purchase/easy-faqs/business?promo=newsub20" />
+						<input type="hidden" id="mc-upgrade-link-dev" value="http://goldplugins.com/purchase/easy-faqs/developer?promo=newsub20" />
+
+						<div class="features">
+							<strong>When you upgrade, you'll instantly unlock:</strong>
+							<ul>
+								<li>Question Submission forms for your users</li>
+								<li>Accordion-Style FAQ pages</li>
+								<li>Quick Links for your FAQ pages</li>
+								<li>Remove all banners from the admin area</li>							
+								<li>And more!</li>
+							</ul>
+						</div>
+						
 					</form>
 				</div>
 				<p class="u_to_p"><a href="http://goldplugins.com/our-plugins/easy-faqs-details/">Upgrade to Easy FAQs Pro now</a> to remove banners like this one.</p>
@@ -190,7 +220,7 @@ class easyFAQOptions
 					$this->shed->textarea( array('name' => 'easy_faqs_custom_css', 'label' =>'Custom CSS', 'value' => get_option('easy_faqs_custom_css'), 'description' => 'Input any Custom CSS you want to use here.  The plugin will work without you placing anything here - this is useful in case you need to edit any styles for it to work with your theme, though.') );
 					
 					// FAQS - View All Link (text)
-					$this->shed->text( array('name' => 'faqs_link', 'label' =>'FAQs View All Link', 'value' => get_option('faqs_link'), 'description' => 'This is the URL of the \'View All\' Link.  If not set, no View All Link is output.  If set, View All Link will be output next to FAQ that will go to this page.') );
+					$this->shed->text( array('name' => 'faqs_link', 'label' =>'FAQs View All Link', 'value' => get_option('faqs_link'), 'description' => 'This is the URL of the \'View All\' Link.  If not set, no View All Link is output.  If set, View All Link will be output next to faq that will go to this page.') );
 
 					// FAQS - View All Text (text)
 					$this->shed->text( array('name' => 'faqs_read_more_text', 'label' =>'FAQs View All Text', 'value' => get_option('faqs_read_more_text'), 'description' => 'This is the Text of the \'View All\' Link.  Default text is "View All."  This is only displayed if a URL is set in the above field, FAQs View All Link.') );
@@ -257,7 +287,7 @@ class easyFAQOptions
 							</th>
 							<td>
 								<input type="text" class="valid_int" id="sc_gen_count" value="10" />
-								<p class="description">How many FAQs would you like to show? If you have more than this number, we'll show a Read More link.</p>
+								<p class="description">How many FAQs would you like to show? If you have more than this number, we'll show a View All link.</p>
 								<p class="description tip"><strong>Tip:</strong> Leave this blank to show all FAQs (unlimited)</p>
 							</td>
 						</tr>

@@ -4,7 +4,7 @@ Plugin Name: Easy FAQs
 Plugin URI: http://goldplugins.com/our-plugins/easy-faqs-details/
 Description: Easy FAQs - Provides custom post type, shortcodes, widgets, and other functionality for Frequently Asked Questions (FAQs).
 Author: Gold Plugins
-Version: 1.7
+Version: 1.7.1
 Author URI: http://goldplugins.com
 
 This file is part of Easy FAQs.
@@ -67,6 +67,11 @@ class easyFAQs
 		
 		// add Google web fonts if needed
 		add_action( 'wp_enqueue_scripts', array($this, 'enqueue_webfonts'));
+		
+		//add our custom links for Settings and Support to various places on the Plugins page
+		$plugin = plugin_basename(__FILE__);
+		add_filter( "plugin_action_links_{$plugin}", array($this, 'add_settings_link_to_plugin_action_links') );
+		add_filter( 'plugin_row_meta', array($this, 'add_custom_links_to_plugin_description'), 10, 2 );		
 	}
 	
 	function admin_init()
@@ -81,6 +86,37 @@ class easyFAQs
 			false,
 			true
 		);		
+		wp_enqueue_script(
+			'gp-admin',
+			plugins_url('include/js/gp-admin.js', __FILE__),
+			array( 'jquery' ),
+			false,
+			true
+		);
+		
+	}
+
+	//add an inline link to the settings page, before the "deactivate" link
+	function add_settings_link_to_plugin_action_links($links) { 
+	  $settings_link = '<a href="admin.php?page=easy-faqs-settings">Settings</a>';
+	  array_unshift($links, $settings_link); 
+	  return $links; 
+	}
+
+	//add inlines link to pur plugin listing on the Plugins page, in the description area
+	function add_custom_links_to_plugin_description($links, $file) { 
+	
+		/** Get the plugin file name for reference */
+		$plugin_file = plugin_basename( __FILE__ );
+	 
+		/** Check if $plugin_file matches the passed $file name */
+		if ( $file == $plugin_file )
+		{		
+			$new_links['settings_link'] = '<a href="admin.php?page=easy-faqs-settings">Settings</a>';
+			$new_links['support_link'] = '<a href="http://goldplugins.com/contact/?utm-source=plugin_menu&utm_campaign=support&utm_banner=easy-faqs" target="_blank">Get Support</a>';
+			$links = array_merge( $links, $new_links);
+		}
+		return $links; 
 	}
 
 	//setup JS
