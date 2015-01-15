@@ -148,7 +148,7 @@ class easyFAQOptions
 						
 					</form>
 				</div>
-				<p class="u_to_p"><a href="http://goldplugins.com/our-plugins/easy-faqs-details/">Upgrade to Easy FAQs Pro now</a> to remove banners like this one.</p>
+				<p class="u_to_p"><a href="http://goldplugins.com/our-plugins/easy-faqs-details/upgrade-to-easy-faqs-pro/">Upgrade to Easy FAQs Pro now</a> to remove banners like this one.</p>
 			</div>
 			<!--End mc_embed_signup-->
 		<?php endif; ?>
@@ -233,7 +233,7 @@ class easyFAQOptions
 
 			<h3>Submission Form Settings</h3>
 			<?php if(!isValidFAQKey()):?>
-			<p class="easy_faq_not_registered"><strong>These settings require Easy FAQs Pro.</strong>&nbsp;&nbsp;&nbsp;<a class="button" target="blank" href="http://goldplugins.com/our-plugins/easy-faqs-details/">Upgrade Now</a></p>
+			<p class="easy_faq_not_registered"><strong>These settings require Easy FAQs Pro.</strong>&nbsp;&nbsp;&nbsp;<a class="button" target="blank" href="http://goldplugins.com/our-plugins/easy-faqs-details/upgrade-to-easy-faqs-pro/">Upgrade Now</a></p>
 			<?php endif;?>
 			
 			<table class="form-table">
@@ -381,7 +381,7 @@ class easyFAQOptions
 						<tr>
 							<td colspan="2">
 								<div class="upgrade_notice">
-									<p class="easy_faq_not_registered"><strong>These settings require Easy FAQs Pro.</strong>&nbsp;&nbsp;&nbsp;<a class="button" target="blank" href="http://goldplugins.com/our-plugins/easy-faqs-details/?utm_source=shortcode_generator&utm_campaign=pro_upgrade">Upgrade Now</a></p>
+									<p class="easy_faq_not_registered"><strong>These settings require Easy FAQs Pro.</strong>&nbsp;&nbsp;&nbsp;<a class="button" target="blank" href="http://goldplugins.com/our-plugins/easy-faqs-details/upgrade-to-easy-faqs-pro/?utm_source=shortcode_generator&utm_campaign=pro_upgrade">Upgrade Now</a></p>
 								</div>
 							</td>
 						</tr>

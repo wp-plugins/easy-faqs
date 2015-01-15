@@ -3,7 +3,7 @@
 <p class="easy_faq_registered">Your plugin is succesfully registered and activated!</p>
 <?php else: ?>
 <p>Fill out the fields below, if you have purchased the pro version of the plugin, to activate additional features such as Front-End FAQ Submission.</p>
-<p class="easy_faq_not_registered">Your plugin is not succesfully registered and activated. <a href="http://goldplugins.com/our-plugins/easy-faqs-details/" target="_blank">Click here</a> to upgrade today!</p>
+<p class="easy_faq_not_registered">Your plugin is not succesfully registered and activated. <a href="http://goldplugins.com/our-plugins/easy-faqs-details/upgrade-to-easy-faqs-pro/?utm_source=registration_fields" target="_blank">Click here</a> to upgrade today!</p>
 <?php endif; ?>	
 
 <?php if(!isValidMSFAQKey()): ?>

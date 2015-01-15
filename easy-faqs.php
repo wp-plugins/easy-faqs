@@ -4,7 +4,7 @@ Plugin Name: Easy FAQs
 Plugin URI: http://goldplugins.com/our-plugins/easy-faqs-details/
 Description: Easy FAQs - Provides custom post type, shortcodes, widgets, and other functionality for Frequently Asked Questions (FAQs).
 Author: Gold Plugins
-Version: 1.7.1
+Version: 1.7.2
 Author URI: http://goldplugins.com
 
 This file is part of Easy FAQs.
@@ -114,6 +114,12 @@ class easyFAQs
 		{		
 			$new_links['settings_link'] = '<a href="admin.php?page=easy-faqs-settings">Settings</a>';
 			$new_links['support_link'] = '<a href="http://goldplugins.com/contact/?utm-source=plugin_menu&utm_campaign=support&utm_banner=easy-faqs" target="_blank">Get Support</a>';
+			
+			if(!isValidFAQKey()){
+				$new_links['upgrade_to_pro'] = '<a href="http://goldplugins.com/our-plugins/easy-faqs-details/upgrade-to-easy-faqs-pro/?utm_source=plugin_menu&utm_campaign=up
+				grade" target="_blank">Upgrade to Pro</a>';
+			}
+			
 			$links = array_merge( $links, $new_links);
 		}
 		return $links; 
