@@ -150,6 +150,8 @@ if (!class_exists('Easy_FAQs_GoldPlugins_BikeShed'))
 								   'value'			=> '',
 								   'values'			=> array(),
 								   'default_color'	=> '#fff',
+								   'class'			=> '',
+								   'disabled'		=> '',
 							);
 			}
 			if (!is_array($options)) {
@@ -278,6 +280,7 @@ if (!class_exists('Easy_FAQs_GoldPlugins_BikeShed'))
 			$defaults = array( 'name' 	=> '',
 							   'id'		=> '',
 							   'label'	=> '',
+							   'disabled'	=> false,
 						);
 			$options = array_merge($defaults, $options);
 			
