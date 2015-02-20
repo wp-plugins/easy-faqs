@@ -4,7 +4,7 @@ Plugin Name: Easy FAQs
 Plugin URI: http://goldplugins.com/our-plugins/easy-faqs-details/
 Description: Easy FAQs - Provides custom post type, shortcodes, widgets, and other functionality for Frequently Asked Questions (FAQs).
 Author: Gold Plugins
-Version: 1.7.2
+Version: 1.7.3
 Author URI: http://goldplugins.com
 
 This file is part of Easy FAQs.
@@ -43,7 +43,7 @@ class easyFAQs
 		add_action( 'wp_enqueue_scripts', array($this, 'easy_faqs_setup_js' ));
 
 		//add CSS
-		add_action( 'wp_head', array($this, 'easy_faqs_setup_css' ));
+		add_action( 'wp_enqueue_scripts', array($this, 'easy_faqs_setup_css' ));
 
 		//add Custom CSS
 		add_action( 'wp_head', array($this, 'easy_faqs_setup_custom_css'));
@@ -989,8 +989,12 @@ class easyFAQs
 		$font_list = $this->list_required_google_fonts();
 		$font_list_encoded = array_map('urlencode', $this->list_required_google_fonts());
 		$font_str = implode('|', $font_list_encoded);
-		wp_register_style( 'ik_facebook_webfonts', 'http://fonts.googleapis.com/css?family=' . $font_str);
-		wp_enqueue_style( 'ik_facebook_webfonts' );
+		
+		//don't register this unless a font is set to register
+		if(strlen($font_str)>2){
+			wp_register_style( 'easy_faqs_webfonts', 'http://fonts.googleapis.com/css?family=' . $font_str);
+			wp_enqueue_style( 'easy_faqs_webfonts' );
+		}
 	}
 
 	function list_required_google_fonts()
@@ -1006,8 +1010,10 @@ class easyFAQs
 			$option_value = get_option($option_key);
 			if (strpos($option_value, 'google:') !== FALSE) {
 				$option_value = str_replace('google:', '', $option_value);
+				
+				//only add the font to the array if it was in fact a google font
+				$fonts[$option_value] = $option_value;				
 			}
-			$fonts[$option_value] = $option_value;
 		}
 		return $fonts;
 	}	
