@@ -24,17 +24,21 @@ Easy FAQs is an easy-to-use plugin that allows users to add FAQs (Frequently Ask
 
 Easy FAQs includes options to set the URL of the Read More Link, whether or not to display the FAQ Image, and more!  You can set the URL of the FAQs read more links for many purposes - such as directing visitors to the product info page that the faq is about.  Showing an Image next to a FAQ is a great tool!
 
-= Premium Support =
+= Upgrade To Easy FAQs PRO For Advanced Features and Email Support =
 
-The GoldPlugins team does not provide direct support for Easy FAQs plugin on the WordPress.org forums. One on one email support is available to people who have purchased Easy FAQs Pro only. Easy FAQs Pro also includes accordion-style FAQs and other advanced features including a Question Submission Form. You should [upgrade today!](http://goldplugins.com/our-plugins/easy-faqs-details/upgrade-to-easy-faqs-pro/ "Upgrade to Easy FAQs Pro")
+Easy FAQs Pro adds awesome new features like accordion-style FAQs and a Question Submission Form, so you can receive new questions right on your website. You'll also have access to one-on-one email support from our staff (just email hello@goldplugins.com anytime).
+
+[Upgrade To Easy FAQs Pro](http://goldplugins.com/our-plugins/easy-faqs-details/upgrade-to-easy-faqs-pro/?utm_source=wp&utm_campaign=desc_upgrade)
 
 = Why Should I Add Frequently Asked Questions (FAQs) to my Website? =
 
 Adding a Frequently Asked Questions (FAQs) section to your website, either as a full page or even just as a sidebar widget, can be a crucial tool to help your customers get the answers they need, fast.  A well written Frequently Asked Questions page can give users the answers they need without reading tedious documentation.  Organized into a Knowledgebase, Frequently Asked Questions can be a one-stop-shop for staff, users, and anyone else who may need answers.
 
-= Top Notch Support =
+= Premium Support =
 
-We take our plugins seriously.  You can contact our staff at hello@goldplugins.com for technical support, bug reports, and more. If you need professional help getting your setup configured just right, or are interested in advanced features such as Collapsing / Accordion-style FAQs, or want your users to be able to submit questions from the front-end, check out the Pro version of Easy FAQs: http://goldplugins.com/our-plugins/easy-faqs-details/
+The GoldPlugins team does not provide direct support for Easy FAQs plugin on the WordPress.org forums. One on one email support is available to people who have purchased Easy FAQs Pro only. Easy FAQs Pro also includes accordion-style FAQs and other advanced features including a Question Submission Form. You should [upgrade today!](http://goldplugins.com/our-plugins/easy-faqs-details/upgrade-to-easy-faqs-pro/?utm_source=wp&utm_campaign=desc_upgrade2 "Upgrade to Easy FAQs Pro")
+
+[Upgrade To Easy FAQs Pro](http://goldplugins.com/our-plugins/easy-faqs-details/upgrade-to-easy-faqs-pro/?utm_source=wp&utm_campaign=desc_upgrade2)
 
 = Get Started Using Easy FAQs Today! =
 
