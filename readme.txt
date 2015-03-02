@@ -24,6 +24,10 @@ Easy FAQs is an easy-to-use plugin that allows users to add FAQs (Frequently Ask
 
 Easy FAQs includes options to set the URL of the Read More Link, whether or not to display the FAQ Image, and more!  You can set the URL of the FAQs read more links for many purposes - such as directing visitors to the product info page that the faq is about.  Showing an Image next to a FAQ is a great tool!
 
+= Premium Support =
+
+The GoldPlugins team does not provide direct support for Easy FAQs plugin on the WordPress.org forums. One on one email support is available to people who have purchased Easy FAQs Pro only. Easy FAQs Pro also includes accordion-style FAQs and other advanced features including a Question Submission Form. You should [upgrade today!](http://goldplugins.com/our-plugins/easy-faqs-details/upgrade-to-easy-faqs-pro/ "Upgrade to Easy FAQs Pro")
+
 = Why Should I Add Frequently Asked Questions (FAQs) to my Website? =
 
 Adding a Frequently Asked Questions (FAQs) section to your website, either as a full page or even just as a sidebar widget, can be a crucial tool to help your customers get the answers they need, fast.  A well written Frequently Asked Questions page can give users the answers they need without reading tedious documentation.  Organized into a Knowledgebase, Frequently Asked Questions can be a one-stop-shop for staff, users, and anyone else who may need answers.
@@ -44,7 +48,7 @@ This section describes how to install the plugin and get it working.
 2. Activate Easy FAQs through the 'Plugins' menu in WordPress
 3. Visit this address for information on how to configure the plugin: http://goldplugins.com/documentation/easy-faqs-documentation/
 
-# Adding a New FAQ #
+### Adding a New FAQ ###
 
 Adding a New FAQ is easy!  There are 3 ways to start adding a new FAQ
 
@@ -63,7 +67,7 @@ You have a few things to pay attention to:
 * **Featured Image:** This image is shown to the left of the FAQ's title, as a 50px by 50px thumbnail.
 * **FAQ Category:** This is the Category that the FAQ belongs to, if desired.  You can use this to output FAQs from specific categories only, with the shortcode.
 
-# Editing a FAQ #
+### Editing a FAQ ###
 
  **This is as easy as adding a New FAQ!**
 
@@ -71,7 +75,7 @@ You have a few things to pay attention to:
 2. Hover over the FAQ you want to Edit and click "Edit".
 3. Change the fields to the desired content and click "Update".
 
-# Deleting a FAQ #
+### Deleting a FAQ ###
 
  **This is as easy as adding a New FAQ!**
 
@@ -80,7 +84,7 @@ You have a few things to pay attention to:
   
   **You can also change the Status of a FAQ, if you want to keep it on file.**
 
-# Outputting FAQs #
+### Outputting FAQs ###
 
 * To output a Single FAQ, place the shortcode ```[single_faq id="1"]``` in the desired area of the Page or Post Content.  If you view the List of FAQs, you can find the FAQ ID in the Table.
 * To output a list of All FAQs, place the shortcode ```[faqs]``` in the desired area of the Page or Post Content.  To display more than one faq, use the shortcode ```[faqs count='3']```, where count is the number of faqs you want displayed.  To display FAQs from a Category, use the shortcode ```[faqs category='your_slug']```.  To control the Order of the FAQs, use the attribute ```[faqs order='ASC']```.  To control the Order By parameter of the FAQs, use the attribute ```[faqs orderby='title']```.  You can find more details [here](http://goldplugins.com/documentation/easy-faqs-documentation/ "Easy FAQs Documentation")
@@ -92,7 +96,7 @@ You have a few things to pay attention to:
 * To output a Accordion Style FAQ List, use the shortcode ```[faqs style=accordion]```.  If you want the Accordion List to start with everything collapsed, use the shortcode ```[faqs style=accordion-collapsed]```.  The same attributes, such as count and category, apply from above.  **NOTE:** This feature requires the [Pro version of Easy FAQs](http://goldplugins.com/our-plugins/easy-faqs-details/ "Easy FAQs Pro")
 * To output a QuickLinks menu above your FAQ List, use the shortcode attribute```quicklinks=1```.  To control the number of columns quicklinks are dividied into, use the shortcode attribute ```colcount=2```.  This attribute works with both the regular and the accordion style FAQs list.  **NOTE:** This feature requires the [Pro version of Easy FAQs](http://goldplugins.com/our-plugins/easy-faqs-details/ "Easy FAQs Pro")
 
-# Front End FAQ Submission #
+### Front End FAQ Submission ###
 
 * **NOTE:** This feature requires the [Pro version of Easy FAQs](http://goldplugins.com/our-plugins/easy-faqs-details/ "Easy FAQs Pro")
 * Add the shortcode ```[submit_faq]``` to the area of the page you want your form on.
@@ -100,7 +104,7 @@ You have a few things to pay attention to:
 * E-mail notifications are sent to the site admin on new Frequently Asked Question (FAQ) submission.
 * Front End Submission supports Really Simple Captcha for SPAM prevention.  Enable from the Options screen.
 
-# Options #
+### Options ###
 * To control the destination of the "Read More" link, set the path in the FAQs Read More Link field.
 * To control the wording of the "Read More" link, set the wording in the Read More Link Text field.
 * To display any Featured Images that you have attached to your FAQs, check the box next to Show FAQ Image.
