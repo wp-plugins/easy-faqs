@@ -4,7 +4,7 @@ Plugin Name: Easy FAQs
 Plugin URI: http://goldplugins.com/our-plugins/easy-faqs-details/
 Description: Easy FAQs - Provides custom post type, shortcodes, widgets, and other functionality for Frequently Asked Questions (FAQs).
 Author: Gold Plugins
-Version: 1.7.4
+Version: 1.7.5
 Author URI: http://goldplugins.com
 
 This file is part of Easy FAQs.
@@ -238,7 +238,7 @@ class easyFAQs
 		$captcha_field_size = $captcha->char_length;
 		// Output the CAPTCHA fields
 		?>
-		<div class="easy_t_field_wrap">
+		<div class="easy_faqs_field_wrap">
 			<img src="<?php echo $captcha_image_src; ?>"
 			 alt="captcha"
 			 width="<?php echo $captcha_image_width; ?>"
@@ -246,7 +246,7 @@ class easyFAQs
 			<label for="captcha_code"><?php echo get_option('easy_faqs_captcha_field_label','Captcha'); ?></label><br/>
 			<input id="captcha_code" name="captcha_code"
 			 size="<?php echo $captcha_field_size; ?>" type="text" />
-			<p class="easy_t_description"><?php echo get_option('easy_faqs_captcha_field_description','Enter the value in the image above into this field.'); ?></p>
+			<p class="easy_faqs_description"><?php echo get_option('easy_faqs_captcha_field_description','Enter the value in the image above into this field.'); ?></p>
 			<input id="captcha_prefix" name="captcha_prefix" type="hidden"
 			 value="<?php echo $captcha_prefix; ?>" />
 		</div>
@@ -280,7 +280,7 @@ class easyFAQs
 					}		
 				
 					if(class_exists('ReallySimpleCaptcha') && get_option('easy_faqs_use_captcha',0)){ 
-						$correct = easy_t_check_captcha(); 
+						$correct = $this->easy_faqs_check_captcha(); 
 						if(!$correct){
 							echo '<p class="easy_faqs_error">Captcha did not match.</p>';
 							$do_not_insert = true;
@@ -330,7 +330,7 @@ class easyFAQs
 							<p class="easy_faqs_description">This is the question that you are asking.</p>
 						</div>
 		
-						<?php if(class_exists('ReallySimpleCaptcha') && get_option('easy_t_use_captcha',0)){ easy_t_outputCaptcha(); } ?>
+						<?php if(class_exists('ReallySimpleCaptcha') && get_option('easy_faqs_use_captcha',0)){ $this->easy_faqs_outputCaptcha(); } ?>
 						
 						<div class="easy_faqs_field_wrap"><input type="submit" value="Submit Your Question" tabindex="3" id="submit" name="submit" /></div>
 						<input type="hidden" name="action" value="post" />
