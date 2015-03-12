@@ -145,7 +145,7 @@ class easyFAQOptions
 								<li>And more!</li>
 							</ul>
 						</div>
-						
+						<input type="hidden" id="gold_plugins_already_subscribed" name="gold_plugins_already_subscribed" value="<?php echo get_user_setting ('_gp_ml_has_subscribed', '0'); ?>" />
 					</form>
 				</div>
 				<p class="u_to_p"><a href="http://goldplugins.com/our-plugins/easy-faqs-details/upgrade-to-easy-faqs-pro/">Upgrade to Easy FAQs Pro now</a> to remove banners like this one.</p>

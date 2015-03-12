@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Tags: faqs, faq widget, faq list, faq submission, frequently asked questions, knowledgebase
 Requires at least: 3.0.1
 Tested up to: 4.1.1
-Stable tag: 1.7.5
+Stable tag: 1.7.6
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -36,7 +36,7 @@ Adding a Frequently Asked Questions (FAQs) section to your website, either as a 
 
 = Premium Support =
 
-The GoldPlugins team does not provide direct support for Easy FAQs plugin on the WordPress.org forums. One on one email support is available to people who have purchased Easy FAQs Pro only. Easy FAQs Pro also includes accordion-style FAQs and other advanced features including a Question Submission Form. You should [upgrade today!](http://goldplugins.com/our-plugins/easy-faqs-details/upgrade-to-easy-faqs-pro/?utm_source=wp&utm_campaign=desc_upgrade2 "Upgrade to Easy FAQs Pro")
+The GoldPlugins team does not provide direct support for the Easy FAQs plugin on the WordPress.org forums. One on one email support is available to people who have purchased Easy FAQs Pro only. Easy FAQs Pro also includes accordion-style FAQs and other advanced features including a Question Submission Form. You should [upgrade today!](http://goldplugins.com/our-plugins/easy-faqs-details/upgrade-to-easy-faqs-pro/?utm_source=wp&utm_campaign=desc_upgrade2 "Upgrade to Easy FAQs Pro")
 
 [Upgrade To Easy FAQs Pro](http://goldplugins.com/our-plugins/easy-faqs-details/upgrade-to-easy-faqs-pro/?utm_source=wp&utm_campaign=desc_upgrade2)
 
@@ -138,6 +138,9 @@ Never!  Easy is in our name!  If by complicated you mean new and easy to use fea
 6. This is the Easy FAQs Categories Page.
 
 == Changelog ==
+
+= 1.7.6 =
+* Fix: Addresses issue where rewrite rules weren't automatically flushed, causing 404s when viewing single FAQs.
 
 = 1.7.5 =
 * Fix: Address issue with captcha functionality on question submission form.
@@ -241,4 +244,4 @@ Never!  Easy is in our name!  If by complicated you mean new and easy to use fea
 
 == Upgrade Notice ==
 
-* 1.7.5: Bug fixes available!
+* 1.7.6: Update Available!

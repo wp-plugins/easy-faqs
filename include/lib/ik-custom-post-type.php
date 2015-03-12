@@ -55,16 +55,14 @@ class ikFAQsCustomPostType
 				'publicly_queryable' => true,
 				'show_ui' => true, 
 				'query_var' => true,
-				'rewrite' => array( 'slug' => $postType['slug'], 'with_front' => (strlen($postType['slug'])>0) ? false : true),
+				'rewrite' => true,
 				'capability_type' => 'post',
 				'hierarchical' => false,
-				'menu_position' => 20,
 				'supports' => array('title','editor','author','thumbnail','excerpt','comments','custom-fields'),
 			); 
 			$this->customPostTypeArgs = $args;
 	
-			// register hooks
-			add_action( 'init', array( &$this, 'registerPostTypes' ) );
+			$this->registerPostTypes();
 		}
 	}
 

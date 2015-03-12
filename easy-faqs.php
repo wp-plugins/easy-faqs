@@ -4,7 +4,7 @@ Plugin Name: Easy FAQs
 Plugin URI: http://goldplugins.com/our-plugins/easy-faqs-details/
 Description: Easy FAQs - Provides custom post type, shortcodes, widgets, and other functionality for Frequently Asked Questions (FAQs).
 Author: Gold Plugins
-Version: 1.7.5
+Version: 1.7.6
 Author URI: http://goldplugins.com
 
 This file is part of Easy FAQs.
@@ -71,7 +71,18 @@ class easyFAQs
 		//add our custom links for Settings and Support to various places on the Plugins page
 		$plugin = plugin_basename(__FILE__);
 		add_filter( "plugin_action_links_{$plugin}", array($this, 'add_settings_link_to_plugin_action_links') );
-		add_filter( 'plugin_row_meta', array($this, 'add_custom_links_to_plugin_description'), 10, 2 );		
+		add_filter( 'plugin_row_meta', array($this, 'add_custom_links_to_plugin_description'), 10, 2 );	
+
+		//flush rewrite rules - only do this once!
+		//we do this to prevent 404s when viewing individual FAQs
+		register_activation_hook( __FILE__, array($this, 'easy_faqs_rewrite_flush'));		
+	}
+
+	//only do this once
+	function easy_faqs_rewrite_flush() {		
+		$this->easy_faqs_setup_faqs();
+		
+		flush_rewrite_rules();
 	}
 	
 	function admin_init()
