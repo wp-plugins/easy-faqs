@@ -16,6 +16,9 @@ You should have received a copy of the GNU General Public License
 along with The Easy FAQs.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+include("lib/easy_faqs_importer.php");
+include("lib/easy_faqs_exporter.php");
+
 class easyFAQOptions
 {
 	var $textdomain = '';
@@ -41,6 +44,7 @@ class easyFAQOptions
 		add_menu_page($page_title, $title, 'administrator', $top_level_slug , array($this, 'basic_settings_page'));
 		add_submenu_page($top_level_slug , 'Basic Options', 'Basic Options', 'administrator', $top_level_slug, array($this, 'basic_settings_page'));
 		add_submenu_page($top_level_slug , 'Shortcode Generator', 'Shortcode Generator', 'administrator', 'easy-faqs-shortcode-generator', array($this, 'shortcode_generator_page'));
+		add_submenu_page($top_level_slug , 'Import & Export FAQs', 'Import & Export FAQs', 'administrator', 'easy-faqs-import-export', array($this, 'import_export_page'));
 		add_submenu_page($top_level_slug , 'Help & Instructions', 'Help & Instructions', 'administrator', 'easy-faqs-help', array($this, 'help_settings_page'));
 
 		//call register settings function
@@ -52,6 +56,7 @@ class easyFAQOptions
 	
 		$tabs = array( 'easy-faqs-settings' => __('Basic Options', $this->textdomain),
 					   'easy-faqs-shortcode-generator' => __('Shortcode Generator', $this->textdomain),
+					   'easy-faqs-import-export' => __('Import & Export FAQs', $this->textdomain),
 					   'easy-faqs-help' => __('Help & Instructions', $this->textdomain)
 					 );
 		echo '<div id="icon-themes" class="icon32"><br></div>';
@@ -472,5 +477,33 @@ class easyFAQOptions
 	}	
 	
 	
+	function import_export_page(){
+		//import export yang		
+		$this->settings_page_top();
+		if(!isValidFAQKey()){ //not pro
+		?>
+		<h3>FAQs Importer</h3>	
+		<p class="easy_faq_not_registered"><strong>These features require Easy FAQs Pro.</strong>&nbsp;&nbsp;&nbsp;<a class="button" target="blank" href="http://goldplugins.com/our-plugins/easy-faqs-details/upgrade-to-easy-faqs-pro/">Upgrade Now</a></p>
+		
+		<h3>FAQs Exporter</h3>		
+		<p class="easy_faq_not_registered"><strong>These features require Easy FAQs Pro.</strong>&nbsp;&nbsp;&nbsp;<a class="button" target="blank" href="http://goldplugins.com/our-plugins/easy-faqs-details/upgrade-to-easy-faqs-pro/">Upgrade Now</a></p>	
+		<?php 
+			} else { //is pro
+		?>
+			<h3>FAQs Importer</h3>	
+			<?php 
+				//CSV Importer
+				$importer = new easyFAQsImporter();
+				$importer->csv_importer();
+			?>
+			<h3>FAQs Exporter</h3>	
+			<?php 
+				//CSV Exporter
+				$exporter = new easyFAQsExporter();
+				$exporter->csv_exporter();
+			?>
+		<?php	} ?>
+		</div><?php			
+	}	
 } // end class
 ?>

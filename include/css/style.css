@@ -60,3 +60,8 @@
 .faq_scroll:hover	{
 	cursor: pointer;
 }
+
+/* highlight search terms */
+.easy-faqs-wrapper .search_highlight {
+    background-color: lightgreen;
+}

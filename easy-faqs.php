@@ -4,7 +4,7 @@ Plugin Name: Easy FAQs
 Plugin URI: http://goldplugins.com/our-plugins/easy-faqs-details/
 Description: Easy FAQs - Provides custom post type, shortcodes, widgets, and other functionality for Frequently Asked Questions (FAQs).
 Author: Gold Plugins
-Version: 1.7.6
+Version: 1.8
 Author URI: http://goldplugins.com
 
 This file is part of Easy FAQs.
@@ -26,6 +26,7 @@ along with Easy FAQs .  If not, see <http://www.gnu.org/licenses/>.
 global $easy_faqs_footer_css_output;
 
 include('include/lib/lib.php');
+include('include/lib/str_highlight.php');
 include('include/lib/BikeShed/bikeshed.php');
 
 class easyFAQs
@@ -37,7 +38,9 @@ class easyFAQs
 		add_shortcode('single_faq', array($this, 'outputSingleFAQ'));
 		add_shortcode('faqs', array($this, 'outputFAQs'));
 		add_shortcode('faqs-by-category', array($this, 'outputFAQsByCategory'));
+		add_shortcode('faqs_by_category', array($this, 'outputFAQsByCategory')); // i've heard it both ways
 		add_shortcode('submit_faq', array($this, 'submitFAQForm'));
+		add_shortcode('search_faqs', array($this, 'outputSearchForm'));
 
 		//add JS
 		add_action( 'wp_enqueue_scripts', array($this, 'easy_faqs_setup_js' ));
@@ -357,6 +360,121 @@ class easyFAQs
 		   
 			return $content;
 	}
+	
+	function outputSearchForm($atts, $content = '')
+	{
+		$query = !empty($_REQUEST['search_faqs']) ? strip_tags($_REQUEST['search_faqs']) : '';
+		$wrapper_class = 'easy_faqs_search_form';
+		$wrapper_class = apply_filters( 'easy_faqs_search_wrapper_class', $wrapper_class, array('query' => $query) );
+		
+		$form_html = $this->getSearchFormTemplate($query);
+		if ( !empty($query) ) {
+			$form_html .= $this->getSearchResults($query);
+		}
+		
+		$search_form = sprintf('<div class="%s">%s</div>', $wrapper_class, $form_html);		
+		return $search_form;
+	}
+	
+	function getSearchFormTemplate($query = '')
+	{
+		// add heading HTML
+		$heading_html = $this->getSearchFormHeader();
+		$heading_html = apply_filters('easy_faqs_search_heading_html', $heading_html);
+		
+		// add the form HTML
+		$form_template = 
+		'<form>
+			<input name="search_faqs" id="search_faqs" value="%s" />			
+			<button type="submit">%s</button>
+		</form>';
+		
+		// allow button label to be overriden by a filter
+		$button_label = 'Search';
+		$button_label = apply_filters('easy_faqs_search_button_label', $button_label);
+		
+		// combine template + vars into the form HTML
+		$form_html = sprintf($form_template, htmlentities($query), $button_label);
+
+		// allow search from to be overridden
+		$form_html = apply_filters( 'easy_faqs_search_form_html', $form_html, array('query' => $query, 'button_label' => $button_label) );
+		
+		// return the finished HTML
+		return $heading_html . $form_html;
+	}
+	
+	function getSearchFormHeader()
+	{
+		// default class and text
+		$heading_class = 'easy_faqs_search_heading';
+		$heading_text = 'Search Our Knowledgebase';
+		
+		// apply filters now to allow class + text to be overridden
+		$heading_class = apply_filters( 'easy_faqs_search_heading_class', $heading_class );
+		$heading_text = apply_filters( 'easy_faqs_search_heading_text', $heading_text );
+
+		// return the formatted heading
+		return sprintf('<h2 class="%s">%s</h2>', $heading_class, $heading_text);
+	}
+		
+	function getSearchResults($search_query)
+	{
+		$args = array(
+			's' 		=> $search_query,
+			'post_type' => 'faq',
+		);
+		$args = apply_filters( 'easy_faqs_search_params', $args );
+		$results = new WP_Query($args);
+		
+		$loop = new WP_Query( $args );		
+		if ( $loop->have_posts() )
+		{
+			$args = array(
+				'highlight_word' => $search_query
+			);
+			
+			$results_heading = '<h2 class="easy_faqs_search_heading">Search Results</h2>';
+			$results_heading = apply_filters( 'easy_faqs_search_results_heading', $results_heading, array('query' => $search_query) );			
+			
+			$results_html = $this->displayFAQsFromQuery($loop, $args);
+			// inject the results into the template and return it
+			$html = sprintf( 
+				'<div class="easy_faqs_search_results_wrapper">
+					%s
+					<div class="easy_faqs_search_results">%s</div>
+				</div>',
+				$results_heading,
+				$results_html
+			);
+			
+			return $html;
+		}
+		else // no results
+		{
+			// return the 'No results found' message's HTML
+			$no_results_msg = 'No FAQs were found which matched your query, "%s". Please search again.';
+			$results_html = $this->format_no_results_message($no_results_msg, $search_query);
+			return $results_html;
+		}				
+	}
+	
+	// returns the "no results message" wrapped in the proper HTML tags 
+	// will insert $query within $msg if $msg contains "%s"
+	function format_no_results_message($msg, $query) {
+		
+		// allow the message to be overriden by a filter
+		$msg = apply_filters( 'easy_faqs_search_no_results_message', $msg, array('query' => $query) );
+		
+		// inject search term if needed
+		if (strpos($msg, '%s') !== FALSE) {
+			$msg = sprintf($msg, htmlentities($query));
+		}
+		
+		// wrap it in a <p> and return it
+		$template = '<p class="%s">%s</p>';
+		$css_class = 'easy_faqs_no_results';
+		return sprintf($template, $css_class, $msg);		
+	}
 
 	//add Custom CSS
 	function easy_faqs_setup_custom_css() {
@@ -403,7 +521,7 @@ class easyFAQs
 		$postType = array('name' => 'FAQ', 'plural' =>'faqs', 'slug' => 'faq' );
 		$fields = array(); 
 		$myCustomType = new ikFAQsCustomPostType($postType, $fields);
-		register_taxonomy( 'easy-faq-category', 'faq', array( 'hierarchical' => true, 'label' => __('FAQ Category'), 'rewrite' => array('slug' => 'faq-category', 'with_front' => false) ) ); 
+		register_taxonomy( 'easy-faq-category', 'faq', array( 'hierarchical' => true, 'label' => __('FAQ Category'), 'rewrite' => array('slug' => 'faq-category', 'with_front' => true) ) ); 
 		
 		//load list of current posts that have featured images	
 		$supportedTypes = get_theme_support( 'post-thumbnails' );
@@ -464,67 +582,103 @@ class easyFAQs
 	}
 
 	//output specific faq
-	function outputSingleFAQ($atts){ 
-		
-		//load shortcode attributes into an array
+	function outputSingleFAQ($atts)
+	{		
+		// go ahead and extract category and ID because we need them to generate the loop
+		extract( shortcode_atts( array(
+			'id' => NULL,
+			'category' => '',
+		), $atts ) );
+		$loop = new WP_Query(array( 'post_type' => 'faq','p' => $id, 'easy-faq-category' => $category));
+		$faqs_list_html = $this->displayFAQsFromQuery($loop, $atts);		
+		return $faqs_list_html;
+	}
+	
+	// Generic function to display the results of a WP_Query ($loop)
+	function displayFAQsFromQuery($loop, $atts = array())
+	{
+		// load default shortcode attributes into an array
+		// and merge with anything specified
 		extract( shortcode_atts( array(
 			'read_more_link' => get_option('faqs_link'),
 			'id' => NULL,
 			'category' => '',
 			'show_thumbs' => get_option('faqs_image'),
 			'style' => '',			
-			'read_more_link_text' =>  get_option('faqs_read_more_text', 'Read More')
+			'quicklinks' => false,
+			'read_more_link_text' =>  get_option('faqs_read_more_text', 'Read More'),
+			'highlight_word' => ''
 		), $atts ) );
-				
-		ob_start();
 		
-		$i = 0;
+		// start building the HTML now
+		$output = '';
 		
-		if($style == "accordion" && isValidFAQKey()){
-			echo '<div class="easy-faqs-wrapper easy-faqs-accordion">';
-		} else if($style == "accordion-collapsed" && isValidFAQKey()){
+		// start with a wrapper div (with accordion classes, if requested & allowed)
+		if( $style == "accordion" && isValidFAQKey() ) {
+			$output .= '<div class="easy-faqs-wrapper easy-faqs-accordion">';
+		} else if( $style == "accordion-collapsed" && isValidFAQKey() ){
 			//output the accordion, with everything collapsed
-			echo '<div class="easy-faqs-wrapper easy-faqs-accordion-collapsed">';
+			$output .= '<div class="easy-faqs-wrapper easy-faqs-accordion-collapsed">';
 		} else {
-			echo '<div class="easy-faqs-wrapper">';
+			$output .='<div class="easy-faqs-wrapper">';
 		}
-				
-		//load faqs into an array
-		$loop = new WP_Query(array( 'post_type' => 'faq','p' => $id, 'easy-faq-category' => $category));
-		while($loop->have_posts()) : $loop->the_post();
+		
+		//output QuickLinks, if available and pro
+		if($quicklinks && isValidFAQKey()){
+			$this->outputQuickLinks($atts);
+		} 
+		
+		// build a single FAQ HTML block for each item, adding it to $output
+		while( $loop->have_posts() )
+		{
+			// load up the current post data with this FAQ's information
+			// this lets us use get_the_content, get_the_title, etc
+			$loop->the_post();
+			
+			// load content for this FAQ
 			$postid = get_the_ID();
 			$faq['content'] = get_post_meta($postid, '_ikcf_short_content', true); 		
-
-			//if nothing is set for the short content, use the long content
+			
+			// if nothing is set for the short content, use the long content instead
 			if(strlen($faq['content']) < 2){
 				$faq['content'] = get_the_content($postid); 
 			}
 			
+			// add an image, if requested
 			if ($show_thumbs) {
-				$faq['image'] = get_the_post_thumbnail($postid, 'easy_faqs_thumb');
+				$faq['image'] = get_the_post_thumbnail($postid, 'easy_faqs_thumb');				
+				$image_html = $faq['image'];
+			} else {
+				$image_html = '';				
 			}
-		
-			?><div class="easy-faq" id="easy-faq-<?php echo $postid; ?>">	
-			
-				<?php if ($show_thumbs) {
-					echo $faq['image'];
-				} ?>
-				
-				<?php echo $this->build_the_question($postid); ?>
-				<?php echo $this->build_the_answer($faq, $read_more_link, $read_more_link_text); ?>
 
-			</div><?php 	
-				
-		endwhile;	
+			// generate the question and answer HTML
+			$question_html = $this->build_the_question($postid);
+			$answer_html = $this->build_the_answer($faq, $read_more_link, $read_more_link_text);
+			
+			// highlight the query in the question & answer
+			if (strlen(trim($highlight_word)) > 0) {
+				$highlight_tag = '<span class="search_highlight">\1</span>';				
+				$highlight_tag = apply_filters('easy_faqs_search_highlight_tag', $highlight_tag);
+				$question_html = gp_str_highlight($question_html, $highlight_word, null, $highlight_tag);
+				$answer_html = gp_str_highlight($answer_html, $highlight_word, null, $highlight_tag);
+			}
+			
+			// put it all together into the single FAQ template
+			$faq_template = '<div class="easy-faq" id="easy-faq-%d">%s %s %s</div>';
+			$faq_html = sprintf($faq_template, $postid, $image_html, $question_html, $answer_html);
+
+			// add the completed FAQ to the output we are building
+			$output .= $faq_html;
+		} //endwhile;	
 		
-		echo '</div>';
+		// close the wrapper div
+		$output .= '</div>';
 		
-		$content = ob_get_contents();
-		ob_end_clean();	
-		
+		// reset the page's query to how it was when we got here
 		wp_reset_query();
 		
-		return $content;
+		return $output;
 	}
 	
 	function build_the_question($postid)
@@ -566,6 +720,7 @@ class easyFAQs
 		extract( shortcode_atts( array(
 			'count' => -1,
 			'category' => '',
+			'category_id' => '',
 			'orderby' => 'date',//'none','ID','author','title','name','date','modified','parent','rand','menu_order'
 			'order' => 'ASC',//'DESC'
 			'colcount' => false
@@ -575,9 +730,27 @@ class easyFAQs
 		if($by_category){
 			//load list of FAQ categories
 			$categories = array();
+			$args = array();
 			
-			$categories = get_terms('easy-faq-category'); 
-			
+			/* If a custom category order was specified, apply it now */
+			if ( !empty($category_id) ) {
+				// we may have many categorys, delimited by commas, so explode 
+				// the ID string into an array and then trim any whitespace
+				$cats = explode(',', $category_id);
+				$trimmed_cats = array_map('trim', $cats);
+				$args['include'] = $trimmed_cats;
+				
+				// get only the categories which were specified
+				$categories = get_terms('easy-faq-category', $args);		
+				
+				// resort the category's by the custom order
+				$this->category_sort_order = $trimmed_cats;
+				usort( $categories, array($this, "order_faqs_by_category_id") );
+			} else {
+				// no custom ordering specified, so proceed normally
+				$categories = get_terms('easy-faq-category', $args);		
+			}
+
 			$quick_links_title = "<h3 class='quick-links' id='quick-links-top'>Quick Links</h3>";
 			echo apply_filters( 'easy_faqs_quick_links_title', $quick_links_title);
 			
@@ -664,86 +837,28 @@ class easyFAQs
 	}
 
 	//output all faqs
-	function outputFAQs($atts){ 
-		
-		//load shortcode attributes into an array
+	function outputFAQs($atts)
+	{
+		// go ahead and extract category and ID because we need them to generate the loop
 		extract( shortcode_atts( array(
-			'read_more_link' => get_option('faqs_link'),
 			'count' => -1,
 			'category' => '',
-			'show_thumbs' => get_option('faqs_image'),
-			'read_more_link_text' =>  get_option('faqs_read_more_text', 'Read More'),
-			'style' => '',
-			'quicklinks' => false,
 			'orderby' => 'date',//'none','ID','author','title','name','date','modified','parent','rand','menu_order'
 			'order' => 'ASC'//'DESC'
 		), $atts ) );
-				
-		if(!is_numeric($count)){
-			$count = -1;
-		}
 		
-		ob_start();
+		$args = array( 
+			'post_type' => 'faq',
+			'posts_per_page' => $count,
+			'orderby' => $orderby,
+			'order' => $order,
+			'easy-faq-category' => $category,
+		);
 		
-		if($style == "accordion" && isValidFAQKey()){
-			echo '<div class="easy-faqs-wrapper easy-faqs-accordion">';
-		} else if($style == "accordion-collapsed" && isValidFAQKey()){
-			//output the accordion, with everything collapsed
-			echo '<div class="easy-faqs-wrapper easy-faqs-accordion-collapsed">';
-		} else {
-			echo '<div class="easy-faqs-wrapper">';
-		}
-		
-		//load faqs into an array
-		$loop = new WP_Query(array( 'post_type' => 'faq','posts_per_page' => $count, 'orderby' => $orderby, 'order' => $order, 'easy-faq-category' => $category));
-		
-		//output QuickLinks, if available and pro
-		if($quicklinks && isValidFAQKey()){
-			$this->outputQuickLinks($atts);
-		} 
-		
-		while($loop->have_posts()) : $loop->the_post();
-			$postid = get_the_ID();
-			$faq['content'] = get_post_meta($postid, '_ikcf_short_content', true); 		
+		$loop = new WP_Query($args);
 
-			//if nothing is set for the short content, use the long content
-			if(strlen($faq['content']) < 2){
-				$faq['content'] = get_the_content($postid); 
-			}
-			
-			if ($show_thumbs) {
-				$faq['image'] = get_the_post_thumbnail($postid, 'easy_faqs_thumb');
-			}
-			
-			?><div class="easy-faq" id="easy-faq-<?php echo $postid; ?>">	
-			
-				<?php if ($show_thumbs) {
-					echo $faq['image'];
-				} ?>
-				
-				<?php echo $this->build_the_question($postid); ?>				
-				<?php echo $this->build_the_answer($faq, $read_more_link, $read_more_link_text); ?>
-
-				<?php 
-					//output return to top links
-					if($quicklinks && isValidFAQKey()){
-						?>
-							<a href="#quick-links-top" class="easy_faqs_return_to_top" title="<?php echo get_option('return_text', 'Return to Top');?>"><?php echo get_option('return_text', 'Return to Top');?></a>
-						<?php
-					}
-				?>
-			</div><?php 		
-			
-		endwhile;	
-
-		echo '</div>'; //<!--.easy-faqs-wrapper-->
-		
-		$content = ob_get_contents();
-		ob_end_clean();	
-		
-		wp_reset_query();
-		
-		return $content;
+		$faqs_list_html = $this->displayFAQsFromQuery($loop, $atts);
+		return $faqs_list_html;
 	}
 	
 	//output all faqs grouped by category
@@ -770,7 +885,10 @@ class easyFAQs
 		
 		// handle possible pluralization of category_id(s)
 		if ( empty($category_id) && !empty($category_ids) ) {
+			// note: $atts gets passed through to several other functions later,
+			// so we need to update it too
 			$category_id = $category_ids;
+			$atts['category_id'] = $category_ids; 
 		}
 
 		ob_start();
@@ -803,6 +921,10 @@ class easyFAQs
 			$this->outputQuickLinks($atts, true);
 		} 
 		
+		// starting here, we force quicklinks to false so that we don't 
+		// output another set of quicklinks for every category
+		$atts['quicklinks'] = false;
+
 		//loop through categories, outputting a heading for the category and the list of faqs in that category
 		foreach($categories as $category)
 		{	
@@ -811,53 +933,9 @@ class easyFAQs
 			$category_heading = sprintf('<h2 class="easy-faqs-category-heading">%s</h2>', $category_name);
 			echo apply_filters( 'easy_faqs_category_heading', $category_heading);
 		
-			if($style == "accordion" && isValidFAQKey()){
-				echo '<div class="easy-faqs-wrapper easy-faqs-accordion">';
-			} else if($style == "accordion-collapsed" && isValidFAQKey()){
-				//output the accordion, with everything collapsed
-				echo '<div class="easy-faqs-wrapper easy-faqs-accordion-collapsed">';
-			} else {
-				echo '<div class="easy-faqs-wrapper">';
-			}	
-			
-			//load faqs into an array
+			//load faqs into an array and then output them as a list
 			$loop = new WP_Query(array( 'post_type' => 'faq','posts_per_page' => $count, 'orderby' => $orderby, 'order' => $order, 'easy-faq-category' => $category->slug));
-			while($loop->have_posts()) : $loop->the_post();
-				$postid = get_the_ID();
-				$faq['content'] = get_post_meta($postid, '_ikcf_short_content', true); 		
-
-				//if nothing is set for the short content, use the long content
-				if(strlen($faq['content']) < 2){
-					$faq['content'] = get_the_content($postid); 
-				}
-				
-				if ($show_thumbs) {
-					$faq['image'] = get_the_post_thumbnail($postid, 'easy_faqs_thumb');
-				}
-				
-				?><div class="easy-faq" id="easy-faq-<?php echo $postid; ?>">	
-				
-					<?php if ($show_thumbs) {
-						echo $faq['image'];
-					} ?>		
-					
-					<?php echo $this->build_the_question($postid); ?>					
-					<?php echo $this->build_the_answer($faq, $read_more_link, $read_more_link_text); ?>
-						
-					
-					<?php 
-						//output return to top links
-						if($quicklinks && isValidFAQKey()){
-							?>
-								<a href="#quick-links-top" class="easy_faqs_return_to_top" title="<?php echo get_option('return_text', 'Return to Top');?>"><?php echo get_option('return_text', 'Return to Top');?></a>
-							<?php
-						}
-					?>
-
-				</div><?php 						
-			endwhile;	
-
-			echo '</div>'; //<!--.easy-faqs-wrapper-->
+			echo $this->displayFAQsFromQuery($loop, $atts);
 			
 		}//endforeach categories
 		
@@ -1041,4 +1119,3 @@ class easyFAQs
 if (!isset($easy_faqs)){
 	$easy_faqs = new easyFAQs();
 }
-?>

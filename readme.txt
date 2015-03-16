@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Tags: faqs, faq widget, faq list, faq submission, frequently asked questions, knowledgebase
 Requires at least: 3.0.1
 Tested up to: 4.1.1
-Stable tag: 1.7.6
+Stable tag: 1.8
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -139,6 +139,10 @@ Never!  Easy is in our name!  If by complicated you mean new and easy to use fea
 
 == Changelog ==
 
+= 1.8 =
+* Pro Feature: Adds FAQ Search Functionality
+* Pro Feature: Adds FAQ Import and Export Functionality
+
 = 1.7.6 =
 * Fix: Addresses issue where rewrite rules weren't automatically flushed, causing 404s when viewing single FAQs.
 
@@ -244,4 +248,4 @@ Never!  Easy is in our name!  If by complicated you mean new and easy to use fea
 
 == Upgrade Notice ==
 
-* 1.7.6: Update Available!
+* 1.8: Upgrade: Search and Import / Export functionality added.
