@@ -107,7 +107,7 @@ class EasyFAQs_SearchFAQs
 		);
 		$args = apply_filters( 'easy_faqs_search_params', $args );
 		$results = new WP_Query( $args );
-		$ip = $_SERVER['REMOTE_ADDR']; // TODO: replace with more robust ip getting function
+		$ip = $this->get_real_user_ip();
 		$result_count = $results->post_count;
 		if ($log_search) {
 			$this->log_search($search_query, $result_count, $ip);
@@ -139,7 +139,7 @@ class EasyFAQs_SearchFAQs
 	
 	function geolocate_current_visitor($ignore_cache = false)
 	{
-		$ip = $_SERVER["REMOTE_ADDR"]; // TODO: replace with more robust ip getting function
+		$ip = $this->get_real_user_ip();
 		$cache_key  = 'easy_faqs_geoloc_' . md5($ip);
 		
 		if ( !$ignore_cache && ($geo = get_transient($cache_key) !== FALSE) ) {
@@ -176,6 +176,22 @@ class EasyFAQs_SearchFAQs
 			else {
 				return false;
 			}
+		}
+	}
+
+	/* Source: http://stackoverflow.com/a/13646848 */
+	function get_real_user_ip()
+	{
+		if( array_key_exists('HTTP_X_FORWARDED_FOR', $_SERVER) && !empty($_SERVER['HTTP_X_FORWARDED_FOR']) ) {
+			if (strpos($_SERVER['HTTP_X_FORWARDED_FOR'], ',')>0) {
+				$addr = explode(",",$_SERVER['HTTP_X_FORWARDED_FOR']);
+				return trim($addr[0]);
+			} else {
+				return $_SERVER['HTTP_X_FORWARDED_FOR'];
+			}
+		}
+		else {
+			return $_SERVER['REMOTE_ADDR'];
 		}
 	}
 	
