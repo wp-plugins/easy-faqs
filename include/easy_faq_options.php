@@ -23,8 +23,9 @@ class easyFAQOptions
 {
 	var $textdomain = '';
 	var $shed = false;
+	var $root = false;
 
-	function __construct(){
+	function __construct($root = false){
 		//may be running in non WP mode (for example from a notification)
 		if(function_exists('add_action')){
 			//add a menu item
@@ -33,6 +34,10 @@ class easyFAQOptions
 		
 		// create the BikeShed object now, so that BikeShed can add its hooks
 		$this->shed = new Easy_FAQs_GoldPlugins_BikeShed();
+		
+		if($root) {
+			$this->root = $root;
+		}
 	}
 	
 	function add_admin_menu_item(){
@@ -45,6 +50,9 @@ class easyFAQOptions
 		add_submenu_page($top_level_slug , 'Basic Options', 'Basic Options', 'administrator', $top_level_slug, array($this, 'basic_settings_page'));
 		add_submenu_page($top_level_slug , 'Shortcode Generator', 'Shortcode Generator', 'administrator', 'easy-faqs-shortcode-generator', array($this, 'shortcode_generator_page'));
 		add_submenu_page($top_level_slug , 'Import & Export FAQs', 'Import & Export FAQs', 'administrator', 'easy-faqs-import-export', array($this, 'import_export_page'));
+		if (isValidFAQKey()) {
+			add_submenu_page($top_level_slug , 'Recent Searches', 'Recent Searches', 'administrator', 'easy-faqs-recent-searches', array($this, 'recent_searches_page'));
+		}
 		add_submenu_page($top_level_slug , 'Help & Instructions', 'Help & Instructions', 'administrator', 'easy-faqs-help', array($this, 'help_settings_page'));
 
 		//call register settings function
@@ -57,8 +65,15 @@ class easyFAQOptions
 		$tabs = array( 'easy-faqs-settings' => __('Basic Options', $this->textdomain),
 					   'easy-faqs-shortcode-generator' => __('Shortcode Generator', $this->textdomain),
 					   'easy-faqs-import-export' => __('Import & Export FAQs', $this->textdomain),
+					   'easy-faqs-recent-searches' => __('Recent Searches', $this->textdomain),
 					   'easy-faqs-help' => __('Help & Instructions', $this->textdomain)
 					 );
+					 
+		// hide Recent Searches tab for non-pro users
+		if (!isValidFAQKey()) {
+			unset($tabs['easy-faqs-recent-searches']);
+		}
+		
 		echo '<div id="icon-themes" class="icon32"><br></div>';
 		echo '<h2 class="nav-tab-wrapper">';
 			foreach( $tabs as $tab => $name ){
@@ -113,7 +128,11 @@ class easyFAQOptions
 		}
 	});
 	</script>
+	<?php if(isValidFAQKey()): ?>
 	<div class="wrap easy_faqs_wrapper gold_plugins_settings">
+	<?php else: ?>
+	<div class="wrap easy_faqs_wrapper gold_plugins_settings not-pro">
+	<?php endif; ?>
 		<h2><?php echo $title; ?></h2>
 		<?php if(!isValidFAQKey()): ?>
 			<!-- Begin MailChimp Signup Form -->
@@ -474,9 +493,9 @@ class easyFAQOptions
 		</div><!-- end #gold_plugins_shortcode_generator -->
 		</div><!--end settings_page-->
 		<?php 
-	}	
-	
-	
+	}
+
+
 	function import_export_page(){
 		//import export yang		
 		$this->settings_page_top();
@@ -504,6 +523,93 @@ class easyFAQOptions
 			?>
 		<?php	} ?>
 		</div><?php			
-	}	
+	}
+	
+	function recent_searches_page() {
+		$this->settings_page_top();
+		$categories = get_terms( 'easy-faq-category', 'orderby=title&hide_empty=0' );
+		?>
+		<div id="easy_faqs_recent_searches">
+			<h3>Recent Searches</h3>
+			<?php
+				global $wpdb;		
+				$table_name = $wpdb->prefix . 'easy_faqs_search_log';
+				$limit = 25;
+				$page = (isset($_GET['results_page']) && intval($_GET['results_page']) > 0) ? intval($_GET['results_page']) : 1;
+				$offset = $page > 1 ? ( ($page - 1) * $limit ) : 0;
+				$sql_template = 'SELECT * from %s ORDER BY time DESC LIMIT %d,%d';
+				$sql = sprintf($sql_template, $table_name, $offset, $limit);				
+				$recent_searches = $wpdb->get_results($sql);
+				
+				
+				// get the total count				
+				$count_sql_template = 'SELECT count(id) from %s';
+				$count_sql = sprintf($count_sql_template, $table_name);
+				$record_count = $wpdb->get_var($count_sql);
+				
+				if (is_array($recent_searches)) {
+					echo '<table id="easy_faqs_recent_searches" class="wp-list-table widefat fixed pages">';
+						echo '<thead>';
+							echo '<tr>';
+								echo '<th>Time</th>';
+								echo '<th>Query</th>';
+								echo '<th>Results</th>';
+								echo '<th>Visitor IP</th>';
+								echo '<th>Location</th>';
+							echo '</tr>';
+						echo '</thead>';
+						echo '<tbody>';
+							foreach($recent_searches as $i => $search)
+							{
+								$row_class = ($i % 2 == 0) ? 'alternate' : '';
+							echo '<tr class="'.$row_class.'">';
+								$friendly_time = date('Y-m-d H:i:s', strtotime($search->time));
+								if ($this->root !== false) {
+									$friendly_time = $this->root->time_elapsed_string($friendly_time);
+								}
+								printf ('<td>%s</td>', htmlentities($friendly_time));
+								printf ('<td>%s</td>', htmlentities($search->query));
+								printf ('<td>%s</td>', htmlentities($search->result_count));
+								printf ('<td>%s</td>', htmlentities($search->ip_address));
+								printf ('<td>%s</td>', htmlentities($search->friendly_location));
+							echo '</tr>';				
+							}
+						echo '</tbody>';
+					echo '</table>';
+					
+					if ($record_count > $limit)
+					{
+						$link_template = '<li><a href="%s">%s</a></li>';
+						$href_template = admin_url('admin.php?page=easy-faqs-recent-searches&results_page=') . '%d';
+						$last_page = ceil($record_count / $limit);
+						echo '<div class="tablenav bottom">';
+						echo '<div class="tablenav-pages">';
+						echo '<ul class="search_result_pages">';
+
+						// first page link
+						$href = sprintf($href_template, 1);
+						printf($link_template, $href, '&laquo;');
+
+						// output page links
+						for($i = 1; $i <= $last_page; $i++)
+						{
+							$href = sprintf($href_template, ($i));
+							printf($link_template, $href, $i);
+						}						
+						
+						// last page link
+						$href = sprintf($href_template, $last_page);
+						printf($link_template, $href, '&raquo;');						
+						
+						echo '</ul>';
+						echo '</div>'; // end tablenav-pages
+						echo '</div>'; // end tablenav
+					}
+				}		
+			?>	
+		</div><!-- end #easy_faqs_recent_searches -->
+		</div><!--end settings_page-->
+	<?php 
+	}
+	
 } // end class
-?>

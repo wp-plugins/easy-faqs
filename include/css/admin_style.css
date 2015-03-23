@@ -164,6 +164,8 @@
 /* MailChimp Form Embed Code - Slim - 08/17/2011 */
 .gold_plugins_settings  {
 	position: relative;
+}
+.gold_plugins_settings.not-pro  {
 	padding-right: 440px;
 }
 .gold_plugins_settings .topper {

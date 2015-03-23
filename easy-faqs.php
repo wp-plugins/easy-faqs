@@ -4,7 +4,7 @@ Plugin Name: Easy FAQs
 Plugin URI: http://goldplugins.com/our-plugins/easy-faqs-details/
 Description: Easy FAQs - Provides custom post type, shortcodes, widgets, and other functionality for Frequently Asked Questions (FAQs).
 Author: Gold Plugins
-Version: 1.8
+Version: 1.9
 Author URI: http://goldplugins.com
 
 This file is part of Easy FAQs.
@@ -27,20 +27,32 @@ global $easy_faqs_footer_css_output;
 
 include('include/lib/lib.php');
 include('include/lib/str_highlight.php');
+include('include/lib/database_setup.php');
+include('include/lib/easy_faqs_search_faqs.class.php');
 include('include/lib/BikeShed/bikeshed.php');
 
 class easyFAQs
 {
 	var $category_sort_order = array();
+	var $SearchFAQs = false;
 	
-	function __construct(){		
+	function __construct(){
+		
+		// load subsclasses
+		$this->SearchFAQs = new EasyFAQs_SearchFAQs($this);
+		
 		//create shortcodes
 		add_shortcode('single_faq', array($this, 'outputSingleFAQ'));
 		add_shortcode('faqs', array($this, 'outputFAQs'));
 		add_shortcode('faqs-by-category', array($this, 'outputFAQsByCategory'));
 		add_shortcode('faqs_by_category', array($this, 'outputFAQsByCategory')); // i've heard it both ways
 		add_shortcode('submit_faq', array($this, 'submitFAQForm'));
-		add_shortcode('search_faqs', array($this, 'outputSearchForm'));
+		
+		// register search_faqs shortcode and recent searches dashboard widget for pro users only
+		if (isValidFAQKey()) {
+			add_shortcode('search_faqs', array($this->SearchFAQs, 'outputSearchForm'));
+			add_action( 'wp_dashboard_setup', array($this->SearchFAQs, 'add_dashboard_widget') );		
+		}
 
 		//add JS
 		add_action( 'wp_enqueue_scripts', array($this, 'easy_faqs_setup_js' ));
@@ -78,7 +90,7 @@ class easyFAQs
 
 		//flush rewrite rules - only do this once!
 		//we do this to prevent 404s when viewing individual FAQs
-		register_activation_hook( __FILE__, array($this, 'easy_faqs_rewrite_flush'));		
+		register_activation_hook( __FILE__, array($this, 'easy_faqs_rewrite_flush'));
 	}
 
 	//only do this once
@@ -361,121 +373,6 @@ class easyFAQs
 			return $content;
 	}
 	
-	function outputSearchForm($atts, $content = '')
-	{
-		$query = !empty($_REQUEST['search_faqs']) ? strip_tags($_REQUEST['search_faqs']) : '';
-		$wrapper_class = 'easy_faqs_search_form';
-		$wrapper_class = apply_filters( 'easy_faqs_search_wrapper_class', $wrapper_class, array('query' => $query) );
-		
-		$form_html = $this->getSearchFormTemplate($query);
-		if ( !empty($query) ) {
-			$form_html .= $this->getSearchResults($query);
-		}
-		
-		$search_form = sprintf('<div class="%s">%s</div>', $wrapper_class, $form_html);		
-		return $search_form;
-	}
-	
-	function getSearchFormTemplate($query = '')
-	{
-		// add heading HTML
-		$heading_html = $this->getSearchFormHeader();
-		$heading_html = apply_filters('easy_faqs_search_heading_html', $heading_html);
-		
-		// add the form HTML
-		$form_template = 
-		'<form>
-			<input name="search_faqs" id="search_faqs" value="%s" />			
-			<button type="submit">%s</button>
-		</form>';
-		
-		// allow button label to be overriden by a filter
-		$button_label = 'Search';
-		$button_label = apply_filters('easy_faqs_search_button_label', $button_label);
-		
-		// combine template + vars into the form HTML
-		$form_html = sprintf($form_template, htmlentities($query), $button_label);
-
-		// allow search from to be overridden
-		$form_html = apply_filters( 'easy_faqs_search_form_html', $form_html, array('query' => $query, 'button_label' => $button_label) );
-		
-		// return the finished HTML
-		return $heading_html . $form_html;
-	}
-	
-	function getSearchFormHeader()
-	{
-		// default class and text
-		$heading_class = 'easy_faqs_search_heading';
-		$heading_text = 'Search Our Knowledgebase';
-		
-		// apply filters now to allow class + text to be overridden
-		$heading_class = apply_filters( 'easy_faqs_search_heading_class', $heading_class );
-		$heading_text = apply_filters( 'easy_faqs_search_heading_text', $heading_text );
-
-		// return the formatted heading
-		return sprintf('<h2 class="%s">%s</h2>', $heading_class, $heading_text);
-	}
-		
-	function getSearchResults($search_query)
-	{
-		$args = array(
-			's' 		=> $search_query,
-			'post_type' => 'faq',
-		);
-		$args = apply_filters( 'easy_faqs_search_params', $args );
-		$results = new WP_Query($args);
-		
-		$loop = new WP_Query( $args );		
-		if ( $loop->have_posts() )
-		{
-			$args = array(
-				'highlight_word' => $search_query
-			);
-			
-			$results_heading = '<h2 class="easy_faqs_search_heading">Search Results</h2>';
-			$results_heading = apply_filters( 'easy_faqs_search_results_heading', $results_heading, array('query' => $search_query) );			
-			
-			$results_html = $this->displayFAQsFromQuery($loop, $args);
-			// inject the results into the template and return it
-			$html = sprintf( 
-				'<div class="easy_faqs_search_results_wrapper">
-					%s
-					<div class="easy_faqs_search_results">%s</div>
-				</div>',
-				$results_heading,
-				$results_html
-			);
-			
-			return $html;
-		}
-		else // no results
-		{
-			// return the 'No results found' message's HTML
-			$no_results_msg = 'No FAQs were found which matched your query, "%s". Please search again.';
-			$results_html = $this->format_no_results_message($no_results_msg, $search_query);
-			return $results_html;
-		}				
-	}
-	
-	// returns the "no results message" wrapped in the proper HTML tags 
-	// will insert $query within $msg if $msg contains "%s"
-	function format_no_results_message($msg, $query) {
-		
-		// allow the message to be overriden by a filter
-		$msg = apply_filters( 'easy_faqs_search_no_results_message', $msg, array('query' => $query) );
-		
-		// inject search term if needed
-		if (strpos($msg, '%s') !== FALSE) {
-			$msg = sprintf($msg, htmlentities($query));
-		}
-		
-		// wrap it in a <p> and return it
-		$template = '<p class="%s">%s</p>';
-		$css_class = 'easy_faqs_no_results';
-		return sprintf($template, $css_class, $msg);		
-	}
-
 	//add Custom CSS
 	function easy_faqs_setup_custom_css() {
 		//use this to track if css has been output
@@ -509,13 +406,44 @@ class easyFAQs
 		return $string;
 	}
 
+	// converts a DateTime string (e.g., a MySQL timestamp) into a friendly time string, e.g. "10 minutes ago"	
+	// source: http://stackoverflow.com/a/18602474
+	function time_elapsed_string($datetime, $full = false) {
+		$now = new DateTime;
+		$ago = new DateTime($datetime);
+		$diff = $now->diff($ago);
+		
+		$diff->w = floor($diff->d / 7);
+		$diff->d -= $diff->w * 7;
+		
+		$string = array(
+			'y' => 'year',
+			'm' => 'month',
+			'w' => 'week',
+			'd' => 'day',
+			'h' => 'hour',
+			'i' => 'minute',
+			's' => 'second',
+		);
+		foreach ($string as $k => &$v) {
+			if ($diff->$k) {
+				$v = $diff->$k . ' ' . $v . ($diff->$k > 1 ? 's' : '');
+			} else {
+				unset($string[$k]);
+			}
+		}
+		
+		if (!$full) $string = array_slice($string, 0, 1);
+		return $string ? implode(', ', $string) . ' ago' : 'just now';
+	}
+	
 	//setup custom post type for faqs
 	function easy_faqs_setup_faqs(){
 		//include custom post type code
 		include('include/lib/ik-custom-post-type.php');
 		//include options code
 		include('include/easy_faq_options.php');	
-		$easy_faqs_options = new easyFAQOptions();
+		$easy_faqs_options = new easyFAQOptions($this);
 				
 		//setup post type for faqs
 		$postType = array('name' => 'FAQ', 'plural' =>'faqs', 'slug' => 'faq' );
@@ -625,7 +553,10 @@ class easyFAQs
 		
 		//output QuickLinks, if available and pro
 		if($quicklinks && isValidFAQKey()){
+			ob_start();
 			$this->outputQuickLinks($atts);
+			$output .= ob_get_contents();
+			ob_end_clean();
 		} 
 		
 		// build a single FAQ HTML block for each item, adding it to $output

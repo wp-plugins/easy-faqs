@@ -65,3 +65,10 @@
 .easy-faqs-wrapper .search_highlight {
     background-color: lightgreen;
 }
+
+/* Search Form Styles */
+.easy_faqs_search_form > form
+{
+	display: block;
+	margin-bottom: 20px;
+}
