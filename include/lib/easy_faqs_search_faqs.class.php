@@ -170,7 +170,7 @@ class EasyFAQs_SearchFAQs
 					$geo['friendly_location'] = $geo_json->city . ', ' . $geo_json->region_name . ', USA';
 				}
 				// cache result indefinitely (1 year)
-				set_transient( $cache_key, $value,  31536000 );				
+				set_transient( $cache_key, $geo, 31536000 );
 				return $geo;
 			}
 			else {

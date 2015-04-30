@@ -3,8 +3,8 @@ Contributors: richardgabriel, ghuger
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=V7HR8DP4EJSYN
 Tags: faqs, faq widget, faq list, faq submission, frequently asked questions, knowledgebase
 Requires at least: 3.0.1
-Tested up to: 4.1.1
-Stable tag: 1.9.1
+Tested up to: 4.2.1
+Stable tag: 1.9.2
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -28,7 +28,7 @@ Easy FAQs includes options to set the URL of the Read More Link, whether or not 
 
 Easy FAQs Pro adds awesome new features like accordion-style FAQs and a Question Submission Form, so you can receive new questions right on your website. You'll also have access to one-on-one email support from our staff (just email hello@goldplugins.com anytime).
 
-[Upgrade To Easy FAQs Pro](http://goldplugins.com/our-plugins/easy-faqs-details/upgrade-to-easy-faqs-pro/?utm_source=wp&utm_campaign=desc_upgrade)
+[Upgrade To Easy FAQs Pro](https://goldplugins.com/our-plugins/easy-faqs-details/upgrade-to-easy-faqs-pro/?utm_source=wp&utm_campaign=desc_upgrade)
 
 = Why Should I Add Frequently Asked Questions (FAQs) to my Website? =
 
@@ -36,9 +36,9 @@ Adding a Frequently Asked Questions (FAQs) section to your website, either as a 
 
 = Premium Support =
 
-The GoldPlugins team does not provide direct support for the Easy FAQs plugin on the WordPress.org forums. One on one email support is available to people who have purchased Easy FAQs Pro only. Easy FAQs Pro also includes accordion-style FAQs and other advanced features including a Question Submission Form. You should [upgrade today!](http://goldplugins.com/our-plugins/easy-faqs-details/upgrade-to-easy-faqs-pro/?utm_source=wp&utm_campaign=desc_upgrade2 "Upgrade to Easy FAQs Pro")
+The GoldPlugins team does not provide direct support for the Easy FAQs plugin on the WordPress.org forums. One on one email support is available to people who have purchased Easy FAQs Pro only. Easy FAQs Pro also includes accordion-style FAQs and other advanced features including a Question Submission Form. You should [upgrade today!](https://goldplugins.com/our-plugins/easy-faqs-details/upgrade-to-easy-faqs-pro/?utm_source=wp&utm_campaign=desc_upgrade2 "Upgrade to Easy FAQs Pro")
 
-[Upgrade To Easy FAQs Pro](http://goldplugins.com/our-plugins/easy-faqs-details/upgrade-to-easy-faqs-pro/?utm_source=wp&utm_campaign=desc_upgrade2)
+[Upgrade To Easy FAQs Pro](https://goldplugins.com/our-plugins/easy-faqs-details/upgrade-to-easy-faqs-pro/?utm_source=wp&utm_campaign=desc_upgrade2)
 
 = Get Started Using Easy FAQs Today! =
 
@@ -50,7 +50,7 @@ This section describes how to install the plugin and get it working.
 
 1. Upload the contents of `/easy-faqs/` to the `/wp-content/plugins/` directory
 2. Activate Easy FAQs through the 'Plugins' menu in WordPress
-3. Visit this address for information on how to configure the plugin: http://goldplugins.com/documentation/easy-faqs-documentation/
+3. Visit this address for information on how to configure the plugin: https://goldplugins.com/documentation/easy-faqs-documentation/
 
 ### Adding a New FAQ ###
 
@@ -91,18 +91,18 @@ You have a few things to pay attention to:
 ### Outputting FAQs ###
 
 * To output a Single FAQ, place the shortcode ```[single_faq id="1"]``` in the desired area of the Page or Post Content.  If you view the List of FAQs, you can find the FAQ ID in the Table.
-* To output a list of All FAQs, place the shortcode ```[faqs]``` in the desired area of the Page or Post Content.  To display more than one faq, use the shortcode ```[faqs count='3']```, where count is the number of faqs you want displayed.  To display FAQs from a Category, use the shortcode ```[faqs category='your_slug']```.  To control the Order of the FAQs, use the attribute ```[faqs order='ASC']```.  To control the Order By parameter of the FAQs, use the attribute ```[faqs orderby='title']```.  You can find more details [here](http://goldplugins.com/documentation/easy-faqs-documentation/ "Easy FAQs Documentation")
+* To output a list of All FAQs, place the shortcode ```[faqs]``` in the desired area of the Page or Post Content.  To display more than one faq, use the shortcode ```[faqs count='3']```, where count is the number of faqs you want displayed.  To display FAQs from a Category, use the shortcode ```[faqs category='your_slug']```.  To control the Order of the FAQs, use the attribute ```[faqs order='ASC']```.  To control the Order By parameter of the FAQs, use the attribute ```[faqs orderby='title']```.  You can find more details [here](https://goldplugins.com/documentation/easy-faqs-documentation/ "Easy FAQs Documentation")
 * To display the Featured Image along with FAQs, use the attribute ```show_thumbs='1'```.  This applies to both the single and list shortcodes.
 * To control the wording of the Read More Link, use the attribute ```read_more_link_text='Your Text Here'```.  This applies to both the single and list shortcodes.
 * To control the destination of the Read More Link, use the attribute ```read_more_link='http://www.yahoo.com'```.  This applies to both the single and list shortcodes.  **NOTE:** be sure you include http:// in your link.
 * To output a list of FAQs, grouped by category, use the shortcode ```[faqs-by-category]```.
 * To output a FAQ in the Sidebar, use the Widgets section of your WordPress Theme, Accessible on the Appearance Menu in the WordPress Admin.  Use the Drop Down menu to select which FAQ is displayed.
-* To output a Accordion Style FAQ List, use the shortcode ```[faqs style=accordion]```.  If you want the Accordion List to start with everything collapsed, use the shortcode ```[faqs style=accordion-collapsed]```.  The same attributes, such as count and category, apply from above.  **NOTE:** This feature requires the [Pro version of Easy FAQs](http://goldplugins.com/our-plugins/easy-faqs-details/ "Easy FAQs Pro")
-* To output a QuickLinks menu above your FAQ List, use the shortcode attribute```quicklinks=1```.  To control the number of columns quicklinks are dividied into, use the shortcode attribute ```colcount=2```.  This attribute works with both the regular and the accordion style FAQs list.  **NOTE:** This feature requires the [Pro version of Easy FAQs](http://goldplugins.com/our-plugins/easy-faqs-details/ "Easy FAQs Pro")
+* To output a Accordion Style FAQ List, use the shortcode ```[faqs style=accordion]```.  If you want the Accordion List to start with everything collapsed, use the shortcode ```[faqs style=accordion-collapsed]```.  The same attributes, such as count and category, apply from above.  **NOTE:** This feature requires the [Pro version of Easy FAQs](https://goldplugins.com/our-plugins/easy-faqs-details/ "Easy FAQs Pro")
+* To output a QuickLinks menu above your FAQ List, use the shortcode attribute```quicklinks=1```.  To control the number of columns quicklinks are dividied into, use the shortcode attribute ```colcount=2```.    To control the scroll offset, in the case that a menu or other element is affecting your scroll position, use the attribute ```[faqs quicklinks=1 scroll_offset=20]```, where 20 means 20 pixels.  This attribute works with both the regular and the accordion style FAQs list.  **NOTE:** This feature requires the [Pro version of Easy FAQs](https://goldplugins.com/our-plugins/easy-faqs-details/ "Easy FAQs Pro")
 
 ### Front End FAQ Submission ###
 
-* **NOTE:** This feature requires the [Pro version of Easy FAQs](http://goldplugins.com/our-plugins/easy-faqs-details/ "Easy FAQs Pro")
+* **NOTE:** This feature requires the [Pro version of Easy FAQs](https://goldplugins.com/our-plugins/easy-faqs-details/ "Easy FAQs Pro")
 * Add the shortcode ```[submit_faq]``` to the area of the page you want your form on.
 * Any submissions will be added to your FAQs list, on the back end.  Only FAQs that you choose to publish will be displayed publicly.
 * E-mail notifications are sent to the site admin on new Frequently Asked Question (FAQ) submission.
@@ -118,11 +118,11 @@ You have a few things to pay attention to:
 
 = Help!  I need more information! =
 
-OK!  We have a great page with some helpful information here: http://goldplugins.com/documentation/easy-faqs-documentation/
+OK!  We have a great page with some helpful information here: https://goldplugins.com/documentation/easy-faqs-documentation/
 
 = Hey!  How do I allow my visitors to submit faqs? =
 
-Great question!  With the Pro version of the plugin, you can do this with our front end form that is output with a shortcode!  FAQs will show up as pending on the Dashboard, for admin moderation.  Visit here to purchase the Pro version: http://goldplugins.com/our-plugins/easy-faqs-details/
+Great question!  With the Pro version of the plugin, you can do this with our front end form that is output with a shortcode!  FAQs will show up as pending on the Dashboard, for admin moderation.  Visit here to purchase the Pro version: https://goldplugins.com/our-plugins/easy-faqs-details/
 
 = Ack!  This FAQs Plugin is too easy to use! Will you make it more complicated? =
 
@@ -138,6 +138,9 @@ Never!  Easy is in our name!  If by complicated you mean new and easy to use fea
 6. This is the Easy FAQs Categories Page.
 
 == Changelog ==
+
+= 1.9.2 =
+* Fix: Adds scroll_offset attribute to quicklinks, handles bookmarks correctly
 
 = 1.9.1 =
 * Fix: Fix geolocation on search log for situations such as CloudFlare.
@@ -254,4 +257,4 @@ Never!  Easy is in our name!  If by complicated you mean new and easy to use fea
 
 == Upgrade Notice ==
 
-* 1.9.1: Upgrade: Search Log Functionality, Geolocation Fix
+* 1.9.2: Fix: Adds scroll_offset attribute to quicklinks, handles bookmarks correctly

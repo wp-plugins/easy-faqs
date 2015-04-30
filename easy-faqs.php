@@ -1,11 +1,11 @@
 <?php
 /*
 Plugin Name: Easy FAQs
-Plugin URI: http://goldplugins.com/our-plugins/easy-faqs-details/
+Plugin URI: https://goldplugins.com/our-plugins/easy-faqs-details/
 Description: Easy FAQs - Provides custom post type, shortcodes, widgets, and other functionality for Frequently Asked Questions (FAQs).
 Author: Gold Plugins
-Version: 1.9.1
-Author URI: http://goldplugins.com
+Version: 1.9.2
+Author URI: https://goldplugins.com
 
 This file is part of Easy FAQs.
 
@@ -36,8 +36,8 @@ class easyFAQs
 	var $category_sort_order = array();
 	var $SearchFAQs = false;
 	
-	function __construct(){
-		
+	function __construct()
+	{		
 		// load subsclasses
 		$this->SearchFAQs = new EasyFAQs_SearchFAQs($this);
 		
@@ -139,10 +139,10 @@ class easyFAQs
 		if ( $file == $plugin_file )
 		{		
 			$new_links['settings_link'] = '<a href="admin.php?page=easy-faqs-settings">Settings</a>';
-			$new_links['support_link'] = '<a href="http://goldplugins.com/contact/?utm-source=plugin_menu&utm_campaign=support&utm_banner=easy-faqs" target="_blank">Get Support</a>';
+			$new_links['support_link'] = '<a href="https://goldplugins.com/contact/?utm-source=plugin_menu&utm_campaign=support&utm_banner=easy-faqs" target="_blank">Get Support</a>';
 			
 			if(!isValidFAQKey()){
-				$new_links['upgrade_to_pro'] = '<a href="http://goldplugins.com/our-plugins/easy-faqs-details/upgrade-to-easy-faqs-pro/?utm_source=plugin_menu&utm_campaign=up
+				$new_links['upgrade_to_pro'] = '<a href="https://goldplugins.com/our-plugins/easy-faqs-details/upgrade-to-easy-faqs-pro/?utm_source=plugin_menu&utm_campaign=up
 				grade" target="_blank">Upgrade to Pro</a>';
 			}
 			
@@ -158,7 +158,8 @@ class easyFAQs
 			wp_enqueue_script(
 				'easy-faqs',
 				plugins_url('include/js/easy-faqs-init.js', __FILE__),
-				array( 'jquery' )
+				array( 'jquery' ),
+				'1.9.2'
 			);
 		}
 	}
@@ -534,6 +535,7 @@ class easyFAQs
 			'show_thumbs' => get_option('faqs_image'),
 			'style' => '',			
 			'quicklinks' => false,
+			'scroll_offset' => 0,
 			'read_more_link_text' =>  get_option('faqs_read_more_text', 'Read More'),
 			'highlight_word' => ''
 		), $atts ) );
@@ -654,9 +656,11 @@ class easyFAQs
 			'category_id' => '',
 			'orderby' => 'date',//'none','ID','author','title','name','date','modified','parent','rand','menu_order'
 			'order' => 'ASC',//'DESC'
-			'colcount' => false
+			'colcount' => false,
+			'scroll_offset' => 0
 		), $atts ) );
 		
+		$scroll_offset = intval($scroll_offset);
 		
 		if($by_category){
 			//load list of FAQ categories
@@ -682,7 +686,7 @@ class easyFAQs
 				$categories = get_terms('easy-faq-category', $args);		
 			}
 
-			$quick_links_title = "<h3 class='quick-links' id='quick-links-top'>Quick Links</h3>";
+			$quick_links_title = '<h3 class="quick-links" id="quick-links-top">Quick Links</h3>';
 			echo apply_filters( 'easy_faqs_quick_links_title', $quick_links_title);
 			
 			//loop through categories, outputting a heading for the category and the list of faqs in that category
@@ -710,7 +714,7 @@ class easyFAQs
 				}
 				
 				//trying CSS3 instead...
-				echo "<div class='faq-questions'>";
+				printf ('<div class="faq-questions" data-scroll_offset="%d">', $scroll_offset);
 				echo "<ol style=\"-webkit-column-count: {$divCount}; -moz-column-count: {$divCount}; column-count: {$divCount};\">";
 				
 				while($loop->have_posts()) : $loop->the_post();
@@ -746,9 +750,9 @@ class easyFAQs
 			}
 			
 			//trying CSS3 instead...
-			$quick_links_title = "<h3 class='quick-links' id='quick-links-top'>Quick Links</h3>";
+			$quick_links_title = '<h3 class="quick-links" id="quick-links-top">Quick Links</h3>';			
 			echo apply_filters( 'easy_faqs_quick_links_title', $quick_links_title);			
-			echo "<div class='faq-questions'>";
+			printf ('<div class="faq-questions" data-scroll_offset="%d">', $scroll_offset);
 			echo "<ol style=\"-webkit-column-count: {$divCount}; -moz-column-count: {$divCount}; column-count: {$divCount};\">";
 			
 			while($loop->have_posts()) : $loop->the_post();
@@ -775,7 +779,9 @@ class easyFAQs
 			'count' => -1,
 			'category' => '',
 			'orderby' => 'date',//'none','ID','author','title','name','date','modified','parent','rand','menu_order'
-			'order' => 'ASC'//'DESC'
+			'order' => 'ASC', //'DESC',
+			'quicklinks' => false,
+			'scroll_offset' => 0
 		), $atts ) );
 		
 		$args = array( 
@@ -806,6 +812,7 @@ class easyFAQs
 			'read_more_link_text' =>  get_option('faqs_read_more_text', 'Read More'),
 			'style' => '',
 			'quicklinks' => false,
+			'scroll_offset' => 0,
 			'orderby' => 'date',//'none','ID','author','title','name','date','modified','parent','rand','menu_order'
 			'order' => 'ASC'//'DESC'
 		), $atts ) );
@@ -1012,7 +1019,9 @@ class easyFAQs
 		
 		//don't register this unless a font is set to register
 		if(strlen($font_str)>2){
-			wp_register_style( 'easy_faqs_webfonts', 'http://fonts.googleapis.com/css?family=' . $font_str);
+			$protocol = is_ssl() ? 'https:' : 'http:';
+			$font_url = $protocol . '//fonts.googleapis.com/css?family=' . $font_str;
+			wp_register_style( 'easy_faqs_webfonts', $font_url);
 			wp_enqueue_style( 'easy_faqs_webfonts' );
 		}
 	}

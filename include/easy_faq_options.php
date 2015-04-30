@@ -50,9 +50,7 @@ class easyFAQOptions
 		add_submenu_page($top_level_slug , 'Basic Options', 'Basic Options', 'administrator', $top_level_slug, array($this, 'basic_settings_page'));
 		add_submenu_page($top_level_slug , 'Shortcode Generator', 'Shortcode Generator', 'administrator', 'easy-faqs-shortcode-generator', array($this, 'shortcode_generator_page'));
 		add_submenu_page($top_level_slug , 'Import & Export FAQs', 'Import & Export FAQs', 'administrator', 'easy-faqs-import-export', array($this, 'import_export_page'));
-		if (isValidFAQKey()) {
-			add_submenu_page($top_level_slug , 'Recent Searches', 'Recent Searches', 'administrator', 'easy-faqs-recent-searches', array($this, 'recent_searches_page'));
-		}
+		add_submenu_page($top_level_slug , 'Recent Searches', 'Recent Searches', 'administrator', 'easy-faqs-recent-searches', array($this, 'recent_searches_page'));
 		add_submenu_page($top_level_slug , 'Help & Instructions', 'Help & Instructions', 'administrator', 'easy-faqs-help', array($this, 'help_settings_page'));
 
 		//call register settings function
@@ -68,11 +66,6 @@ class easyFAQOptions
 					   'easy-faqs-recent-searches' => __('Recent Searches', $this->textdomain),
 					   'easy-faqs-help' => __('Help & Instructions', $this->textdomain)
 					 );
-					 
-		// hide Recent Searches tab for non-pro users
-		if (!isValidFAQKey()) {
-			unset($tabs['easy-faqs-recent-searches']);
-		}
 		
 		echo '<div id="icon-themes" class="icon32"><br></div>';
 		echo '<h2 class="nav-tab-wrapper">';
@@ -155,24 +148,27 @@ class easyFAQOptions
 						<p class="secure"><img src="<?php echo plugins_url( 'img/lock.png', __FILE__ ); ?>" alt="Lock" width="16px" height="16px" />We respect your privacy.</p>
 						
 						<input type="hidden" id="mc-upgrade-plugin-name" value="Easy FAQs Pro" />
-						<input type="hidden" id="mc-upgrade-link-per" value="http://goldplugins.com/purchase/easy-faqs/single?promo=newsub20" />
-						<input type="hidden" id="mc-upgrade-link-biz" value="http://goldplugins.com/purchase/easy-faqs/business?promo=newsub20" />
-						<input type="hidden" id="mc-upgrade-link-dev" value="http://goldplugins.com/purchase/easy-faqs/developer?promo=newsub20" />
+						<input type="hidden" id="mc-upgrade-link-per" value="https://goldplugins.com/purchase/easy-faqs/single?promo=newsub20" />
+						<input type="hidden" id="mc-upgrade-link-biz" value="https://goldplugins.com/purchase/easy-faqs/business?promo=newsub20" />
+						<input type="hidden" id="mc-upgrade-link-dev" value="https://goldplugins.com/purchase/easy-faqs/developer?promo=newsub20" />
 
 						<div class="features">
-							<strong>When you upgrade, you'll instantly unlock:</strong>
+							<strong>When you upgrade to Pro, you'll instantly unlock:</strong>
 							<ul>
 								<li>Question Submission forms for your users</li>
 								<li>Accordion-Style FAQ pages</li>
 								<li>Quick Links for your FAQ pages</li>
+								<li>Search Forms for your FAQs</li>
+								<li>Import/Export your FAQs</li>
 								<li>Remove all banners from the admin area</li>							
-								<li>And more!</li>
+								<li>And more!</li>								
 							</ul>
+							<a class="learn_more_link" href="https://goldplugins.com/our-plugins/easy-faqs-details/upgrade-to-easy-faqs-pro/?utm_campaign=upgrade_sidebar&utm_source=learn_more_link" target="_blank">Click Here To Learn More! &raquo;</a>
 						</div>
 						<input type="hidden" id="gold_plugins_already_subscribed" name="gold_plugins_already_subscribed" value="<?php echo get_user_setting ('_gp_ml_has_subscribed', '0'); ?>" />
 					</form>
 				</div>
-				<p class="u_to_p"><a href="http://goldplugins.com/our-plugins/easy-faqs-details/upgrade-to-easy-faqs-pro/">Upgrade to Easy FAQs Pro now</a> to remove banners like this one.</p>
+				<p class="u_to_p"><a href="https://goldplugins.com/our-plugins/easy-faqs-details/upgrade-to-easy-faqs-pro/">Upgrade to Easy FAQs Pro now</a> to remove banners like this one.</p>
 			</div>
 			<!--End mc_embed_signup-->
 		<?php endif; ?>
@@ -257,7 +253,7 @@ class easyFAQOptions
 
 			<h3>Submission Form Settings</h3>
 			<?php if(!isValidFAQKey()):?>
-			<p class="easy_faq_not_registered"><strong>These settings require Easy FAQs Pro.</strong>&nbsp;&nbsp;&nbsp;<a class="button" target="blank" href="http://goldplugins.com/our-plugins/easy-faqs-details/upgrade-to-easy-faqs-pro/">Upgrade Now</a></p>
+			<p class="easy_faq_not_registered"><strong>These settings require Easy FAQs Pro.</strong>&nbsp;&nbsp;&nbsp;<a class="button" target="blank" href="https://goldplugins.com/our-plugins/easy-faqs-details/upgrade-to-easy-faqs-pro/">Upgrade Now</a></p>
 			<?php endif;?>
 			
 			<table class="form-table">
@@ -405,7 +401,7 @@ class easyFAQOptions
 						<tr>
 							<td colspan="2">
 								<div class="upgrade_notice">
-									<p class="easy_faq_not_registered"><strong>These settings require Easy FAQs Pro.</strong>&nbsp;&nbsp;&nbsp;<a class="button" target="blank" href="http://goldplugins.com/our-plugins/easy-faqs-details/upgrade-to-easy-faqs-pro/?utm_source=shortcode_generator&utm_campaign=pro_upgrade">Upgrade Now</a></p>
+									<p class="easy_faq_not_registered"><strong>These settings require Easy FAQs Pro.</strong>&nbsp;&nbsp;&nbsp;<a class="button" target="blank" href="https://goldplugins.com/our-plugins/easy-faqs-details/upgrade-to-easy-faqs-pro/?utm_source=shortcode_generator&utm_campaign=pro_upgrade">Upgrade Now</a></p>
 								</div>
 							</td>
 						</tr>
@@ -502,10 +498,10 @@ class easyFAQOptions
 		if(!isValidFAQKey()){ //not pro
 		?>
 		<h3>FAQs Importer</h3>	
-		<p class="easy_faq_not_registered"><strong>These features require Easy FAQs Pro.</strong>&nbsp;&nbsp;&nbsp;<a class="button" target="blank" href="http://goldplugins.com/our-plugins/easy-faqs-details/upgrade-to-easy-faqs-pro/">Upgrade Now</a></p>
+		<p class="easy_faq_not_registered"><strong>These features require Easy FAQs Pro.</strong>&nbsp;&nbsp;&nbsp;<a class="button" target="blank" href="https://goldplugins.com/our-plugins/easy-faqs-details/upgrade-to-easy-faqs-pro/?utm_campaign=upgrade&utm_source=plugin&utm_banner=import_upgrade">Upgrade Now</a></p>
 		
 		<h3>FAQs Exporter</h3>		
-		<p class="easy_faq_not_registered"><strong>These features require Easy FAQs Pro.</strong>&nbsp;&nbsp;&nbsp;<a class="button" target="blank" href="http://goldplugins.com/our-plugins/easy-faqs-details/upgrade-to-easy-faqs-pro/">Upgrade Now</a></p>	
+		<p class="easy_faq_not_registered"><strong>These features require Easy FAQs Pro.</strong>&nbsp;&nbsp;&nbsp;<a class="button" target="blank" href="https://goldplugins.com/our-plugins/easy-faqs-details/upgrade-to-easy-faqs-pro/?utm_campaign=upgrade&utm_source=plugin&utm_banner=export_upgrade">Upgrade Now</a></p>
 		<?php 
 			} else { //is pro
 		?>
@@ -531,6 +527,7 @@ class easyFAQOptions
 		?>
 		<div id="easy_faqs_recent_searches">
 			<h3>Recent Searches</h3>
+			<?php if (isValidFAQKey()): ?>
 			<?php
 				global $wpdb;		
 				$table_name = $wpdb->prefix . 'easy_faqs_search_log';
@@ -609,6 +606,9 @@ class easyFAQOptions
 			?>	
 		</div><!-- end #easy_faqs_recent_searches -->
 		</div><!--end settings_page-->
+		<?php else: ?>
+		<p class="easy_faq_not_registered"><strong>This feature requires Easy FAQs Pro.</strong>&nbsp;&nbsp;&nbsp;<a class="button" target="blank" href="https://goldplugins.com/our-plugins/easy-faqs-details/upgrade-to-easy-faqs-pro/?utm_campaign=upgrade_search&utm_source=plugin&utm_banner=recent_searches">Upgrade Now</a></p>
+		<?php endif; ?>
 	<?php 
 	}
 	
