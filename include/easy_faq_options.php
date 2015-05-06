@@ -41,7 +41,7 @@ class easyFAQOptions
 	}
 	
 	function add_admin_menu_item(){
-		$title = "Easy FAQ Settings";
+		$title = "Easy FAQs Settings";
 		$page_title = "Easy FAQs Settings";
 		$top_level_slug = "easy-faqs-settings";
 		
@@ -49,8 +49,13 @@ class easyFAQOptions
 		add_menu_page($page_title, $title, 'administrator', $top_level_slug , array($this, 'basic_settings_page'));
 		add_submenu_page($top_level_slug , 'Basic Options', 'Basic Options', 'administrator', $top_level_slug, array($this, 'basic_settings_page'));
 		add_submenu_page($top_level_slug , 'Shortcode Generator', 'Shortcode Generator', 'administrator', 'easy-faqs-shortcode-generator', array($this, 'shortcode_generator_page'));
-		add_submenu_page($top_level_slug , 'Import & Export FAQs', 'Import & Export FAQs', 'administrator', 'easy-faqs-import-export', array($this, 'import_export_page'));
-		add_submenu_page($top_level_slug , 'Recent Searches', 'Recent Searches', 'administrator', 'easy-faqs-recent-searches', array($this, 'recent_searches_page'));
+		if (isValidFAQKey()) {
+			add_submenu_page($top_level_slug , 'Import & Export', 'Import & Export', 'administrator', 'easy-faqs-import-export', array($this, 'import_export_page'));
+			add_submenu_page($top_level_slug , 'Recent Searches', 'Recent Searches', 'administrator', 'easy-faqs-recent-searches', array($this, 'recent_searches_page'));
+		} else {
+			add_submenu_page($top_level_slug , 'Import & Export (Pro)', 'Import & Export (Pro)', 'administrator', 'easy-faqs-import-export', array($this, 'import_export_page'));
+			add_submenu_page($top_level_slug , 'Recent Searches (Pro)', 'Recent Searches (Pro)', 'administrator', 'easy-faqs-recent-searches', array($this, 'recent_searches_page'));
+		}
 		add_submenu_page($top_level_slug , 'Help & Instructions', 'Help & Instructions', 'administrator', 'easy-faqs-help', array($this, 'help_settings_page'));
 
 		//call register settings function
@@ -60,12 +65,21 @@ class easyFAQOptions
 	//function to produce tabs on admin screen
 	function admin_tabs( $current = 'homepage' ) {
 	
-		$tabs = array( 'easy-faqs-settings' => __('Basic Options', $this->textdomain),
-					   'easy-faqs-shortcode-generator' => __('Shortcode Generator', $this->textdomain),
-					   'easy-faqs-import-export' => __('Import & Export FAQs', $this->textdomain),
-					   'easy-faqs-recent-searches' => __('Recent Searches', $this->textdomain),
-					   'easy-faqs-help' => __('Help & Instructions', $this->textdomain)
-					 );
+		if (isValidFAQKey()) {
+			$tabs = array( 'easy-faqs-settings' => __('Basic Options', $this->textdomain),
+						   'easy-faqs-shortcode-generator' => __('Shortcode Generator', $this->textdomain),
+						   'easy-faqs-import-export' => __('Import & Export FAQs', $this->textdomain),
+						   'easy-faqs-recent-searches' => __('Recent Searches', $this->textdomain),
+						   'easy-faqs-help' => __('Help & Instructions', $this->textdomain)
+						 );
+		} else {
+			$tabs = array( 'easy-faqs-settings' => __('Basic Options', $this->textdomain),
+						   'easy-faqs-shortcode-generator' => __('Shortcode Generator', $this->textdomain),
+						   'easy-faqs-import-export' => __('Import & Export FAQs (Pro)', $this->textdomain),
+						   'easy-faqs-recent-searches' => __('Recent Searches (Pro)', $this->textdomain),
+						   'easy-faqs-help' => __('Help & Instructions', $this->textdomain)
+						 );
+		}
 		
 		echo '<div id="icon-themes" class="icon32"><br></div>';
 		echo '<h2 class="nav-tab-wrapper">';
@@ -116,8 +130,8 @@ class easyFAQOptions
 	?>
 	<script type="text/javascript">
 	jQuery(function () {
-		if (typeof(gold_plugins_init_mailchimp_form) == 'function') {
-			gold_plugins_init_mailchimp_form();
+		if (typeof(gold_plugins_init_coupon_box) == 'function') {
+			gold_plugins_init_coupon_box();
 		}
 	});
 	</script>
@@ -137,16 +151,19 @@ class easyFAQOptions
 					<p class="pitch">Submit your name and email and we’ll send you a coupon for 20% off your upgrade to the Pro version.</p>
 				</div>
 				<div id="mc_embed_signup">
-					<form action="http://illuminatikarate.us2.list-manage2.com/subscribe/post?u=403e206455845b3b4bd0c08dc&amp;id=4ec6d49e6b" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
-						<label for="mce-NAME">Your Name:</label>
-						<input type="text" value="<?php echo (!empty($current_user->display_name) ?  $current_user->display_name : ''); ?>" name="NAME" class="name" id="mce-NAME" placeholder="Your Name">
-						<label for="mce-EMAIL">Your Email:</label>
-						<input type="email" value="<?php echo (!empty($current_user->user_email) ?  $current_user->user_email : ''); ?>" name="EMAIL" class="email" id="mce-EMAIL" placeholder="email address" required>
-						<!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups-->
-						<div style="position: absolute; left: -5000px;"><input type="text" name="b_403e206455845b3b4bd0c08dc_6ad78db648" tabindex="-1" value=""></div>
+					<form action="" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
+						<div class="fields_wrapper">
+							<label for="mce-NAME">Your Name:</label>
+							<input type="text" value="<?php echo (!empty($current_user->display_name) ?  $current_user->display_name : ''); ?>" name="NAME" class="name" id="mce-NAME" placeholder="Your Name">
+							<label for="mce-EMAIL">Your Email:</label>
+							<input type="email" value="<?php echo (!empty($current_user->user_email) ?  $current_user->user_email : ''); ?>" name="EMAIL" class="email" id="mce-EMAIL" placeholder="email address" required>
+							<!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups-->
+							<div style="position: absolute; left: -5000px;"><input type="text" name="b_403e206455845b3b4bd0c08dc_6ad78db648" tabindex="-1" value=""></div>
+						</div>
 						<div class="clear"><input type="submit" value="Send Me The Coupon Now" name="subscribe" id="mc-embedded-subscribe" class="smallBlueButton"></div>
 						<p class="secure"><img src="<?php echo plugins_url( 'img/lock.png', __FILE__ ); ?>" alt="Lock" width="16px" height="16px" />We respect your privacy.</p>
 						
+						<input type="hidden" name="PRODUCT" value="Easy FAQs Pro" />
 						<input type="hidden" id="mc-upgrade-plugin-name" value="Easy FAQs Pro" />
 						<input type="hidden" id="mc-upgrade-link-per" value="https://goldplugins.com/purchase/easy-faqs/single?promo=newsub20" />
 						<input type="hidden" id="mc-upgrade-link-biz" value="https://goldplugins.com/purchase/easy-faqs/business?promo=newsub20" />
@@ -165,7 +182,6 @@ class easyFAQOptions
 							</ul>
 							<a class="learn_more_link" href="https://goldplugins.com/our-plugins/easy-faqs-details/upgrade-to-easy-faqs-pro/?utm_campaign=upgrade_sidebar&utm_source=learn_more_link" target="_blank">Click Here To Learn More! &raquo;</a>
 						</div>
-						<input type="hidden" id="gold_plugins_already_subscribed" name="gold_plugins_already_subscribed" value="<?php echo get_user_setting ('_gp_ml_has_subscribed', '0'); ?>" />
 					</form>
 				</div>
 				<p class="u_to_p"><a href="https://goldplugins.com/our-plugins/easy-faqs-details/upgrade-to-easy-faqs-pro/">Upgrade to Easy FAQs Pro now</a> to remove banners like this one.</p>
@@ -194,9 +210,8 @@ class easyFAQOptions
 		<form method="post" action="options.php">		
 			<?php settings_fields( 'easy-faqs-settings-group' ); ?>			
 			
-			<h3>Basic Options</h3>
-			
-			<p>Use the below options to control various bits of output.</p>
+			<h3>Basic Options</h3>			
+			<p>Use these options to customize the display of your FAQs.</p>
 			
 			<table class="form-table">
 				<?php
@@ -272,7 +287,7 @@ class easyFAQOptions
 			?>
 
 			</table>	
-			<?php include('registration_options.php'); ?>				
+			<?php include('registration_options.php'); ?>
 			
 			<p class="submit">
 				<input type="submit" class="button-primary" value="<?php _e('Save Changes') ?>" />
@@ -605,10 +620,10 @@ class easyFAQOptions
 				}		
 			?>	
 		</div><!-- end #easy_faqs_recent_searches -->
-		</div><!--end settings_page-->
 		<?php else: ?>
 		<p class="easy_faq_not_registered"><strong>This feature requires Easy FAQs Pro.</strong>&nbsp;&nbsp;&nbsp;<a class="button" target="blank" href="https://goldplugins.com/our-plugins/easy-faqs-details/upgrade-to-easy-faqs-pro/?utm_campaign=upgrade_search&utm_source=plugin&utm_banner=recent_searches">Upgrade Now</a></p>
 		<?php endif; ?>
+		</div><!--end settings_page-->
 	<?php 
 	}
 	

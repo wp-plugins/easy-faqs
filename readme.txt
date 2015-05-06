@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Tags: faqs, faq widget, faq list, faq submission, frequently asked questions, knowledgebase
 Requires at least: 3.0.1
 Tested up to: 4.2.1
-Stable tag: 1.9.2
+Stable tag: 1.9.3
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -139,6 +139,9 @@ Never!  Easy is in our name!  If by complicated you mean new and easy to use fea
 
 == Changelog ==
 
+= 1.9.3 =
+* Fix: Respect HTTPS when enqueuing fonts, fix broken HTML in admin, clearly label Pro features
+
 = 1.9.2 =
 * Fix: Adds scroll_offset attribute to quicklinks, handles bookmarks correctly
 
@@ -257,4 +260,4 @@ Never!  Easy is in our name!  If by complicated you mean new and easy to use fea
 
 == Upgrade Notice ==
 
-* 1.9.2: Fix: Adds scroll_offset attribute to quicklinks, handles bookmarks correctly
+* 1.9.3: Fix: Respect HTTPS when enqueuing fonts, fix broken HTML in admin, more clearly label pro features
