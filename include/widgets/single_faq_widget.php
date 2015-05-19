@@ -35,7 +35,7 @@ class singleFAQWidget extends WP_Widget
 		?>
 			<p><label for="<?php echo $this->get_field_id('title'); ?>">Widget Title: <input class="widefat" id="<?php echo $this->get_field_id('title'); ?>" name="<?php echo $this->get_field_name('title'); ?>" type="text" value="<?php echo esc_attr($title); ?>" /></label></p>
 			<?php
-				$faqs = get_posts('post_type=faq');
+				$faqs = get_posts('post_type=faq&posts_per_page=-1&nopaging=true');
 			?>
 				<label for="<?php echo $this->get_field_id('faqid'); ?>">FAQ to Display</label>
 				<select id="<?php echo $this->get_field_id('faqid'); ?>" name="<?php echo $this->get_field_name('faqid'); ?>">

@@ -520,18 +520,19 @@ class easyFAQOptions
 		<?php 
 			} else { //is pro
 		?>
-			<h3>FAQs Importer</h3>	
-			<?php 
-				//CSV Importer
-				$importer = new easyFAQsImporter();
-				$importer->csv_importer();
-			?>
-			<h3>FAQs Exporter</h3>	
-			<?php 
-				//CSV Exporter
-				$exporter = new easyFAQsExporter();
-				$exporter->csv_exporter();
-			?>
+			<form method="POST" action="" enctype="multipart/form-data">
+				<h3>FAQs Importer</h3>	
+				<?php 
+					//CSV Importer
+					$importer = new FAQsPlugin_Importer($this);
+					$importer->csv_importer(); // outputs form and handles input. TODO: break into 2 functions (one to show form, one to process input)
+				?>
+				<h3>FAQs Exporter</h3>	
+				<?php 
+					//CSV Exporter
+					FAQsPlugin_Exporter::output_form();
+				?>
+			</form>
 		<?php	} ?>
 		</div><?php			
 	}

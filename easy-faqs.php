@@ -4,7 +4,7 @@ Plugin Name: Easy FAQs
 Plugin URI: https://goldplugins.com/our-plugins/easy-faqs-details/
 Description: Easy FAQs - Provides custom post type, shortcodes, widgets, and other functionality for Frequently Asked Questions (FAQs).
 Author: Gold Plugins
-Version: 1.9.3
+Version: 1.9.4
 Author URI: https://goldplugins.com
 
 This file is part of Easy FAQs.
@@ -87,6 +87,9 @@ class easyFAQs
 		$plugin = plugin_basename(__FILE__);
 		add_filter( "plugin_action_links_{$plugin}", array($this, 'add_settings_link_to_plugin_action_links') );
 		add_filter( 'plugin_row_meta', array($this, 'add_custom_links_to_plugin_description'), 10, 2 );	
+		
+		/* Look for Export requests */
+		add_action('admin_init', array($this, 'process_export'));
 
 		//flush rewrite rules - only do this once!
 		//we do this to prevent 404s when viewing individual FAQs
@@ -1047,12 +1050,22 @@ class easyFAQs
 		return $fonts;
 	}	
 
-
 	//register any widgets here
 	function easy_faqs_register_widgets() {
 		include('include/widgets/single_faq_widget.php');
 
 		register_widget( 'singleFAQWidget' );
+	}
+	
+	/* Looks for a special POST value, and if its found, outputs a CSV of FAQs */
+	function process_export()
+	{
+		// look for an Export command first
+		if (isset($_POST['_gp_do_export']) && $_POST['_gp_do_export'] == '_gp_do_export') {
+			$exporter = new FAQsPlugin_Exporter();
+			$exporter->process_export();
+			exit();
+		}
 	}
 }//end easyFAQs
 
