@@ -21,7 +21,7 @@ include("lib/easy_faqs_exporter.php");
 
 class easyFAQOptions
 {
-	var $textdomain = '';
+	var $textdomain = 'easy-faqs';
 	var $shed = false;
 	var $root = false;
 

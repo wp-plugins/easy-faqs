@@ -22,6 +22,7 @@ class ikFAQsCustomPostType
 	var $customPostTypeSingular = 'customPost';
 	var $customPostTypePlural = 'customPosts';
 	var $prefix = '_ikcf_';
+	var $textdomain;
 	
 	function setupCustomPostType($postType)
 	{
@@ -36,16 +37,16 @@ class ikFAQsCustomPostType
 		{		
 			$labels = array
 			(
-				'name' => _x($plural, 'post type general name'),
-				'singular_name' => _x($singular, 'post type singular name'),
-				'add_new' => _x('Add New ' . $singular, strtolower($singular)),
-				'add_new_item' => __('Add New ' . $singular),
-				'edit_item' => __('Edit ' . $singular),
-				'new_item' => __('New ' . $singular),
-				'view_item' => __('View ' . $singular),
-				'search_items' => __('Search ' . $plural),
-				'not_found' =>  __('No ' . strtolower($plural) . ' found'),
-				'not_found_in_trash' => __('No ' . strtolower($plural) . ' found in Trash'), 
+				'name' => _x($plural, 'post type general name', $this->textdomain),
+				'singular_name' => _x($singular, 'post type singular name', $this->textdomain),
+				'add_new' => _x('Add New ' . $singular, strtolower($singular), $this->textdomain),
+				'add_new_item' => __('Add New ' . $singular, $this->textdomain),
+				'edit_item' => __('Edit ' . $singular, $this->textdomain),
+				'new_item' => __('New ' . $singular, $this->textdomain),
+				'view_item' => __('View ' . $singular, $this->textdomain),
+				'search_items' => __('Search ' . $plural, $this->textdomain),
+				'not_found' =>  __('No ' . strtolower($plural) . ' found', $this->textdomain),
+				'not_found_in_trash' => __('No ' . strtolower($plural) . ' found in Trash', $this->textdomain), 
 				'parent_item_colon' => ''
 			);
 			
@@ -200,8 +201,10 @@ class ikFAQsCustomPostType
 		}
 	}
 
-	function __construct($postType, $customFields = false, $removeDefaultCustomFields = false)
+	function __construct($postType, $customFields = false, $removeDefaultCustomFields = false, $textdomain)
 	{
+		$this->textdomain = $textdomain;
+		
 		$this->setupCustomPostType($postType);
 		
 		if ($customFields)

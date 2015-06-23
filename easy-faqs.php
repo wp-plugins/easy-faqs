@@ -4,8 +4,9 @@ Plugin Name: Easy FAQs
 Plugin URI: https://goldplugins.com/our-plugins/easy-faqs-details/
 Description: Easy FAQs - Provides custom post type, shortcodes, widgets, and other functionality for Frequently Asked Questions (FAQs).
 Author: Gold Plugins
-Version: 1.9.4
+Version: 1.10
 Author URI: https://goldplugins.com
+Text Domain: easy-faqs
 
 This file is part of Easy FAQs.
 
@@ -29,15 +30,23 @@ include('include/lib/lib.php');
 include('include/lib/str_highlight.php');
 include('include/lib/database_setup.php');
 include('include/lib/easy_faqs_search_faqs.class.php');
-include('include/lib/BikeShed/bikeshed.php');
+include('include/lib/BikeShed/bikeshed.php');	
 
 class easyFAQs
 {
 	var $category_sort_order = array();
 	var $SearchFAQs = false;
+	var $textdomain = "easy-faqs";
 	
 	function __construct()
-	{		
+	{			
+		//load plugin text domain
+		$plugin_dir = basename(dirname(__FILE__));
+		load_plugin_textdomain( 'easy-faqs', false, $plugin_dir );
+		
+		//load strings with translations
+		include('include/lib/strings.php');
+	
 		// load subsclasses
 		$this->SearchFAQs = new EasyFAQs_SearchFAQs($this);
 		
@@ -141,12 +150,12 @@ class easyFAQs
 		/** Check if $plugin_file matches the passed $file name */
 		if ( $file == $plugin_file )
 		{		
-			$new_links['settings_link'] = '<a href="admin.php?page=easy-faqs-settings">Settings</a>';
-			$new_links['support_link'] = '<a href="https://goldplugins.com/contact/?utm-source=plugin_menu&utm_campaign=support&utm_banner=easy-faqs" target="_blank">Get Support</a>';
+			$new_links['settings_link'] = '<a href="admin.php?page=easy-faqs-settings">' . FAQ_SETTINGS_TEXT . '</a>';
+			$new_links['support_link'] = '<a href="https://goldplugins.com/contact/?utm-source=plugin_menu&utm_campaign=support&utm_banner=easy-faqs" target="_blank">' . FAQ_SUPPORT_TEXT . '</a>';
 			
 			if(!isValidFAQKey()){
 				$new_links['upgrade_to_pro'] = '<a href="https://goldplugins.com/our-plugins/easy-faqs-details/upgrade-to-easy-faqs-pro/?utm_source=plugin_menu&utm_campaign=up
-				grade" target="_blank">Upgrade to Pro</a>';
+				grade" target="_blank">' . FAQ_UPGRADE_TEXT . '</a>';
 			}
 			
 			$links = array_merge( $links, $new_links);
@@ -185,8 +194,8 @@ class easyFAQs
 		//get e-mail address from post meta field
 		$email_address = get_option('easy_faqs_submit_notification_address', get_bloginfo('admin_email'));
 	 
-		$subject = "New Easy FAQ Submission on " . get_bloginfo('name');
-		$body = "You have received a new submission with Easy FAQs on your site, " . get_bloginfo('name') . ".  Login and see what they had to say!";
+		$subject = NEW_FAQ_SUBMISSION_TEXT . get_bloginfo('name');
+		$body = NEW_FAQ_SUBMISSION_BODY;
 	 
 		//use this to set the From address of the e-mail
 		$headers = 'From: ' . get_bloginfo('name') . ' <'.get_bloginfo('admin_email').'>' . "\r\n";
@@ -296,23 +305,23 @@ class easyFAQs
 					$do_not_insert = false;
 					
 					if (isset ($_POST['the-title']) && strlen($_POST['the-title']) > 0) {
-							$title =  "Question from: " . $_POST['the-title'];
+							$title =  __("Question from: ", $this->textdomain) . $_POST['the-title'];
 					} else {
-							echo '<p class="easy_faqs_error">Please enter your name.</p>';
+							echo '<p class="easy_faqs_error">' . FAQ_FORM_ERROR_NAME . '</p>';
 							$do_not_insert = true;
 					}	
 				   
 					if (isset ($_POST['the-body']) && strlen($_POST['the-body']) > 0) {
 							$body = $_POST['the-body'];
 					} else {
-							echo '<p class="easy_faqs_error">Please enter a question.</p>';
+							echo '<p class="easy_faqs_error">' . FAQ_FORM_ERROR_QUESTION . '</p>';
 							$do_not_insert = true;
 					}		
 				
 					if(class_exists('ReallySimpleCaptcha') && get_option('easy_faqs_use_captcha',0)){ 
 						$correct = $this->easy_faqs_check_captcha(); 
 						if(!$correct){
-							echo '<p class="easy_faqs_error">Captcha did not match.</p>';
+							echo '<p class="easy_faqs_error">' . FAQ_FORM_ERROR_CAPTCHA . '</p>';
 							$do_not_insert = true;
 						}
 					}
@@ -334,7 +343,7 @@ class easyFAQs
 						do_action('wp_insert_post', 'wp_insert_post');                 
 					}
 				} else {
-					echo "You must have a valid key to perform this action.";
+					echo __("You must have a valid key to perform this action.", $this->textdomain);
 				}
 			}       
 		   
@@ -350,19 +359,19 @@ class easyFAQs
 				<div id="postbox">
 					<form id="new_post" name="new_post" method="post">
 						<div class="easy_faqs_field_wrap">
-							<label for="the-title">Your Name</label><br />
+							<label for="the-title"><?php echo FAQ_FORM_NAME; ?></label><br />
 							<input type="text" id="the-title" tabindex="1" name="the-title" />
-							<p class="easy_faqs_description">Please let us know your name.</p>
+							<p class="easy_faqs_description"><?php echo FAQ_FORM_NAME_DESCRIPTION; ?></p>
 						</div>
 						<div class="easy_faqs_field_wrap">
-							<label for="the-body">Question</label><br />
+							<label for="the-body"><?php echo FAQ_FORM_QUESTION; ?></label><br />
 							<textarea id="the-body" tabindex="2" name="the-body" cols="50" rows="6"></textarea>
-							<p class="easy_faqs_description">This is the question that you are asking.</p>
+							<p class="easy_faqs_description"><?php echo FAQ_FORM_QUESTION_DESCRIPTION ?></p>
 						</div>
 		
 						<?php if(class_exists('ReallySimpleCaptcha') && get_option('easy_faqs_use_captcha',0)){ $this->easy_faqs_outputCaptcha(); } ?>
 						
-						<div class="easy_faqs_field_wrap"><input type="submit" value="Submit Your Question" tabindex="3" id="submit" name="submit" /></div>
+						<div class="easy_faqs_field_wrap"><input type="submit" value="<?php echo FAQ_SUBMIT_QUESTION_BUTTON; ?>" tabindex="3" id="submit" name="submit" /></div>
 						<input type="hidden" name="action" value="post" />
 						<?php wp_nonce_field( 'new-post' ); ?>
 					</form>
@@ -390,7 +399,6 @@ class easyFAQs
 		}
 	}
 
-	
 	function word_trim($string, $count, $ellipsis = FALSE)	{
 		$words = explode(' ', $string);
 		if (count($words) > $count)
@@ -452,8 +460,8 @@ class easyFAQs
 		//setup post type for faqs
 		$postType = array('name' => 'FAQ', 'plural' =>'faqs', 'slug' => 'faq' );
 		$fields = array(); 
-		$myCustomType = new ikFAQsCustomPostType($postType, $fields);
-		register_taxonomy( 'easy-faq-category', 'faq', array( 'hierarchical' => true, 'label' => __('FAQ Category'), 'rewrite' => array('slug' => 'faq-category', 'with_front' => true) ) ); 
+		$myCustomType = new ikFAQsCustomPostType($postType, $fields, false, $this->textdomain);
+		register_taxonomy( 'easy-faq-category', 'faq', array( 'hierarchical' => true, 'label' => 'FAQ Category', 'rewrite' => array('slug' => 'faq-category', 'with_front' => true) ) ); 
 		
 		//load list of current posts that have featured images	
 		$supportedTypes = get_theme_support( 'post-thumbnails' );
@@ -689,7 +697,7 @@ class easyFAQs
 				$categories = get_terms('easy-faq-category', $args);		
 			}
 
-			$quick_links_title = '<h3 class="quick-links" id="quick-links-top">Quick Links</h3>';
+			$quick_links_title = '<h3 class="quick-links" id="quick-links-top">' . FAQ_QUICK_LINKS_LABEL . '</h3>';
 			echo apply_filters( 'easy_faqs_quick_links_title', $quick_links_title);
 			
 			//loop through categories, outputting a heading for the category and the list of faqs in that category

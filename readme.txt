@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Tags: faqs, faq widget, faq list, faq submission, frequently asked questions, knowledgebase
 Requires at least: 3.0.1
 Tested up to: 4.2.2
-Stable tag: 1.9.4
+Stable tag: 1.10
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -139,6 +139,9 @@ Never!  Easy is in our name!  If by complicated you mean new and easy to use fea
 
 == Changelog ==
 
+= 1.10 =
+* Feature: Update to be translatable.
+
 = 1.9.4 =
 * Fix: Single widget now allows you to pick from more than just 10 FAQs
 * Fix: Update the CSV Import / Export to function better, security patch
@@ -264,4 +267,4 @@ Never!  Easy is in our name!  If by complicated you mean new and easy to use fea
 
 == Upgrade Notice ==
 
-* 1.9.4: Widget updates, bug fixes
+* 1.10: Update to be translatable.
