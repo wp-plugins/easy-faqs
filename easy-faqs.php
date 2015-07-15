@@ -4,7 +4,7 @@ Plugin Name: Easy FAQs
 Plugin URI: https://goldplugins.com/our-plugins/easy-faqs-details/
 Description: Easy FAQs - Provides custom post type, shortcodes, widgets, and other functionality for Frequently Asked Questions (FAQs).
 Author: Gold Plugins
-Version: 1.10
+Version: 1.11
 Author URI: https://goldplugins.com
 Text Domain: easy-faqs
 
@@ -37,9 +37,15 @@ class easyFAQs
 	var $category_sort_order = array();
 	var $SearchFAQs = false;
 	var $textdomain = "easy-faqs";
+	var $is_pro = false;
 	
 	function __construct()
-	{			
+	{					
+		//set class variable for tracking pro
+		if(isValidFAQKey()){
+			$this->is_pro = true;
+		}
+		
 		//load plugin text domain
 		$plugin_dir = basename(dirname(__FILE__));
 		load_plugin_textdomain( 'easy-faqs', false, $plugin_dir );
@@ -87,7 +93,7 @@ class easyFAQs
 		add_action('manage_easy-faq-category_custom_column', array($this, 'easy_faqs_cat_columns_content'), 10, 3); 
 		
 		// admin init
-		add_action('admin_init', array($this, 'admin_init'));
+		add_action('admin_enqueue_scripts', array($this, 'admin_init'));
 		
 		// add Google web fonts if needed
 		add_action( 'wp_enqueue_scripts', array($this, 'enqueue_webfonts'));
@@ -112,26 +118,28 @@ class easyFAQs
 		flush_rewrite_rules();
 	}
 	
-	function admin_init()
+	function admin_init($hook)
 	{
-		wp_register_style( 'easy_faqs_admin_stylesheet', plugins_url('include/css/admin_style.css', __FILE__) );
-		wp_enqueue_style( 'easy_faqs_admin_stylesheet' );
-		
-		wp_enqueue_script(
-			'gp-shortcode-generator',
-			plugins_url('include/js/gp-shortcode-generator.js', __FILE__),
-			array( 'jquery' ),
-			false,
-			true
-		);		
-		wp_enqueue_script(
-			'gp-admin_v2',
-			plugins_url('include/js/gp-admin_v2.js', __FILE__),
-			array( 'jquery' ),
-			false,
-			true
-		);
-		
+		//RWG: only enqueue scripts and styles on Easy T admin pages
+		if(strpos($hook,'easy-faqs')!==false){		
+			wp_register_style( 'easy_faqs_admin_stylesheet', plugins_url('include/css/admin_style.css', __FILE__) );
+			wp_enqueue_style( 'easy_faqs_admin_stylesheet' );
+			
+			wp_enqueue_script(
+				'gp-shortcode-generator',
+				plugins_url('include/js/gp-shortcode-generator.js', __FILE__),
+				array( 'jquery' ),
+				false,
+				true
+			);		
+			wp_enqueue_script(
+				'gp-admin_v2',
+				plugins_url('include/js/gp-admin_v2.js', __FILE__),
+				array( 'jquery' ),
+				false,
+				true
+			);
+		}
 	}
 
 	//add an inline link to the settings page, before the "deactivate" link
@@ -194,7 +202,7 @@ class easyFAQs
 		//get e-mail address from post meta field
 		$email_address = get_option('easy_faqs_submit_notification_address', get_bloginfo('admin_email'));
 	 
-		$subject = NEW_FAQ_SUBMISSION_TEXT . get_bloginfo('name');
+		$subject = NEW_FAQ_SUBMISSION_SUBJECT . get_bloginfo('name');
 		$body = NEW_FAQ_SUBMISSION_BODY;
 	 
 		//use this to set the From address of the e-mail
@@ -337,10 +345,7 @@ class easyFAQs
 					   
 						$new_id = wp_insert_post($post);
 					   
-						$inserted = true;
-   
-						// do the wp_insert_post action to insert it
-						do_action('wp_insert_post', 'wp_insert_post');                 
+						$inserted = true;              
 					}
 				} else {
 					echo __("You must have a valid key to perform this action.", $this->textdomain);
@@ -1061,8 +1066,14 @@ class easyFAQs
 	//register any widgets here
 	function easy_faqs_register_widgets() {
 		include('include/widgets/single_faq_widget.php');
+		include('include/widgets/search_faqs_widget.php');
+		include('include/widgets/list_faqs_widget.php');
+		include('include/widgets/submit_faqs_widget.php');
 
 		register_widget( 'singleFAQWidget' );
+		register_widget( 'searchFAQsWidget' );
+		register_widget( 'listFAQsWidget' );
+		register_widget( 'submitFAQsWidget' );
 	}
 	
 	/* Looks for a special POST value, and if its found, outputs a CSV of FAQs */

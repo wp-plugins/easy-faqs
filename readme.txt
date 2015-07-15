@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Tags: faqs, faq widget, faq list, faq submission, frequently asked questions, knowledgebase
 Requires at least: 3.0.1
 Tested up to: 4.2.2
-Stable tag: 1.10
+Stable tag: 1.11
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -136,8 +136,12 @@ Never!  Easy is in our name!  If by complicated you mean new and easy to use fea
 4. This is the Easy FAQs Help & Instructions Page.
 5. This is the Easy Single FAQ Widget.
 6. This is the Easy FAQs Categories Page.
+7. This is the Easy FAQs List Widget.
 
 == Changelog ==
+
+= 1.11 =
+* Feature: Adds FAQs Search, List, and Submit Widgets.
 
 = 1.10 =
 * Feature: Update to be translatable.
@@ -267,4 +271,4 @@ Never!  Easy is in our name!  If by complicated you mean new and easy to use fea
 
 == Upgrade Notice ==
 
-* 1.10: Update to be translatable.
+* 1.11: Adds FAQs Search, List, and Question Submission Widgets.

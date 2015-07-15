@@ -22,7 +22,7 @@ class singleFAQWidget extends WP_Widget
 {
 	function singleFAQWidget(){
 		$widget_ops = array('classname' => 'singleFAQWidget', 'description' => 'Displays a random FAQ.' );
-		$this->WP_Widget('singleFAQWidget', 'Easy Single FAQ', $widget_ops);
+		$this->WP_Widget('singleFAQWidget', 'Easy FAQs Single FAQ', $widget_ops);
 	}
 
 	function form($instance){
@@ -75,7 +75,7 @@ class singleFAQWidget extends WP_Widget
 			echo $before_title . $title . $after_title;;
 		}
 		
-		echo $easy_faqs->outputSingleFAQ(array('faqs_link' => get_option('faqs_link'), 'id' => $faqid, 'read_more_link_text' => $faq_read_more_link_text, 'read_more_link' => $faq_read_more_link, 'show_thumbs' => $show_faq_image));
+		echo $easy_faqs->outputSingleFAQ(array('id' => $faqid, 'read_more_link_text' => $faq_read_more_link_text, 'read_more_link' => $faq_read_more_link, 'show_thumbs' => $show_faq_image));
 
 		echo $after_widget;
 	} 

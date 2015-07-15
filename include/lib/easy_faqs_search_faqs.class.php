@@ -159,7 +159,7 @@ class EasyFAQs_SearchFAQs
 				'region_name' => $geo_json->region_name,
 				'state' => $geo_json->region_name,
 				'city' => $geo_json->city,
-				'zipcode' => $geo_json->zipcode,
+				'zipcode' => isset($geo_json->zipcode) ? $geo_json->zipcode : '',
 				'latitude' => $geo_json->latitude,
 				'longitude' => $geo_json->longitude,
 				'friendly_location' => $geo_json->country_name,

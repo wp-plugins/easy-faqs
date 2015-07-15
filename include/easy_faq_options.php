@@ -465,15 +465,15 @@ class easyFAQOptions
 							</th>
 							<td>
 								<div class="sc_gen_control_group sc_gen_control_group_radio">
-									<label title="Hide Ratings">
+									<label title="Normal Style">
 										<input type="radio" value="normal" id="sc_gen_style_normal" name="sc_gen_style" checked="checked">
 										<span>Normal Style</span>
 									</label>
-									<label title="Show Rating Before Testimonial">
+									<label title="Accordion Style - First FAQ Visible">
 										<input type="radio" value="accordion" id="sc_gen_style_accordion_first_open" name="sc_gen_style">
 										<span>Accordion Style - First FAQ Visible</span>
 									</label>
-									<label title="Show Rating After Testimonial">
+									<label title="Accordion Style - All FAQs Start Collapsed">
 										<input type="radio" value="accordion-collapsed" id="sc_gen_style_accordion_closed" name="sc_gen_style">
 										<span>Accordion Style - All FAQs Start Collapsed</span>
 									</label>
