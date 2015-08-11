@@ -20,9 +20,9 @@ Shout out to http://www.makeuseof.com/tag/how-to-create-wordpress-widgets/ for t
 
 class singleFAQWidget extends WP_Widget
 {
-	function singleFAQWidget(){
+	function __construct(){
 		$widget_ops = array('classname' => 'singleFAQWidget', 'description' => 'Displays a random FAQ.' );
-		$this->WP_Widget('singleFAQWidget', 'Easy FAQs Single FAQ', $widget_ops);
+		parent::__construct('singleFAQWidget', 'Easy FAQs Single FAQ', $widget_ops);
 	}
 
 	function form($instance){
@@ -33,6 +33,7 @@ class singleFAQWidget extends WP_Widget
 		$faq_read_more_link = $instance['faq_read_more_link'];
 		$show_faq_image = $instance['show_faq_image'];
 		?>
+		<div class="gp_widget_form_wrapper">		
 			<p><label for="<?php echo $this->get_field_id('title'); ?>">Widget Title: <input class="widefat" id="<?php echo $this->get_field_id('title'); ?>" name="<?php echo $this->get_field_name('title'); ?>" type="text" value="<?php echo esc_attr($title); ?>" /></label></p>
 			<?php
 				$faqs = get_posts('post_type=faq&posts_per_page=-1&nopaging=true');
@@ -43,10 +44,14 @@ class singleFAQWidget extends WP_Widget
 					<option value="<?php echo $faq->ID; ?>"  <?php if($faqid == $faq->ID): ?> selected="SELECTED" <?php endif; ?>><?php echo $faq->post_title; ?></option>
 				<?php endforeach; endif;?>
 				 </select>
-			<p><label for="<?php echo $this->get_field_id('show_faq_image'); ?>">Show FAQ Image: </label><input class="widefat" id="<?php echo $this->get_field_id('show_faq_image'); ?>" name="<?php echo $this->get_field_name('show_faq_image'); ?>" type="checkbox" value="1" <?php if($show_faq_image){ ?>checked="CHECKED"<?php } ?>/></p>
-			<p><label for="<?php echo $this->get_field_id('faq_read_more_link'); ?>">Read More Link Destination: <input class="widefat" id="<?php echo $this->get_field_id('faq_read_more_link'); ?>" name="<?php echo $this->get_field_name('faq_read_more_link'); ?>" type="text" value="<?php echo esc_attr($faq_read_more_link); ?>" /></label></p>
-			<p><label for="<?php echo $this->get_field_id('faq_read_more_link_text'); ?>">Read More Link Text: <input class="widefat" id="<?php echo $this->get_field_id('faq_read_more_link_text'); ?>" name="<?php echo $this->get_field_name('faq_read_more_link_text'); ?>" type="text" value="<?php echo esc_attr($faq_read_more_link_text); ?>" /></label></p>
-			<?php
+			<fieldset class="radio_text_input">
+				<legend>Fields to Display:</legend>
+				<p><label for="<?php echo $this->get_field_id('faq_read_more_link'); ?>">View All Link Destination: <input class="widefat" id="<?php echo $this->get_field_id('faq_read_more_link'); ?>" name="<?php echo $this->get_field_name('faq_read_more_link'); ?>" type="text" value="<?php echo esc_attr($faq_read_more_link); ?>" /></label></p>
+				<p><label for="<?php echo $this->get_field_id('faq_read_more_link_text'); ?>">View All Link Text: <input class="widefat" id="<?php echo $this->get_field_id('faq_read_more_link_text'); ?>" name="<?php echo $this->get_field_name('faq_read_more_link_text'); ?>" type="text" value="<?php echo esc_attr($faq_read_more_link_text); ?>" /></label></p>
+				<p><input class="widefat" id="<?php echo $this->get_field_id('show_faq_image'); ?>" name="<?php echo $this->get_field_name('show_faq_image'); ?>" type="checkbox" value="1" <?php if($show_faq_image){ ?>checked="CHECKED"<?php } ?>/><label for="<?php echo $this->get_field_id('show_faq_image'); ?>">Show FAQ Image</label></p>
+			</fieldset>
+		</div>
+		<?php
 	}
 
 	function update($new_instance, $old_instance){

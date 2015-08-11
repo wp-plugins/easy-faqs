@@ -20,9 +20,9 @@ Shout out to http://www.makeuseof.com/tag/how-to-create-wordpress-widgets/ for t
 
 class searchFAQsWidget extends WP_Widget
 {
-	function searchFAQsWidget(){
+	function __construct(){
 		$widget_ops = array('classname' => 'searchFAQsWidget', 'description' => 'Displays an FAQs Search Form.' );
-		$this->WP_Widget('searchFAQsWidget', 'Easy FAQs Search', $widget_ops);
+		parent::__construct('searchFAQsWidget', 'Easy FAQs Search', $widget_ops);
 	}
 
 	function form($instance){
@@ -32,13 +32,16 @@ class searchFAQsWidget extends WP_Widget
 			$instance = wp_parse_args( (array) $instance, array( 'title' => '') );
 			$title = $instance['title'];
 			?>
+			<div class="gp_widget_form_wrapper">
 				<p><label for="<?php echo $this->get_field_id('title'); ?>">Widget Title: <input class="widefat" id="<?php echo $this->get_field_id('title'); ?>" name="<?php echo $this->get_field_name('title'); ?>" type="text" value="<?php echo esc_attr($title); ?>" /></label></p>
+			</div>
 			<?php
 		} else {
 			?>
-			<p><strong>Please Note:</strong><br/> This Feature Requires Easy FAQs Pro.</p>
-			<p><a href="https://goldplugins.com/our-plugins/easy-faqs-details/upgrade-to-easy-faqs-pro/?utm_source=submit_faqs_widget&utm_campaign=up
-				grade" target="_blank"><?php echo FAQ_UPGRADE_TEXT; ?></a></p>
+			<div class="gp_widget_form_wrapper">
+				<p><strong>Please Note:</strong><br/> This Feature Requires Easy FAQs Pro.</p>
+				<p><a href="https://goldplugins.com/our-plugins/easy-faqs-details/upgrade-to-easy-faqs-pro/?utm_source=submit_faqs_widget&utm_campaign=upgrade" target="_blank"><?php echo FAQ_UPGRADE_TEXT; ?></a></p>
+			</div>
 			<?php
 		}
 		

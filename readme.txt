@@ -3,8 +3,8 @@ Contributors: richardgabriel, ghuger
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=V7HR8DP4EJSYN
 Tags: faqs, faq widget, faq list, faq submission, frequently asked questions, knowledgebase
 Requires at least: 3.0.1
-Tested up to: 4.2.2
-Stable tag: 1.11
+Tested up to: 4.3
+Stable tag: 1.11.1
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -132,13 +132,21 @@ Never!  Easy is in our name!  If by complicated you mean new and easy to use fea
 
 1. This is the Add New FAQ Page.
 2. This is the List of FAQs - from here you can Edit or Delete a FAQ.
-3. This is the Easy FAQs Settings Page.
-4. This is the Easy FAQs Help & Instructions Page.
-5. This is the Easy Single FAQ Widget.
-6. This is the Easy FAQs Categories Page.
-7. This is the Easy FAQs List Widget.
+3. This is the Easy FAQs Categories Page.
+4. This is the Easy FAQs Basic Settings Page.
+5. This is the Easy FAQs Shortcode Generator.
+6. This is the Easy Import & Export Page.
+7. This is the Easy Recent Searches Page.
+8. This is the Easy FAQs Help & Instructions Page.
+9. This is the Easy FAQs List Widget.
+10. This is the Easy Single FAQ Widget.
 
 == Changelog ==
+
+= 1.11.1 =
+* Updates Widget CSS and Forms to improve Usability.
+* Updates Accordion CSS to prevent flash of FAQs as JS loads.
+* Updates Widgets to use PHP5 style constructors, in preparation for WP 4.3.
 
 = 1.11 =
 * Feature: Adds FAQs Search, List, and Submit Widgets.
@@ -271,4 +279,4 @@ Never!  Easy is in our name!  If by complicated you mean new and easy to use fea
 
 == Upgrade Notice ==
 
-* 1.11: Adds FAQs Search, List, and Question Submission Widgets.
+* 1.11.1: Default Accordion CSS to prevent style flash as JS loads, Updates Widget CSS and Forms.

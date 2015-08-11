@@ -14,21 +14,19 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with Easy FAQs.  If not, see <http://www.gnu.org/licenses/>.
-
-Shout out to http://www.makeuseof.com/tag/how-to-create-wordpress-widgets/ for the help
 */
 
 class listFAQsWidget extends WP_Widget
 {
-	function listFAQsWidget(){
+	function __construct(){
 		$widget_ops = array('classname' => 'listFAQsWidget', 'description' => 'Displays a list of FAQs.' );
-		$this->WP_Widget('listFAQsWidget', 'Easy FAQs List', $widget_ops);
+		parent::__construct('listFAQsWidget', 'Easy FAQs List', $widget_ops);
 	}
 
 	function form($instance){
 		global $easy_faqs;
 		
-		$instance = wp_parse_args( (array) $instance, array( 'title' => '', 'count' => 10, 'show_faq_image' => get_option('faqs_image'), 'faq_read_more_link_text' => get_option('faqs_read_more_text', 'View All'), 'faq_read_more_link' => get_option('faqs_link'), 'order' => 'ASC', 'order_by' => 'date', 'category' => '', 'group_by_category' => false, 'quick_links' => false, 'quick_links_columns' => 2, 'accordion_style' => false ) );
+		$instance = wp_parse_args( (array) $instance, array( 'title' => '', 'count' => 10, 'show_faq_image' => get_option('faqs_image'), 'faq_read_more_link_text' => get_option('faqs_read_more_text', 'View All'), 'faq_read_more_link' => get_option('faqs_link'), 'order' => 'ASC', 'order_by' => 'date', 'category' => '', 'group_by_category' => false, 'quick_links' => false, 'quick_links_columns' => 2, 'accordion_style' => 'normal' ) );
 		
 		$title = $instance['title'];
 		$count = $instance['count'];
@@ -44,58 +42,65 @@ class listFAQsWidget extends WP_Widget
 		$accordion_style = $instance['accordion_style'];
 		
 		?>
+		<div class="gp_widget_form_wrapper">
 			<p><label for="<?php echo $this->get_field_id('title'); ?>">Widget Title: <input class="widefat" id="<?php echo $this->get_field_id('title'); ?>" name="<?php echo $this->get_field_name('title'); ?>" type="text" value="<?php echo esc_attr($title); ?>" /></label></p>
-			<p><label for="<?php echo $this->get_field_id('count'); ?>">Count: <input class="widefat" id="<?php echo $this->get_field_id('count'); ?>" name="<?php echo $this->get_field_name('count'); ?>" type="text" value="<?php echo esc_attr($count); ?>" /></label><br/><em>Set to -1 to show All FAQs.</em></p>
-			<p><label for="<?php echo $this->get_field_id('faq_read_more_link'); ?>">View All Link URL: <input class="widefat" id="<?php echo $this->get_field_id('faq_read_more_link'); ?>" name="<?php echo $this->get_field_name('faq_read_more_link'); ?>" type="text" value="<?php echo esc_attr($faq_read_more_link); ?>" /></label></em></p>
-			<p><label for="<?php echo $this->get_field_id('faq_read_more_link_text'); ?>">View All Link Text: <input class="widefat" id="<?php echo $this->get_field_id('faq_read_more_link_text'); ?>" name="<?php echo $this->get_field_name('faq_read_more_link_text'); ?>" type="text" value="<?php echo esc_attr($faq_read_more_link_text); ?>" /></label></p>			
-			
-			<p><label for="<?php echo $this->get_field_id('order'); ?>">FAQ Order:</label><br/>
-			<select id="<?php echo $this->get_field_id('order_by'); ?>" name="<?php echo $this->get_field_name('order_by'); ?>">
-				<option value="title" <?php if($order_by == "title"): ?>selected="SELECTED"<?php endif; ?>>Title</option>
-				<option value="random" <?php if($order_by == "random"): ?>selected="SELECTED"<?php endif; ?>>Random</option>
-				<option value="id" <?php if($order_by == "id"): ?>selected="SELECTED"<?php endif; ?>>ID</option>
-				<option value="author" <?php if($order_by == "author"): ?>selected="SELECTED"<?php endif; ?>>Author</option>
-				<option value="name" <?php if($order_by == "name"): ?>selected="SELECTED"<?php endif; ?>>Name</option>
-				<option value="date" <?php if($order_by == "date"): ?>selected="SELECTED"<?php endif; ?>>Date</option>
-				<option value="last_modified" <?php if($order_by == "last_modified"): ?>selected="SELECTED"<?php endif; ?>>Last Modified</option>
-				<option value="parent_id" <?php if($order_by == "parent_id"): ?>selected="SELECTED"<?php endif; ?>>Parent ID</option>
-			</select>
-			<select id="<?php echo $this->get_field_id('order'); ?>" name="<?php echo $this->get_field_name('order'); ?>">
-				<option value="ASC" <?php if($order == "ASC"): ?>selected="SELECTED"<?php endif; ?>>Ascending (ASC)</option>
-				<option value="DESC" <?php if($order == "DESC"): ?>selected="SELECTED"<?php endif; ?>>Descending (DESC)</option>
-			</select></p>
-			
-			<p><label for="<?php echo $this->get_field_id('category'); ?>">Filter By Category:</label><br/>
-			<?php $categories = get_terms( 'easy-faq-category', 'orderby=title&hide_empty=0' ); ?>			
-			<select id="<?php echo $this->get_field_id('category'); ?>">
-				<option value="all">All Categories</option>
-				<?php foreach($categories as $cat):?>
-				<option value="<?php echo $cat->slug; ?>" <?php if($category == $cat->slug):?>selected="SELECTED"<?php endif; ?>><?php echo htmlentities($cat->name); ?></option>
-				<?php endforeach; ?>
-			</select><br/><em><a href="<?php echo admin_url('edit-tags.php?taxonomy=easy-faq-category&post_type=faq'); ?>">Manage Categories</a></em></p>
-			
-			<p><label for="<?php echo $this->get_field_id('show_faq_image'); ?>">Show FAQ Image: </label><input class="widefat" id="<?php echo $this->get_field_id('show_faq_image'); ?>" name="<?php echo $this->get_field_name('show_faq_image'); ?>" type="checkbox" value="1" <?php if($show_faq_image){ ?>checked="CHECKED"<?php } ?>/></p>
-			
-			<p><label for="<?php echo $this->get_field_id('quick_links'); ?>">Quick Links: </label><input class="widefat" id="<?php echo $this->get_field_id('quick_links'); ?>" name="<?php echo $this->get_field_name('quick_links'); ?>" type="checkbox" value="1" <?php if($quick_links){ ?>checked="CHECKED"<?php } ?>/></p>
-			<p><label for="<?php echo $this->get_field_id('quick_links_columns'); ?>">Quick Links Columns: <input class="widefat" id="<?php echo $this->get_field_id('quick_links_columns'); ?>" name="<?php echo $this->get_field_name('quick_links_columns'); ?>" type="text" value="<?php echo esc_attr($quick_links_columns); ?>" /></label></p>
-						
-			<p>Display Style:<br/>
-			<label title="Normal Style">
-				<input type="radio" value="normal" id="sc_gen_style_normal" name="<?php echo $this->get_field_name('accordion_style'); ?>" <?php if($accordion_style == "normal"): ?>checked="CHECKED"<?php endif; ?>>
-				<span>Normal Style</span>
-			</label><br/>
-			<label title="Accordion Style - First FAQ Visible">
-				<input type="radio" value="accordion" id="sc_gen_style_accordion_first_open" name="<?php echo $this->get_field_name('accordion_style'); ?>" <?php if(!$easy_faqs->is_pro): ?>disabled="disabled"<?php endif; ?> <?php if($accordion_style == "accordion"): ?>checked="CHECKED"<?php endif; ?>>
-				<span>Accordion Style - First FAQ Visible <?php if(!$easy_faqs->is_pro): ?><br/><strong>Easy FAQs Pro Required.</strong> <a href="https://goldplugins.com/our-plugins/easy-faqs-details/upgrade-to-easy-faqs-pro/?utm_source=list_faqs_widget&utm_campaign=up
-				grade" target="_blank"><?php echo FAQ_UPGRADE_TEXT; ?></a><?php endif; ?> </span>
-			</label><br/>
-			<label title="Accordion Style - All FAQs Start Collapsed">
-				<input type="radio" value="accordion-collapsed" id="sc_gen_style_accordion_closed" name="<?php echo $this->get_field_name('accordion_style'); ?>" <?php if(!$easy_faqs->is_pro): ?>disabled="disabled"<?php endif; ?> <?php if($accordion_style == "accordion-collapsed"): ?>checked="CHECKED"<?php endif; ?>>
-				<span>Accordion Style - All FAQs Start Collapsed <?php if(!$easy_faqs->is_pro): ?><br/><strong>Easy FAQs Pro Required.</strong> <a href="https://goldplugins.com/our-plugins/easy-faqs-details/upgrade-to-easy-faqs-pro/?utm_source=list_faqs_widget&utm_campaign=up
-				grade" target="_blank"><?php echo FAQ_UPGRADE_TEXT; ?></a><?php endif; ?> </span>
-			</label></p>
-			
-			<?php
+			<fieldset class="radio_text_input">
+				<legend>Filter FAQs:</legend> 
+				<p><label for="<?php echo $this->get_field_id('category'); ?>">Category:</label><br/>
+				<?php $categories = get_terms( 'easy-faq-category', 'orderby=title&hide_empty=0' ); ?>			
+				<select id="<?php echo $this->get_field_id('category'); ?>">
+					<option value="all">All Categories</option>
+					<?php foreach($categories as $cat):?>
+					<option value="<?php echo $cat->slug; ?>" <?php if($category == $cat->slug):?>selected="SELECTED"<?php endif; ?>><?php echo htmlentities($cat->name); ?></option>
+					<?php endforeach; ?>
+				</select><br/><em><a href="<?php echo admin_url('edit-tags.php?taxonomy=easy-faq-category&post_type=faq'); ?>">Manage Categories</a></em></p>
+				<p><label for="<?php echo $this->get_field_id('count'); ?>">Count: <input class="widefat" id="<?php echo $this->get_field_id('count'); ?>" name="<?php echo $this->get_field_name('count'); ?>" type="text" value="<?php echo esc_attr($count); ?>" /></label><br/><em>The number of FAQs to display.  Set to -1 to show All FAQs.</em></p>
+				<p><label for="<?php echo $this->get_field_id('order'); ?>">Order:</label><br/>
+				<select id="<?php echo $this->get_field_id('order_by'); ?>" name="<?php echo $this->get_field_name('order_by'); ?>" class="multi_left">
+					<option value="title" <?php if($order_by == "title"): ?>selected="SELECTED"<?php endif; ?>>Title</option>
+					<option value="random" <?php if($order_by == "random"): ?>selected="SELECTED"<?php endif; ?>>Random</option>
+					<option value="id" <?php if($order_by == "id"): ?>selected="SELECTED"<?php endif; ?>>ID</option>
+					<option value="author" <?php if($order_by == "author"): ?>selected="SELECTED"<?php endif; ?>>Author</option>
+					<option value="name" <?php if($order_by == "name"): ?>selected="SELECTED"<?php endif; ?>>Name</option>
+					<option value="date" <?php if($order_by == "date"): ?>selected="SELECTED"<?php endif; ?>>Date</option>
+					<option value="last_modified" <?php if($order_by == "last_modified"): ?>selected="SELECTED"<?php endif; ?>>Last Modified</option>
+					<option value="parent_id" <?php if($order_by == "parent_id"): ?>selected="SELECTED"<?php endif; ?>>Parent ID</option>
+				</select>
+				<select id="<?php echo $this->get_field_id('order'); ?>" name="<?php echo $this->get_field_name('order'); ?>" class="multi_right">
+					<option value="ASC" <?php if($order == "ASC"): ?>selected="SELECTED"<?php endif; ?>>Ascending (ASC)</option>
+					<option value="DESC" <?php if($order == "DESC"): ?>selected="SELECTED"<?php endif; ?>>Descending (DESC)</option>
+				</select></p>
+			</fieldset>
+			<fieldset class="radio_text_input">
+				<legend>Fields to Display:</legend> 
+				<p><label for="<?php echo $this->get_field_id('faq_read_more_link'); ?>">View All Link URL: <input class="widefat" id="<?php echo $this->get_field_id('faq_read_more_link'); ?>" name="<?php echo $this->get_field_name('faq_read_more_link'); ?>" type="text" value="<?php echo esc_attr($faq_read_more_link); ?>" /></label></em></p>
+				<p><label for="<?php echo $this->get_field_id('faq_read_more_link_text'); ?>">View All Link Text: <input class="widefat" id="<?php echo $this->get_field_id('faq_read_more_link_text'); ?>" name="<?php echo $this->get_field_name('faq_read_more_link_text'); ?>" type="text" value="<?php echo esc_attr($faq_read_more_link_text); ?>" /></label></p>			
+				<p><input class="widefat" id="<?php echo $this->get_field_id('show_faq_image'); ?>" name="<?php echo $this->get_field_name('show_faq_image'); ?>" type="checkbox" value="1" <?php if($show_faq_image){ ?>checked="CHECKED"<?php } ?>/><label for="<?php echo $this->get_field_id('show_faq_image'); ?>">Show FAQ Image</label></p>
+			</fieldset>
+			<fieldset class="radio_text_input">
+				<legend>Quick Links:</legend>				
+				<p><input class="widefat" id="<?php echo $this->get_field_id('quick_links'); ?>" name="<?php echo $this->get_field_name('quick_links'); ?>" type="checkbox" value="1" <?php if($quick_links){ ?>checked="CHECKED"<?php } ?>/><label for="<?php echo $this->get_field_id('quick_links'); ?>">Quick Links</label></p>
+				<p><label for="<?php echo $this->get_field_id('quick_links_columns'); ?>">Number of Columns: <input class="widefat" id="<?php echo $this->get_field_id('quick_links_columns'); ?>" name="<?php echo $this->get_field_name('quick_links_columns'); ?>" type="text" value="<?php echo esc_attr($quick_links_columns); ?>" /></label></p>
+			</fieldset>
+			<fieldset class="radio_text_input">
+				<legend>Display Style:</legend>
+				<label title="Normal Style">
+					<input type="radio" value="normal" id="sc_gen_style_normal" name="<?php echo $this->get_field_name('accordion_style'); ?>" <?php if($accordion_style == "normal"): ?>checked="CHECKED"<?php endif; ?>>
+					<span>Normal Style</span>
+				</label><br/>
+				<label title="Accordion Style - First FAQ Visible">
+					<input type="radio" value="accordion" id="sc_gen_style_accordion_first_open" name="<?php echo $this->get_field_name('accordion_style'); ?>" <?php if(!$easy_faqs->is_pro): ?>disabled="disabled"<?php endif; ?> <?php if($accordion_style == "accordion"): ?>checked="CHECKED"<?php endif; ?>>
+					<span>Accordion Style - First FAQ Visible <?php if(!$easy_faqs->is_pro): ?><br/><strong>Easy FAQs Pro Required.</strong> <a href="https://goldplugins.com/our-plugins/easy-faqs-details/upgrade-to-easy-faqs-pro/?utm_source=list_faqs_widget&utm_campaign=up
+					grade" target="_blank"><?php echo FAQ_UPGRADE_TEXT; ?></a><?php endif; ?> </span>
+				</label><br/>
+				<label title="Accordion Style - All FAQs Start Collapsed">
+					<input type="radio" value="accordion-collapsed" id="sc_gen_style_accordion_closed" name="<?php echo $this->get_field_name('accordion_style'); ?>" <?php if(!$easy_faqs->is_pro): ?>disabled="disabled"<?php endif; ?> <?php if($accordion_style == "accordion-collapsed"): ?>checked="CHECKED"<?php endif; ?>>
+					<span>Accordion Style - All FAQs Start Collapsed <?php if(!$easy_faqs->is_pro): ?><br/><strong>Easy FAQs Pro Required.</strong> <a href="https://goldplugins.com/our-plugins/easy-faqs-details/upgrade-to-easy-faqs-pro/?utm_source=list_faqs_widget&utm_campaign=up
+					grade" target="_blank"><?php echo FAQ_UPGRADE_TEXT; ?></a><?php endif; ?> </span>
+				</label></p>
+			</fieldset>			
+		</div>
+		<?php
 	}
 
 	function update($new_instance, $old_instance){

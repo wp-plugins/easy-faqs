@@ -4,7 +4,7 @@ Plugin Name: Easy FAQs
 Plugin URI: https://goldplugins.com/our-plugins/easy-faqs-details/
 Description: Easy FAQs - Provides custom post type, shortcodes, widgets, and other functionality for Frequently Asked Questions (FAQs).
 Author: Gold Plugins
-Version: 1.11
+Version: 1.11.1
 Author URI: https://goldplugins.com
 Text Domain: easy-faqs
 
@@ -120,8 +120,11 @@ class easyFAQs
 	
 	function admin_init($hook)
 	{
+		
 		//RWG: only enqueue scripts and styles on Easy T admin pages
-		if(strpos($hook,'easy-faqs')!==false){		
+		$screen = get_current_screen();
+		
+		if(strpos($hook,'easy-faqs')!==false || $screen->id === "widgets" || (function_exists('is_customize_preview') && is_customize_preview())){
 			wp_register_style( 'easy_faqs_admin_stylesheet', plugins_url('include/css/admin_style.css', __FILE__) );
 			wp_enqueue_style( 'easy_faqs_admin_stylesheet' );
 			
@@ -307,7 +310,7 @@ class easyFAQs
 			// process form submissions
 			$inserted = false;
        
-			if( 'POST' == $_SERVER['REQUEST_METHOD'] && !empty( $_POST['action'] )) {
+			if( 'POST' == $_SERVER['REQUEST_METHOD'] && !empty( $_POST['action'] ) && $_POST['action'] == "post_faq") {
 				//only process submissions from logged in users
 				if(isValidFAQKey()){  
 					$do_not_insert = false;
@@ -377,7 +380,7 @@ class easyFAQs
 						<?php if(class_exists('ReallySimpleCaptcha') && get_option('easy_faqs_use_captcha',0)){ $this->easy_faqs_outputCaptcha(); } ?>
 						
 						<div class="easy_faqs_field_wrap"><input type="submit" value="<?php echo FAQ_SUBMIT_QUESTION_BUTTON; ?>" tabindex="3" id="submit" name="submit" /></div>
-						<input type="hidden" name="action" value="post" />
+						<input type="hidden" name="action" value="post_faq" />
 						<?php wp_nonce_field( 'new-post' ); ?>
 					</form>
 				</div>

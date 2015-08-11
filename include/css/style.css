@@ -72,3 +72,13 @@
 	display: block;
 	margin-bottom: 20px;
 }
+
+/* Accordion CSS */
+.easy-faqs-accordion .easy-faq .easy-faq-body,
+.easy-faqs-accordion-collapsed .easy-faq  .easy-faq-body{
+	display: none;
+}
+
+.easy-faqs-accordion .easy-faq:nth-child(1) .easy-faq-body{
+	display: block;
+}
